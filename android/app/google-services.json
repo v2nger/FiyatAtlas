@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "904641400932",
+    "project_id": "fiyatatlas",
+    "storage_bucket": "fiyatatlas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904641400932:android:df35ea81d8a7cb79e90f71",
+        "android_client_info": {
+          "package_name": "com.example.fiyatatlas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904641400932-u6aa57np0viaq0oiomvnoi033jd08v30.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fiyatatlas",
+            "certificate_hash": "5c3adf1b4bf6a0c03f3248da178fe0723ca801f7"
+          }
+        },
+        {
+          "client_id": "904641400932-sql9kfdqhgkr2ci89amk1809bbmc77up.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAP-pe4Vul7rcNtB7X6EeZWa3s4xtEMM4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904641400932-sql9kfdqhgkr2ci89amk1809bbmc77up.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "904641400932-er5dh8upr4r2d15f15hfr59ilnasfbu5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fiyatatlas"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

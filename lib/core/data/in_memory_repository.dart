@@ -107,6 +107,11 @@ class InMemoryRepository {
     _entries.insert(0, entry);
   }
 
+  void replaceEntries(List<PriceEntry> entries) {
+    _entries.clear();
+    _entries.addAll(entries);
+  }
+
   void updateEntry(PriceEntry updatedEntry) {
     final index = _entries.indexWhere((e) => e.id == updatedEntry.id);
     if (index != -1) {

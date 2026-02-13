@@ -193,12 +193,31 @@ class _PriceEntryScreenState extends State<PriceEntryScreen> {
                    source: 'User',
                  );
                  
+                 // Show loading
                  if (mounted) {
-                   Navigator.pop(ctx);
+                   showDialog(
+                     context: context, 
+                     barrierDismissible: false,
+                     builder: (_) => const Center(child: CircularProgressIndicator())
+                   );
+                 }
+
+                 try {
+                   await context.read<AppState>().addUserProduct(newProduct);
+                   
+                   if (!mounted) return;
+                   Navigator.pop(context); // Hide loading
+                   Navigator.pop(ctx);     // Hide dialog
+
                    setState(() {
                      _selectedProduct = newProduct;
                      _productNameController.text = newProduct.name;
                    });
+                 } catch (e) {
+                   if (mounted) {
+                     Navigator.pop(context); // Hide loading
+                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hata: $e')));
+                   }
                  }
               }
             },
@@ -212,56 +231,75 @@ class _PriceEntryScreenState extends State<PriceEntryScreen> {
   void _submit(MarketBranch branch) async {
     if (!_formKey.currentState!.validate()) return;
     
-    final productIdentifier = _selectedProduct?.barcode ?? _productNameController.text;
-    
-    context.read<AppState>().addPriceEntry(
-      barcode: productIdentifier,
-      marketBranchId: branch.id,
-      price: _isAvailable ? double.parse(_priceController.text) : 0.0,
-      hasReceipt: _hasReceipt,
-      isAvailable: _isAvailable,
-    );
-
-    // Gamification: Başarı Dialogu
+    // Show loading
     showDialog(
       context: context,
-      builder: (ctx) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.check_circle, color: Colors.green, size: 64),
-                const SizedBox(height: 16),
-                const Text(
-                  'Harika!',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                const Text('+10 Puan Kazandın', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 18)),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  child: const Text('Devam Et'),
-                )
-              ],
-            ),
-          ),
-        );
-      },
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
     );
 
-    // Formu temizle ve kullanıcıyı aynı ekranda tut (Seri giriş)
-    setState(() {
-      _productNameController.clear();
-      _campaignDescController.clear();
-      _priceController.clear();
-      _selectedProduct = null;
-      _isAvailable = true;
-      _hasReceipt = false;
-    });
+    final productIdentifier = _selectedProduct?.barcode ?? _productNameController.text;
+    
+    try {
+      await context.read<AppState>().addPriceEntry(
+        barcode: productIdentifier,
+        marketBranchId: branch.id,
+        price: _isAvailable ? double.parse(_priceController.text) : 0.0,
+        hasReceipt: _hasReceipt,
+        isAvailable: _isAvailable,
+      );
+
+      if (!mounted) return;
+      Navigator.pop(context); // Hide loading
+
+      // Gamification: Başarı Dialogu
+      showDialog(
+        context: context,
+        builder: (ctx) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.green, size: 64),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Harika!',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text('+10 Puan Kazandın', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 18)),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    child: const Text('Devam Et'),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      // Formu temizle ve kullanıcıyı aynı ekranda tut (Seri giriş)
+      setState(() {
+        _productNameController.clear();
+        _campaignDescController.clear();
+        _priceController.clear();
+        _selectedProduct = null;
+        _isAvailable = true;
+        _hasReceipt = false;
+      });
+
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.pop(context); // Hide loading
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Hata oluştu: $e')),
+      );
+    }
   }
 
   @override
@@ -725,22 +763,32 @@ class _MarketSelectorState extends State<_MarketSelector> {
             child: const Text('İptal'),
           ),
           FilledButton(
-            onPressed: () {
+            onPressed: () async {
               if (chainController.text.isNotEmpty && branchController.text.isNotEmpty) {
-                 context.read<AppState>().addMarketBranch(
-                   chainName: chainController.text,
-                   branchName: branchController.text,
-                   city: cityController.text,
-                   district: districtController.text,
-                 );
-                 Navigator.pop(ctx);
-                 setState(() {
-                   _chainCtrl.clear();
-                   _branchCtrl.clear();
-                 });
-                 ScaffoldMessenger.of(context).showSnackBar(
-                   const SnackBar(content: Text('Market eklendi.')),
-                 );
+                 try {
+                   await context.read<AppState>().addMarketBranch(
+                     chainName: chainController.text,
+                     branchName: branchController.text,
+                     city: cityController.text,
+                     district: districtController.text,
+                   );
+                   if (!context.mounted) return;
+                   
+                   Navigator.pop(ctx);
+                   setState(() {
+                     _chainCtrl.clear();
+                     _branchCtrl.clear();
+                   });
+                   ScaffoldMessenger.of(context).showSnackBar(
+                     const SnackBar(content: Text('Market eklendi.')),
+                   );
+                 } catch (e) {
+                   if (context.mounted) {
+                     ScaffoldMessenger.of(context).showSnackBar(
+                       SnackBar(content: Text('Hata: $e')),
+                     );
+                   }
+                 }
               }
             },
             child: const Text('Ekle'),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state.dart';
-import '../models/price_status.dart';
+import '../features/price/domain/price_status.dart';
 import '../widgets/app_logo.dart'; // Add this import
 
 class HomeScreen extends StatelessWidget {

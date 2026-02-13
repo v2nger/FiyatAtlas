@@ -56,4 +56,46 @@ class PriceEntry {
       status: status ?? this.status,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'userId': userId,
+      'barcode': barcode,
+      'marketBranchId': marketBranchId,
+      'price': price,
+      'currency': currency,
+      'entryDate': entryDate.toIso8601String(),
+      'hasReceipt': hasReceipt,
+      'receiptImageUrl': receiptImageUrl,
+      'isAvailable': isAvailable,
+      'status': status.name, // Enum to string
+    };
+  }
+
+  factory PriceEntry.fromMap(Map<String, dynamic> map) {
+    return PriceEntry(
+      id: map['id'] ?? '',
+      userId: map['userId'],
+      barcode: map['barcode'] ?? '',
+      marketBranchId: map['marketBranchId'] ?? '',
+      price: (map['price'] ?? 0).toDouble(),
+      currency: map['currency'] ?? 'TRY',
+      entryDate: map['entryDate'] != null 
+          ? DateTime.parse(map['entryDate']) 
+          : DateTime.now(),
+      hasReceipt: map['hasReceipt'] ?? false,
+      receiptImageUrl: map['receiptImageUrl'],
+      isAvailable: map['isAvailable'] ?? true,
+      status: map['status'] != null
+          ? PriceVerificationStatus.values.firstWhere(
+              (e) => e.name == map['status'],
+              orElse: () => PriceVerificationStatus.pendingPrivate,
+            )
+          : PriceVerificationStatus.pendingPrivate,
+    );
+  }
+
+  // Legacy accessor for timestamp (if used elsewhere)
+  DateTime get timestamp => entryDate;
 }

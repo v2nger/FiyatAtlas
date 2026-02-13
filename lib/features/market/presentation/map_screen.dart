@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:fiyatatlas/core/data/in_memory_repository.dart';
+import 'package:fiyatatlas/app_state.dart';
 import 'package:fiyatatlas/features/market/domain/market_branch.dart';
 import 'package:provider/provider.dart';
 
@@ -13,22 +13,16 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  late List<MarketBranch> _branches;
   final MapController _mapController = MapController();
 
   // Default center: Kadıköy/Istanbul
   final LatLng _initialCenter = const LatLng(41.0082, 29.0410);
 
   @override
-  void initState() {
-    super.initState();
-    // In a real app, we might fetch this via a provider or repo with async methods
-    final repo = context.read<InMemoryRepository>();
-    _branches = repo.getBranches();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
+    final branches = appState.branches;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Market Haritası'),
@@ -50,7 +44,7 @@ class _MapScreenState extends State<MapScreen> {
             userAgentPackageName: 'com.fiyatatlas.app',
           ),
           MarkerLayer(
-            markers: _branches.map((branch) {
+            markers: branches.map((branch) {
               return Marker(
                 point: LatLng(branch.latitude, branch.longitude),
                 width: 40,

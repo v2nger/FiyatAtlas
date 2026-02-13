@@ -5,16 +5,16 @@ import 'l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'app_state.dart';
-import 'screens/login_screen.dart'; // Add login screen import
-import 'screens/main_screen.dart'; 
-import 'screens/map_screen.dart';
-import 'screens/onboarding_screen.dart';
-import 'screens/price_entry_screen.dart';
-import 'screens/product_detail_screen.dart';
-import 'screens/scan_screen.dart';
-import 'screens/search_screen.dart';
-import 'screens/splash_screen.dart';
-import 'screens/verification_screen.dart';
+import 'features/auth/presentation/login_screen.dart';
+import 'features/home/presentation/main_screen.dart';
+import 'features/market/presentation/map_screen.dart';
+import 'features/auth/presentation/onboarding_screen.dart';
+import 'features/price/presentation/price_entry_screen.dart';
+import 'features/product/presentation/product_detail_screen.dart';
+import 'features/product/presentation/scan_screen.dart';
+import 'features/product/presentation/search_screen.dart';
+import 'features/auth/presentation/splash_screen.dart';
+import 'features/verification/presentation/verification_screen.dart';
 
 class FiyatAtlasApp extends StatelessWidget {
   const FiyatAtlasApp({super.key});

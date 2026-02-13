@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 
-import 'data/in_memory_repository.dart';
-import 'services/auth_service.dart';
-import 'services/firestore_service.dart';
-import 'services/product_lookup_service.dart';
-import 'models/market_branch.dart';
-import 'models/price_entry.dart';
-import 'models/price_status.dart';
-import 'models/product.dart';
-import 'models/user.dart';
+import 'core/data/in_memory_repository.dart';
+import 'features/auth/data/auth_service.dart';
+import 'core/services/firestore_service.dart';
+import 'features/product/data/product_lookup_service.dart';
+import 'features/market/domain/market_branch.dart';
+import 'features/price/domain/price_entry.dart';
+import 'features/price/domain/price_status.dart';
+import 'features/product/domain/product.dart';
+import 'features/auth/domain/user.dart';
 
 class AppState extends ChangeNotifier {
-  final AuthService _authService = AuthService();
-  final FirestoreService _firestoreService = FirestoreService();
+  final AuthService _authService;
+  final FirestoreService _firestoreService;
   final ProductLookupService _productLookupService = ProductLookupService();
   final InMemoryRepository _repository;
   
@@ -58,8 +58,13 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  AppState({InMemoryRepository? repository})
-      : _repository = repository ?? InMemoryRepository() {
+  AppState({
+    InMemoryRepository? repository,
+    AuthService? authService,
+    FirestoreService? firestoreService,
+  })  : _repository = repository ?? InMemoryRepository(),
+        _authService = authService ?? AuthService(),
+        _firestoreService = firestoreService ?? FirestoreService() {
     _authService.authStateChanges.listen((user) {
       _firebaseUser = user;
       _fetchUserProfile(); // Fetch real data when auth state changes

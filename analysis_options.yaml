@@ -5,6 +5,24 @@
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.
 
+analyzer:
+  plugins:
+    - custom_lint
+  # Strong mode configuration (optional but recommended for stricter checks)
+  # language:
+  #   strict-casts: true
+  #   strict-inference: true
+  #   strict-raw-types: true
+  errors:
+    # Treat missing required parameters as errors
+    missing_required_param: error
+    # Treat missing return values as errors 
+    missing_return: error
+    # Allow having TODOs in the code
+    todo: ignore
+    # Ignore specific hint often used with freezed/json_serializable
+    invalid_annotation_target: ignore
+
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
@@ -21,8 +39,38 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # Error Prevention
+    avoid_print: true
+    avoid_empty_else: true
+    avoid_relative_lib_imports: true
+    cancel_subscriptions: true
+    close_sinks: true
+    control_flow_in_finally: true
+    empty_statements: true
+    hash_and_equals: true
+    no_duplicate_case_values: true
+    
+    # Style & Best Practices
+    always_declare_return_types: true
+    annotate_overrides: true
+    avoid_init_to_null: true
+    avoid_multiple_declarations_per_line: true
+    avoid_unused_constructor_parameters: true
+    curly_braces_in_flow_control_structures: true
+    directives_ordering: true
+    library_private_types_in_public_api: true
+    no_leading_underscores_for_local_identifiers: true
+    prefer_const_constructors: true
+    prefer_const_constructors_in_immutables: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_is_not_empty: true
+    prefer_null_aware_operators: true
+    sized_box_for_whitespace: true
+    unnecessary_this: true
+    use_key_in_widget_constructors: true
+
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

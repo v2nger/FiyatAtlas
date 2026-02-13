@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'firebase_options.dart';
 
 import 'app.dart';
@@ -13,9 +14,11 @@ void main() async {
   );
   
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => AppState(),
-      child: const FiyatAtlasApp(),
+    riverpod.ProviderScope(
+      child: ChangeNotifierProvider(
+        create: (_) => AppState(),
+        child: const FiyatAtlasApp(),
+      ),
     ),
   );
 }

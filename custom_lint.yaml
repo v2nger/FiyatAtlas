@@ -1,0 +1,5 @@
+riverpod:
+  # Combine provider definitions into a single class if possible? (Just a comment example, config goes here if needed)
+  # For riverpod_lint, rules are enabled by default but can be disabled here.
+  # rules:
+  #   - avoid_public_notifier_properties: false

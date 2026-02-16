@@ -6,23 +6,17 @@ class PriceLog extends Equatable {
   final String productId;
   final String marketId;
   final String? marketName;
-
   final double price;
   final String currency;
   final DateTime timestamp;
 
   final bool hasReceipt;
   final String? receiptImageUrl;
-  final bool isAvailable;
+  final String? receiptRawText;
 
+  final bool isAvailable;
   final String deviceHash;
 
-  // Backend State
-  final String status; // private | pending | verified
-  final double? confidenceScore;
-  final String? abuseFlag;
-
-  // Local Sync
   final PriceLogSyncStatus syncStatus;
 
   const PriceLog({
@@ -36,11 +30,9 @@ class PriceLog extends Equatable {
     required this.timestamp,
     required this.hasReceipt,
     this.receiptImageUrl,
+    this.receiptRawText,
     this.isAvailable = true,
     required this.deviceHash,
-    this.status = "private",
-    this.confidenceScore,
-    this.abuseFlag,
     this.syncStatus = PriceLogSyncStatus.pending,
   });
 
@@ -55,11 +47,9 @@ class PriceLog extends Equatable {
     DateTime? timestamp,
     bool? hasReceipt,
     String? receiptImageUrl,
+    String? receiptRawText,
     bool? isAvailable,
     String? deviceHash,
-    String? status,
-    double? confidenceScore,
-    String? abuseFlag,
     PriceLogSyncStatus? syncStatus,
   }) {
     return PriceLog(
@@ -73,11 +63,9 @@ class PriceLog extends Equatable {
       timestamp: timestamp ?? this.timestamp,
       hasReceipt: hasReceipt ?? this.hasReceipt,
       receiptImageUrl: receiptImageUrl ?? this.receiptImageUrl,
+      receiptRawText: receiptRawText ?? this.receiptRawText,
       isAvailable: isAvailable ?? this.isAvailable,
       deviceHash: deviceHash ?? this.deviceHash,
-      status: status ?? this.status,
-      confidenceScore: confidenceScore ?? this.confidenceScore,
-      abuseFlag: abuseFlag ?? this.abuseFlag,
       syncStatus: syncStatus ?? this.syncStatus,
     );
   }
@@ -94,11 +82,9 @@ class PriceLog extends Equatable {
         timestamp,
         hasReceipt,
         receiptImageUrl,
+        receiptRawText,
         isAvailable,
         deviceHash,
-        status,
-        confidenceScore,
-        abuseFlag,
         syncStatus,
       ];
 }

@@ -52,16 +52,16 @@ class PriceLogSyncManager {
 
       for (var logModel in pending) {
         try {
-          final entity = logModel.toEntity();
+          final entity = logModel; // It IS an entity now
           // Check for Duplicates / Rate Limiting (Optimistic)
           // Ideally check remote if it already exists, but for Append-Only logs, 
           // we can rely on ID idempotency if the ID is preserved.
           
           await remoteDataSource.submitPriceLog(entity);
-          await localDataSource.markAsSynced(logModel.uuid);
-          debugPrint('SyncManager: Synced ${logModel.uuid}');
+          await localDataSource.markAsSynced(logModel.id); // uuid -> id
+          debugPrint('SyncManager: Synced ${logModel.id}');
         } catch (e) {
-          debugPrint('SyncManager: Failed log ${logModel.uuid}: $e');
+          debugPrint('SyncManager: Failed log ${logModel.id}: $e');
           anyFailed = true;
           // Don't stop the loop, try others
         }

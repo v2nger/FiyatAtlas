@@ -6,7 +6,7 @@ part of 'auth_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authStateChangesHash() => r'24ccea72693bd761695a193bf44e03365e8811b2';
+String _$authStateChangesHash() => r'904f2f9c67fce951f69ae1938c05a2c5fc383e71';
 
 /// Provides the raw FirebaseAuth user stream
 ///

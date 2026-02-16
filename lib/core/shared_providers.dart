@@ -8,7 +8,7 @@ import 'services/firestore_service.dart';
 
 // Check main.dart for Isar initialization and override
 final isarProvider = Provider<Isar>((ref) {
-  throw UnimplementedError('Isar must be initialized in main.dart');
+  throw UnimplementedError("Isar not available on Web");
 });
 
 final firestoreProvider = Provider<FirebaseFirestore>((ref) {

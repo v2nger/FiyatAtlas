@@ -4,11 +4,11 @@ import '../../domain/entities/price_log.dart';
 part 'price_log_model.g.dart';
 
 @collection
-class PriceLogModel {
+class PriceLogIsarEntry {
   Id id = Isar.autoIncrement;
 
   @Index(unique: true, replace: true)
-  late String uuid; // entity.id
+  late String uuid;
 
   late String userId;
 
@@ -24,24 +24,17 @@ class PriceLogModel {
 
   late bool hasReceipt;
   late String? receiptImageUrl;
+  late String? receiptRawText;
+
   late bool isAvailable;
 
-  // Backend fields
   late String deviceHash;
-  late String status; // private | pending | verified
-  double? confidenceScore;
-  String? abuseFlag;
 
-  // Sync Logic
   @Enumerated(EnumType.ordinal)
   late SyncStatus syncStatus;
 
-  /* ============================
-     ENTITY → LOCAL
-  ============================ */
-
-  static PriceLogModel fromEntity(PriceLog log) {
-    return PriceLogModel()
+  static PriceLogIsarEntry fromEntity(PriceLog log) {
+    return PriceLogIsarEntry()
       ..uuid = log.id
       ..userId = log.userId
       ..productId = log.productId
@@ -52,17 +45,11 @@ class PriceLogModel {
       ..timestamp = log.timestamp
       ..hasReceipt = log.hasReceipt
       ..receiptImageUrl = log.receiptImageUrl
+      ..receiptRawText = log.receiptRawText
       ..isAvailable = log.isAvailable
       ..deviceHash = log.deviceHash
-      ..status = log.status
-      ..confidenceScore = log.confidenceScore
-      ..abuseFlag = log.abuseFlag
       ..syncStatus = _mapSyncStatus(log.syncStatus);
   }
-
-  /* ============================
-     LOCAL → ENTITY
-  ============================ */
 
   PriceLog toEntity() {
     return PriceLog(
@@ -76,18 +63,12 @@ class PriceLogModel {
       timestamp: timestamp,
       hasReceipt: hasReceipt,
       receiptImageUrl: receiptImageUrl,
+      receiptRawText: receiptRawText,
       isAvailable: isAvailable,
       deviceHash: deviceHash,
-      status: status,
-      confidenceScore: confidenceScore,
-      abuseFlag: abuseFlag,
       syncStatus: _mapToDomainStatus(syncStatus),
     );
   }
-
-  /* ============================
-     STATUS MAPPERS
-  ============================ */
 
   static SyncStatus _mapSyncStatus(PriceLogSyncStatus status) {
     switch (status) {

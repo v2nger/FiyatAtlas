@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../features/auth/domain/user.dart';
@@ -8,7 +9,7 @@ part 'auth_providers.g.dart';
 
 /// Provides the raw FirebaseAuth user stream
 @riverpod
-Stream<fb_auth.User?> authStateChanges(AuthStateChangesRef ref) {
+Stream<fb_auth.User?> authStateChanges(Ref ref) {
   final authService = ref.watch(authServiceProvider);
   return authService.authStateChanges;
 }

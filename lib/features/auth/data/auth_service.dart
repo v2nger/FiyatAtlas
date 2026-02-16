@@ -52,7 +52,7 @@ class AuthService {
       );
       
       // 2. Get ID Token
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       // 3. Get Access Token (Authorization)
       // Note: authorizeScopes might require user interaction if not granted, 

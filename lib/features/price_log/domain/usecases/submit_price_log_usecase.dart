@@ -1,27 +1,39 @@
 import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
-
 import '../../../../core/error/failures.dart';
-import '../../../../core/usecases/usecase.dart';
+import '../../../product/domain/repositories/product_repository.dart';
 import '../entities/price_log.dart';
 import '../repositories/price_log_repository.dart';
 
-class SubmitPriceLog implements UseCase<void, PriceLogParams> {
-  final PriceLogRepository repository;
+class SubmitPriceLog {
+  final PriceLogRepository priceLogRepository;
+  final ProductRepository productRepository;
 
-  SubmitPriceLog(this.repository);
+  SubmitPriceLog({
+    required this.priceLogRepository,
+    required this.productRepository,
+  });
 
-  @override
   Future<Either<Failure, void>> call(PriceLogParams params) async {
-    return await repository.submitPriceLog(params.log);
+    try {
+      // 1️⃣ Ürün yoksa oluştur
+      await productRepository.createIfNotExists(
+        barcode: params.log.productId,
+        name: params.log.marketName ?? "Bilinmiyor",
+        brand: "Bilinmiyor",
+      );
+
+      // 2️⃣ Price log gönder
+      await priceLogRepository.submitPriceLog(params.log);
+
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
   }
 }
 
-class PriceLogParams extends Equatable {
+class PriceLogParams {
   final PriceLog log;
 
-  const PriceLogParams({required this.log});
-
-  @override
-  List<Object> get props => [log];
+  PriceLogParams({required this.log});
 }

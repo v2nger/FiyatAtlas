@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'core/providers/locale_provider.dart';
+import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/login_screen.dart';
 import 'features/auth/presentation/onboarding_screen.dart';
 import 'features/auth/presentation/splash_screen.dart';
 import 'features/home/presentation/main_screen.dart';
 import 'features/market/presentation/map_screen.dart';
 import 'features/price/presentation/price_entry_screen.dart';
-import 'features/product/presentation/product_detail_screen.dart';
 import 'features/product/presentation/scan_screen.dart';
 import 'features/product/presentation/search_screen.dart';
+import 'features/product/presentation/views/product_detail_screen.dart';
 import 'features/verification/presentation/verification_screen.dart';
 import 'l10n/app_localizations.dart';
 
@@ -23,11 +23,8 @@ class FiyatAtlasApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to LocaleProvider
     final locale = ref.watch(localeNotifierProvider);
-
-    // Google Fonts ile tema oluşturma
-    final textTheme = GoogleFonts.poppinsTextTheme();
-    final colorScheme = ColorScheme.fromSeed(seedColor: Colors.teal);
-
+    
+    // Uygulama koyu modda çalışacağı için default olarak AppTheme.darkTheme
     return MaterialApp(
       title: 'FiyatAtlas',
       debugShowCheckedModeBanner: false,
@@ -44,13 +41,12 @@ class FiyatAtlasApp extends ConsumerWidget {
         Locale('tr'),
         Locale('en'),
       ],
-
-      theme: ThemeData(
-        colorScheme: colorScheme,
-        useMaterial3: true,
-        textTheme: textTheme, // Font uygula
-        scaffoldBackgroundColor: colorScheme.surface,
-      ),
+      
+      // THEME CONFIGURATION
+      themeMode: ThemeMode.dark,
+      theme: ThemeData.light(), // Fallback unused
+      darkTheme: AppTheme.darkTheme,
+      
       initialRoute: '/',
       routes: {
         '/': (_) => const SplashScreen(),

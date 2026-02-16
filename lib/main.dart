@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart';
+import 'package:isar/isar.dart'; // Isar type is needed for overriding provider
 import 'package:path_provider/path_provider.dart';
 
 import 'app.dart';
+import 'core/app_setup/isar_setup.dart'; // Conditional Isar Setup
 import 'core/shared_providers.dart';
-import 'features/price_log/data/models/price_log_model.dart';
 import 'features/price_log/data/sync/sync_manager.dart';
 import 'features/price_log/presentation/providers/submit_price_log_provider.dart';
 import 'firebase_options.dart';
@@ -16,6 +16,8 @@ import 'firebase_options.dart';
 // ================= SYNC =================
 
 final syncManagerProvider = Provider<PriceLogSyncManager>((ref) {
+  // If we mistakenly access this on web, it will try to access localDataSource which accesses Isar
+  // which throws. So failing fast is good.
   return PriceLogSyncManager(
     localDataSource: ref.watch(priceLogLocalDataSourceProvider),
     remoteDataSource: ref.watch(priceLogRemoteDataSourceProvider),
@@ -42,39 +44,29 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-
-    // Path Logic for Isar
-    late final String path;
-    if (kIsWeb) {
-      path = "";
-    } else {
-      final dir = await getApplicationDocumentsDirectory();
-      path = dir.path;
-    }
     
-    debugPrint('Isar Path: $path');
     debugPrint('Is Web: $kIsWeb');
 
-    // Isar Initialization
-    final isar = await Isar.open(
-      [PriceLogModelSchema],
-      directory: path,
-    );
+    // Isar Initialization (Conditional)
+    // Only runs on mobile, returns null on web
+    final isar = await initIsar();
 
     final container = ProviderContainer(
       overrides: [
-        isarProvider.overrideWithValue(isar),
+        if (isar != null) isarProvider.overrideWithValue(isar),
       ],
     );
 
-    // Initialize Sync Manager (Fire-and-forget, but inside a microtask)
-    Future.microtask(() {
-      try {
-        container.read(syncManagerProvider).init();
-      } catch (e) {
-        debugPrint('SyncManager Init Error: $e');
-      }
-    });
+    if (!kIsWeb) {
+      // Initialize Sync Manager (Fire-and-forget, but inside a microtask)
+      Future.microtask(() {
+        try {
+          container.read(syncManagerProvider).init();
+        } catch (e) {
+          debugPrint('SyncManager Init Error: $e');
+        }
+      });
+    }
 
     runApp(
       UncontrolledProviderScope(

@@ -9,100 +9,90 @@ part of 'price_log_model.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetPriceLogModelCollection on Isar {
-  IsarCollection<PriceLogModel> get priceLogModels => this.collection();
+extension GetPriceLogIsarEntryCollection on Isar {
+  IsarCollection<PriceLogIsarEntry> get priceLogIsarEntrys => this.collection();
 }
 
-const PriceLogModelSchema = CollectionSchema(
-  name: r'PriceLogModel',
-  id: 1292558803559634231,
+const PriceLogIsarEntrySchema = CollectionSchema(
+  name: r'PriceLogIsarEntry',
+  id: -20230206123456789, // Manually fixed safe integer for JS
   properties: {
-    r'abuseFlag': PropertySchema(
-      id: 0,
-      name: r'abuseFlag',
-      type: IsarType.string,
-    ),
-    r'confidenceScore': PropertySchema(
-      id: 1,
-      name: r'confidenceScore',
-      type: IsarType.double,
-    ),
     r'currency': PropertySchema(
-      id: 2,
+      id: 0,
       name: r'currency',
       type: IsarType.string,
     ),
     r'deviceHash': PropertySchema(
-      id: 3,
+      id: 1,
       name: r'deviceHash',
       type: IsarType.string,
     ),
     r'hasReceipt': PropertySchema(
-      id: 4,
+      id: 2,
       name: r'hasReceipt',
       type: IsarType.bool,
     ),
     r'isAvailable': PropertySchema(
-      id: 5,
+      id: 3,
       name: r'isAvailable',
       type: IsarType.bool,
     ),
     r'marketId': PropertySchema(
-      id: 6,
+      id: 4,
       name: r'marketId',
       type: IsarType.string,
     ),
     r'marketName': PropertySchema(
-      id: 7,
+      id: 5,
       name: r'marketName',
       type: IsarType.string,
     ),
     r'price': PropertySchema(
-      id: 8,
+      id: 6,
       name: r'price',
       type: IsarType.double,
     ),
     r'productId': PropertySchema(
-      id: 9,
+      id: 7,
       name: r'productId',
       type: IsarType.string,
     ),
     r'receiptImageUrl': PropertySchema(
-      id: 10,
+      id: 8,
       name: r'receiptImageUrl',
       type: IsarType.string,
     ),
-    r'status': PropertySchema(
-      id: 11,
-      name: r'status',
+    r'receiptRawText': PropertySchema(
+      id: 9,
+      name: r'receiptRawText',
       type: IsarType.string,
     ),
     r'syncStatus': PropertySchema(
-      id: 12,
+      id: 10,
       name: r'syncStatus',
       type: IsarType.byte,
-      enumMap: _PriceLogModelsyncStatusEnumValueMap,
+      enumMap: _PriceLogIsarEntrysyncStatusEnumValueMap,
     ),
     r'timestamp': PropertySchema(
-      id: 13,
+      id: 11,
       name: r'timestamp',
       type: IsarType.dateTime,
     ),
     r'userId': PropertySchema(
-      id: 14,
+      id: 12,
       name: r'userId',
       type: IsarType.string,
     ),
     r'uuid': PropertySchema(
-      id: 15,
+      id: 13,
       name: r'uuid',
       type: IsarType.string,
     )
   },
-  estimateSize: _priceLogModelEstimateSize,
-  serialize: _priceLogModelSerialize,
-  deserialize: _priceLogModelDeserialize,
-  deserializeProp: _priceLogModelDeserializeProp,
+  estimateSize: _priceLogIsarEntryEstimateSize,
+  serialize: _priceLogIsarEntrySerialize,
+  deserialize: _priceLogIsarEntryDeserialize,
+  deserializeProp: _priceLogIsarEntryDeserializeProp,
   idName: r'id',
   indexes: {
     r'uuid': IndexSchema(
@@ -134,24 +124,18 @@ const PriceLogModelSchema = CollectionSchema(
   },
   links: {},
   embeddedSchemas: {},
-  getId: _priceLogModelGetId,
-  getLinks: _priceLogModelGetLinks,
-  attach: _priceLogModelAttach,
+  getId: _priceLogIsarEntryGetId,
+  getLinks: _priceLogIsarEntryGetLinks,
+  attach: _priceLogIsarEntryAttach,
   version: '3.1.0+1',
 );
 
-int _priceLogModelEstimateSize(
-  PriceLogModel object,
+int _priceLogIsarEntryEstimateSize(
+  PriceLogIsarEntry object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.abuseFlag;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   bytesCount += 3 + object.currency.length * 3;
   bytesCount += 3 + object.deviceHash.length * 3;
   bytesCount += 3 + object.marketId.length * 3;
@@ -168,66 +152,67 @@ int _priceLogModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.status.length * 3;
+  {
+    final value = object.receiptRawText;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.userId.length * 3;
   bytesCount += 3 + object.uuid.length * 3;
   return bytesCount;
 }
 
-void _priceLogModelSerialize(
-  PriceLogModel object,
+void _priceLogIsarEntrySerialize(
+  PriceLogIsarEntry object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.abuseFlag);
-  writer.writeDouble(offsets[1], object.confidenceScore);
-  writer.writeString(offsets[2], object.currency);
-  writer.writeString(offsets[3], object.deviceHash);
-  writer.writeBool(offsets[4], object.hasReceipt);
-  writer.writeBool(offsets[5], object.isAvailable);
-  writer.writeString(offsets[6], object.marketId);
-  writer.writeString(offsets[7], object.marketName);
-  writer.writeDouble(offsets[8], object.price);
-  writer.writeString(offsets[9], object.productId);
-  writer.writeString(offsets[10], object.receiptImageUrl);
-  writer.writeString(offsets[11], object.status);
-  writer.writeByte(offsets[12], object.syncStatus.index);
-  writer.writeDateTime(offsets[13], object.timestamp);
-  writer.writeString(offsets[14], object.userId);
-  writer.writeString(offsets[15], object.uuid);
+  writer.writeString(offsets[0], object.currency);
+  writer.writeString(offsets[1], object.deviceHash);
+  writer.writeBool(offsets[2], object.hasReceipt);
+  writer.writeBool(offsets[3], object.isAvailable);
+  writer.writeString(offsets[4], object.marketId);
+  writer.writeString(offsets[5], object.marketName);
+  writer.writeDouble(offsets[6], object.price);
+  writer.writeString(offsets[7], object.productId);
+  writer.writeString(offsets[8], object.receiptImageUrl);
+  writer.writeString(offsets[9], object.receiptRawText);
+  writer.writeByte(offsets[10], object.syncStatus.index);
+  writer.writeDateTime(offsets[11], object.timestamp);
+  writer.writeString(offsets[12], object.userId);
+  writer.writeString(offsets[13], object.uuid);
 }
 
-PriceLogModel _priceLogModelDeserialize(
+PriceLogIsarEntry _priceLogIsarEntryDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = PriceLogModel();
-  object.abuseFlag = reader.readStringOrNull(offsets[0]);
-  object.confidenceScore = reader.readDoubleOrNull(offsets[1]);
-  object.currency = reader.readString(offsets[2]);
-  object.deviceHash = reader.readString(offsets[3]);
-  object.hasReceipt = reader.readBool(offsets[4]);
+  final object = PriceLogIsarEntry();
+  object.currency = reader.readString(offsets[0]);
+  object.deviceHash = reader.readString(offsets[1]);
+  object.hasReceipt = reader.readBool(offsets[2]);
   object.id = id;
-  object.isAvailable = reader.readBool(offsets[5]);
-  object.marketId = reader.readString(offsets[6]);
-  object.marketName = reader.readStringOrNull(offsets[7]);
-  object.price = reader.readDouble(offsets[8]);
-  object.productId = reader.readString(offsets[9]);
-  object.receiptImageUrl = reader.readStringOrNull(offsets[10]);
-  object.status = reader.readString(offsets[11]);
-  object.syncStatus = _PriceLogModelsyncStatusValueEnumMap[
-          reader.readByteOrNull(offsets[12])] ??
+  object.isAvailable = reader.readBool(offsets[3]);
+  object.marketId = reader.readString(offsets[4]);
+  object.marketName = reader.readStringOrNull(offsets[5]);
+  object.price = reader.readDouble(offsets[6]);
+  object.productId = reader.readString(offsets[7]);
+  object.receiptImageUrl = reader.readStringOrNull(offsets[8]);
+  object.receiptRawText = reader.readStringOrNull(offsets[9]);
+  object.syncStatus = _PriceLogIsarEntrysyncStatusValueEnumMap[
+          reader.readByteOrNull(offsets[10])] ??
       SyncStatus.synced;
-  object.timestamp = reader.readDateTime(offsets[13]);
-  object.userId = reader.readString(offsets[14]);
-  object.uuid = reader.readString(offsets[15]);
+  object.timestamp = reader.readDateTime(offsets[11]);
+  object.userId = reader.readString(offsets[12]);
+  object.uuid = reader.readString(offsets[13]);
   return object;
 }
 
-P _priceLogModelDeserializeProp<P>(
+P _priceLogIsarEntryDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -235,74 +220,71 @@ P _priceLogModelDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 4:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 5:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
-    case 7:
-      return (reader.readStringOrNull(offset)) as P;
-    case 8:
       return (reader.readDouble(offset)) as P;
-    case 9:
+    case 7:
       return (reader.readString(offset)) as P;
-    case 10:
+    case 8:
       return (reader.readStringOrNull(offset)) as P;
-    case 11:
-      return (reader.readString(offset)) as P;
-    case 12:
-      return (_PriceLogModelsyncStatusValueEnumMap[
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
+    case 10:
+      return (_PriceLogIsarEntrysyncStatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SyncStatus.synced) as P;
-    case 13:
+    case 11:
       return (reader.readDateTime(offset)) as P;
-    case 14:
+    case 12:
       return (reader.readString(offset)) as P;
-    case 15:
+    case 13:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-const _PriceLogModelsyncStatusEnumValueMap = {
+const _PriceLogIsarEntrysyncStatusEnumValueMap = {
   'synced': 0,
   'pending': 1,
   'failed': 2,
 };
-const _PriceLogModelsyncStatusValueEnumMap = {
+const _PriceLogIsarEntrysyncStatusValueEnumMap = {
   0: SyncStatus.synced,
   1: SyncStatus.pending,
   2: SyncStatus.failed,
 };
 
-Id _priceLogModelGetId(PriceLogModel object) {
+Id _priceLogIsarEntryGetId(PriceLogIsarEntry object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _priceLogModelGetLinks(PriceLogModel object) {
+List<IsarLinkBase<dynamic>> _priceLogIsarEntryGetLinks(
+    PriceLogIsarEntry object) {
   return [];
 }
 
-void _priceLogModelAttach(
-    IsarCollection<dynamic> col, Id id, PriceLogModel object) {
+void _priceLogIsarEntryAttach(
+    IsarCollection<dynamic> col, Id id, PriceLogIsarEntry object) {
   object.id = id;
 }
 
-extension PriceLogModelByIndex on IsarCollection<PriceLogModel> {
-  Future<PriceLogModel?> getByUuid(String uuid) {
+extension PriceLogIsarEntryByIndex on IsarCollection<PriceLogIsarEntry> {
+  Future<PriceLogIsarEntry?> getByUuid(String uuid) {
     return getByIndex(r'uuid', [uuid]);
   }
 
-  PriceLogModel? getByUuidSync(String uuid) {
+  PriceLogIsarEntry? getByUuidSync(String uuid) {
     return getByIndexSync(r'uuid', [uuid]);
   }
 
@@ -314,12 +296,12 @@ extension PriceLogModelByIndex on IsarCollection<PriceLogModel> {
     return deleteByIndexSync(r'uuid', [uuid]);
   }
 
-  Future<List<PriceLogModel?>> getAllByUuid(List<String> uuidValues) {
+  Future<List<PriceLogIsarEntry?>> getAllByUuid(List<String> uuidValues) {
     final values = uuidValues.map((e) => [e]).toList();
     return getAllByIndex(r'uuid', values);
   }
 
-  List<PriceLogModel?> getAllByUuidSync(List<String> uuidValues) {
+  List<PriceLogIsarEntry?> getAllByUuidSync(List<String> uuidValues) {
     final values = uuidValues.map((e) => [e]).toList();
     return getAllByIndexSync(r'uuid', values);
   }
@@ -334,37 +316,37 @@ extension PriceLogModelByIndex on IsarCollection<PriceLogModel> {
     return deleteAllByIndexSync(r'uuid', values);
   }
 
-  Future<Id> putByUuid(PriceLogModel object) {
+  Future<Id> putByUuid(PriceLogIsarEntry object) {
     return putByIndex(r'uuid', object);
   }
 
-  Id putByUuidSync(PriceLogModel object, {bool saveLinks = true}) {
+  Id putByUuidSync(PriceLogIsarEntry object, {bool saveLinks = true}) {
     return putByIndexSync(r'uuid', object, saveLinks: saveLinks);
   }
 
-  Future<List<Id>> putAllByUuid(List<PriceLogModel> objects) {
+  Future<List<Id>> putAllByUuid(List<PriceLogIsarEntry> objects) {
     return putAllByIndex(r'uuid', objects);
   }
 
-  List<Id> putAllByUuidSync(List<PriceLogModel> objects,
+  List<Id> putAllByUuidSync(List<PriceLogIsarEntry> objects,
       {bool saveLinks = true}) {
     return putAllByIndexSync(r'uuid', objects, saveLinks: saveLinks);
   }
 }
 
-extension PriceLogModelQueryWhereSort
-    on QueryBuilder<PriceLogModel, PriceLogModel, QWhere> {
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhere> anyId() {
+extension PriceLogIsarEntryQueryWhereSort
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QWhere> {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension PriceLogModelQueryWhere
-    on QueryBuilder<PriceLogModel, PriceLogModel, QWhereClause> {
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause> idEqualTo(
-      Id id) {
+extension PriceLogIsarEntryQueryWhere
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QWhereClause> {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
+      idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -373,8 +355,8 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause> idNotEqualTo(
-      Id id) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
+      idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -396,9 +378,8 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause> idGreaterThan(
-      Id id,
-      {bool include = false}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
+      idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -406,9 +387,8 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause> idLessThan(
-      Id id,
-      {bool include = false}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
+      idLessThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -416,7 +396,8 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause> idBetween(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
+      idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -432,8 +413,8 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause> uuidEqualTo(
-      String uuid) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
+      uuidEqualTo(String uuid) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'uuid',
@@ -442,8 +423,8 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause> uuidNotEqualTo(
-      String uuid) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
+      uuidNotEqualTo(String uuid) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -477,7 +458,7 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
       productIdEqualTo(String productId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
@@ -487,7 +468,7 @@ extension PriceLogModelQueryWhere
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterWhereClause>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterWhereClause>
       productIdNotEqualTo(String productId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
@@ -523,247 +504,9 @@ extension PriceLogModelQueryWhere
   }
 }
 
-extension PriceLogModelQueryFilter
-    on QueryBuilder<PriceLogModel, PriceLogModel, QFilterCondition> {
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'abuseFlag',
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'abuseFlag',
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'abuseFlag',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'abuseFlag',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'abuseFlag',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'abuseFlag',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'abuseFlag',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'abuseFlag',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'abuseFlag',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'abuseFlag',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'abuseFlag',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      abuseFlagIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'abuseFlag',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      confidenceScoreIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'confidenceScore',
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      confidenceScoreIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'confidenceScore',
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      confidenceScoreEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'confidenceScore',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      confidenceScoreGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'confidenceScore',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      confidenceScoreLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'confidenceScore',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      confidenceScoreBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'confidenceScore',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+extension PriceLogIsarEntryQueryFilter
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QFilterCondition> {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -777,7 +520,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyGreaterThan(
     String value, {
     bool include = false,
@@ -793,7 +536,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyLessThan(
     String value, {
     bool include = false,
@@ -809,7 +552,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyBetween(
     String lower,
     String upper, {
@@ -829,7 +572,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -843,7 +586,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -857,7 +600,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -868,7 +611,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -879,7 +622,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -889,7 +632,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       currencyIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -899,7 +642,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -913,7 +656,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashGreaterThan(
     String value, {
     bool include = false,
@@ -929,7 +672,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashLessThan(
     String value, {
     bool include = false,
@@ -945,7 +688,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashBetween(
     String lower,
     String upper, {
@@ -965,7 +708,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -979,7 +722,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -993,7 +736,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1004,7 +747,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1015,7 +758,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1025,7 +768,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       deviceHashIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1035,7 +778,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       hasReceiptEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1045,8 +788,8 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition> idEqualTo(
-      Id value) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -1055,7 +798,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       idGreaterThan(
     Id value, {
     bool include = false,
@@ -1069,7 +812,8 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition> idLessThan(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -1082,7 +826,8 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition> idBetween(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -1099,7 +844,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       isAvailableEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1109,7 +854,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1123,7 +868,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdGreaterThan(
     String value, {
     bool include = false,
@@ -1139,7 +884,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdLessThan(
     String value, {
     bool include = false,
@@ -1155,7 +900,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdBetween(
     String lower,
     String upper, {
@@ -1175,7 +920,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -1189,7 +934,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -1203,7 +948,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1214,7 +959,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1225,7 +970,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1235,7 +980,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1245,7 +990,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1254,7 +999,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -1263,7 +1008,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -1277,7 +1022,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameGreaterThan(
     String? value, {
     bool include = false,
@@ -1293,7 +1038,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameLessThan(
     String? value, {
     bool include = false,
@@ -1309,7 +1054,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameBetween(
     String? lower,
     String? upper, {
@@ -1329,7 +1074,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -1343,7 +1088,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -1357,7 +1102,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1368,7 +1113,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1379,7 +1124,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1389,7 +1134,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       marketNameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1399,7 +1144,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       priceEqualTo(
     double value, {
     double epsilon = Query.epsilon,
@@ -1413,7 +1158,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       priceGreaterThan(
     double value, {
     bool include = false,
@@ -1429,7 +1174,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       priceLessThan(
     double value, {
     bool include = false,
@@ -1445,7 +1190,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       priceBetween(
     double lower,
     double upper, {
@@ -1465,7 +1210,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1479,7 +1224,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdGreaterThan(
     String value, {
     bool include = false,
@@ -1495,7 +1240,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdLessThan(
     String value, {
     bool include = false,
@@ -1511,7 +1256,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdBetween(
     String lower,
     String upper, {
@@ -1531,7 +1276,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -1545,7 +1290,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -1559,7 +1304,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1570,7 +1315,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1581,7 +1326,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1591,7 +1336,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       productIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1601,7 +1346,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1610,7 +1355,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
@@ -1619,7 +1364,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -1633,7 +1378,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlGreaterThan(
     String? value, {
     bool include = false,
@@ -1649,7 +1394,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlLessThan(
     String? value, {
     bool include = false,
@@ -1665,7 +1410,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlBetween(
     String? lower,
     String? upper, {
@@ -1685,7 +1430,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -1699,7 +1444,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -1713,7 +1458,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1724,7 +1469,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1735,7 +1480,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1745,7 +1490,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       receiptImageUrlIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1755,63 +1500,81 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusEqualTo(
-    String value, {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'receiptRawText',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'receiptRawText',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextEqualTo(
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'status',
+        property: r'receiptRawText',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusGreaterThan(
-    String value, {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextGreaterThan(
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'status',
+        property: r'receiptRawText',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusLessThan(
-    String value, {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextLessThan(
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'status',
+        property: r'receiptRawText',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusBetween(
-    String lower,
-    String upper, {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextBetween(
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'status',
+        property: r'receiptRawText',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1821,77 +1584,77 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusStartsWith(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'status',
+        property: r'receiptRawText',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusEndsWith(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'status',
+        property: r'receiptRawText',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'status',
+        property: r'receiptRawText',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'status',
+        property: r'receiptRawText',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusIsEmpty() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'status',
+        property: r'receiptRawText',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
-      statusIsNotEmpty() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      receiptRawTextIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'status',
+        property: r'receiptRawText',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       syncStatusEqualTo(SyncStatus value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1901,7 +1664,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       syncStatusGreaterThan(
     SyncStatus value, {
     bool include = false,
@@ -1915,7 +1678,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       syncStatusLessThan(
     SyncStatus value, {
     bool include = false,
@@ -1929,7 +1692,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       syncStatusBetween(
     SyncStatus lower,
     SyncStatus upper, {
@@ -1947,7 +1710,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       timestampEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1957,7 +1720,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       timestampGreaterThan(
     DateTime value, {
     bool include = false,
@@ -1971,7 +1734,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       timestampLessThan(
     DateTime value, {
     bool include = false,
@@ -1985,7 +1748,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       timestampBetween(
     DateTime lower,
     DateTime upper, {
@@ -2003,7 +1766,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -2017,7 +1780,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdGreaterThan(
     String value, {
     bool include = false,
@@ -2033,7 +1796,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdLessThan(
     String value, {
     bool include = false,
@@ -2049,7 +1812,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdBetween(
     String lower,
     String upper, {
@@ -2069,7 +1832,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -2083,7 +1846,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -2097,7 +1860,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -2108,7 +1871,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -2119,7 +1882,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -2129,7 +1892,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       userIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2139,7 +1902,8 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition> uuidEqualTo(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      uuidEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2152,7 +1916,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       uuidGreaterThan(
     String value, {
     bool include = false,
@@ -2168,7 +1932,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       uuidLessThan(
     String value, {
     bool include = false,
@@ -2184,7 +1948,8 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition> uuidBetween(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      uuidBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -2203,7 +1968,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       uuidStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -2217,7 +1982,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       uuidEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -2231,7 +1996,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       uuidContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -2242,9 +2007,8 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition> uuidMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
+      uuidMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'uuid',
@@ -2254,7 +2018,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       uuidIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -2264,7 +2028,7 @@ extension PriceLogModelQueryFilter
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterFilterCondition>
       uuidIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2275,513 +2039,482 @@ extension PriceLogModelQueryFilter
   }
 }
 
-extension PriceLogModelQueryObject
-    on QueryBuilder<PriceLogModel, PriceLogModel, QFilterCondition> {}
+extension PriceLogIsarEntryQueryObject
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QFilterCondition> {}
 
-extension PriceLogModelQueryLinks
-    on QueryBuilder<PriceLogModel, PriceLogModel, QFilterCondition> {}
+extension PriceLogIsarEntryQueryLinks
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QFilterCondition> {}
 
-extension PriceLogModelQuerySortBy
-    on QueryBuilder<PriceLogModel, PriceLogModel, QSortBy> {
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByAbuseFlag() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'abuseFlag', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
-      sortByAbuseFlagDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'abuseFlag', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
-      sortByConfidenceScore() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'confidenceScore', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
-      sortByConfidenceScoreDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'confidenceScore', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByCurrency() {
+extension PriceLogIsarEntryQuerySortBy
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QSortBy> {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByCurrency() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByCurrencyDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByDeviceHash() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByDeviceHash() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'deviceHash', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByDeviceHashDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'deviceHash', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByHasReceipt() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByHasReceipt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasReceipt', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByHasReceiptDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasReceipt', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByIsAvailable() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByIsAvailable() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isAvailable', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByIsAvailableDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isAvailable', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByMarketId() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByMarketId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketId', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByMarketIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketId', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByMarketName() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByMarketName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketName', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByMarketNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketName', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByPrice() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByPrice() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'price', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByPriceDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByPriceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'price', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByProductId() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByProductId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'productId', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByProductIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'productId', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByReceiptImageUrl() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'receiptImageUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByReceiptImageUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'receiptImageUrl', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByStatus() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByReceiptRawText() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.asc);
+      return query.addSortBy(r'receiptRawText', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByStatusDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByReceiptRawTextDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.desc);
+      return query.addSortBy(r'receiptRawText', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortBySyncStatus() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortBySyncStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'syncStatus', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortBySyncStatusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'syncStatus', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByTimestamp() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'timestamp', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       sortByTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'timestamp', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByUserId() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByUserId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'userId', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByUserIdDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByUserIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'userId', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByUuid() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByUuidDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      sortByUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.desc);
     });
   }
 }
 
-extension PriceLogModelQuerySortThenBy
-    on QueryBuilder<PriceLogModel, PriceLogModel, QSortThenBy> {
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByAbuseFlag() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'abuseFlag', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
-      thenByAbuseFlagDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'abuseFlag', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
-      thenByConfidenceScore() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'confidenceScore', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
-      thenByConfidenceScoreDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'confidenceScore', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByCurrency() {
+extension PriceLogIsarEntryQuerySortThenBy
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QSortThenBy> {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByCurrency() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByCurrencyDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByDeviceHash() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByDeviceHash() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'deviceHash', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByDeviceHashDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'deviceHash', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByHasReceipt() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByHasReceipt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasReceipt', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByHasReceiptDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasReceipt', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenById() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByIsAvailable() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByIsAvailable() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isAvailable', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByIsAvailableDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isAvailable', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByMarketId() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByMarketId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketId', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByMarketIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketId', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByMarketName() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByMarketName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketName', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByMarketNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'marketName', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByPrice() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByPrice() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'price', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByPriceDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByPriceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'price', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByProductId() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByProductId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'productId', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByProductIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'productId', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByReceiptImageUrl() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'receiptImageUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByReceiptImageUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'receiptImageUrl', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByStatus() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByReceiptRawText() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.asc);
+      return query.addSortBy(r'receiptRawText', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByStatusDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByReceiptRawTextDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.desc);
+      return query.addSortBy(r'receiptRawText', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenBySyncStatus() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenBySyncStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'syncStatus', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenBySyncStatusDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'syncStatus', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByTimestamp() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'timestamp', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
       thenByTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'timestamp', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByUserId() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByUserId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'userId', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByUserIdDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByUserIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'userId', Sort.desc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByUuid() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByUuid() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.asc);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByUuidDesc() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QAfterSortBy>
+      thenByUuidDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'uuid', Sort.desc);
     });
   }
 }
 
-extension PriceLogModelQueryWhereDistinct
-    on QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> {
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByAbuseFlag(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'abuseFlag', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct>
-      distinctByConfidenceScore() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'confidenceScore');
-    });
-  }
-
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByCurrency(
-      {bool caseSensitive = true}) {
+extension PriceLogIsarEntryQueryWhereDistinct
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct> {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByCurrency({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'currency', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByDeviceHash(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByDeviceHash({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'deviceHash', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByHasReceipt() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByHasReceipt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'hasReceipt');
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
       distinctByIsAvailable() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isAvailable');
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByMarketId(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByMarketId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'marketId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByMarketName(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByMarketName({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'marketName', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByPrice() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByPrice() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'price');
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByProductId(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByProductId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'productId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct>
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
       distinctByReceiptImageUrl({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'receiptImageUrl',
@@ -2789,33 +2522,36 @@ extension PriceLogModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByStatus(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByReceiptRawText({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'receiptRawText',
+          caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctBySyncStatus() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctBySyncStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'syncStatus');
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByTimestamp() {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByTimestamp() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'timestamp');
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByUserId(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct>
+      distinctByUserId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByUuid(
+  QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QDistinct> distinctByUuid(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'uuid', caseSensitive: caseSensitive);
@@ -2823,108 +2559,101 @@ extension PriceLogModelQueryWhereDistinct
   }
 }
 
-extension PriceLogModelQueryProperty
-    on QueryBuilder<PriceLogModel, PriceLogModel, QQueryProperty> {
-  QueryBuilder<PriceLogModel, int, QQueryOperations> idProperty() {
+extension PriceLogIsarEntryQueryProperty
+    on QueryBuilder<PriceLogIsarEntry, PriceLogIsarEntry, QQueryProperty> {
+  QueryBuilder<PriceLogIsarEntry, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<PriceLogModel, String?, QQueryOperations> abuseFlagProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'abuseFlag');
-    });
-  }
-
-  QueryBuilder<PriceLogModel, double?, QQueryOperations>
-      confidenceScoreProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'confidenceScore');
-    });
-  }
-
-  QueryBuilder<PriceLogModel, String, QQueryOperations> currencyProperty() {
+  QueryBuilder<PriceLogIsarEntry, String, QQueryOperations> currencyProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'currency');
     });
   }
 
-  QueryBuilder<PriceLogModel, String, QQueryOperations> deviceHashProperty() {
+  QueryBuilder<PriceLogIsarEntry, String, QQueryOperations>
+      deviceHashProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'deviceHash');
     });
   }
 
-  QueryBuilder<PriceLogModel, bool, QQueryOperations> hasReceiptProperty() {
+  QueryBuilder<PriceLogIsarEntry, bool, QQueryOperations> hasReceiptProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'hasReceipt');
     });
   }
 
-  QueryBuilder<PriceLogModel, bool, QQueryOperations> isAvailableProperty() {
+  QueryBuilder<PriceLogIsarEntry, bool, QQueryOperations>
+      isAvailableProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isAvailable');
     });
   }
 
-  QueryBuilder<PriceLogModel, String, QQueryOperations> marketIdProperty() {
+  QueryBuilder<PriceLogIsarEntry, String, QQueryOperations> marketIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'marketId');
     });
   }
 
-  QueryBuilder<PriceLogModel, String?, QQueryOperations> marketNameProperty() {
+  QueryBuilder<PriceLogIsarEntry, String?, QQueryOperations>
+      marketNameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'marketName');
     });
   }
 
-  QueryBuilder<PriceLogModel, double, QQueryOperations> priceProperty() {
+  QueryBuilder<PriceLogIsarEntry, double, QQueryOperations> priceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'price');
     });
   }
 
-  QueryBuilder<PriceLogModel, String, QQueryOperations> productIdProperty() {
+  QueryBuilder<PriceLogIsarEntry, String, QQueryOperations>
+      productIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'productId');
     });
   }
 
-  QueryBuilder<PriceLogModel, String?, QQueryOperations>
+  QueryBuilder<PriceLogIsarEntry, String?, QQueryOperations>
       receiptImageUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'receiptImageUrl');
     });
   }
 
-  QueryBuilder<PriceLogModel, String, QQueryOperations> statusProperty() {
+  QueryBuilder<PriceLogIsarEntry, String?, QQueryOperations>
+      receiptRawTextProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'status');
+      return query.addPropertyName(r'receiptRawText');
     });
   }
 
-  QueryBuilder<PriceLogModel, SyncStatus, QQueryOperations>
+  QueryBuilder<PriceLogIsarEntry, SyncStatus, QQueryOperations>
       syncStatusProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'syncStatus');
     });
   }
 
-  QueryBuilder<PriceLogModel, DateTime, QQueryOperations> timestampProperty() {
+  QueryBuilder<PriceLogIsarEntry, DateTime, QQueryOperations>
+      timestampProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'timestamp');
     });
   }
 
-  QueryBuilder<PriceLogModel, String, QQueryOperations> userIdProperty() {
+  QueryBuilder<PriceLogIsarEntry, String, QQueryOperations> userIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'userId');
     });
   }
 
-  QueryBuilder<PriceLogModel, String, QQueryOperations> uuidProperty() {
+  QueryBuilder<PriceLogIsarEntry, String, QQueryOperations> uuidProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'uuid');
     });

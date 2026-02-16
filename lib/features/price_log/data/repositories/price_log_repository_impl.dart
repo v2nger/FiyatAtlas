@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/price_log.dart';
@@ -19,6 +20,17 @@ class PriceLogRepositoryImpl implements PriceLogRepository {
 
   @override
   Future<Either<Failure, void>> submitPriceLog(PriceLog log) async {
+    // WEB: Direct to Firestore (Bypass Isar)
+    if (kIsWeb) {
+      try {
+        await remoteDataSource.submitPriceLog(log);
+        return const Right(null);
+      } catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    }
+
+    // MOBILE: Offline-First Logic (Isar + Sync)
     // 1. Always save to local DB first (Optimistic UI support + Backup)
     try {
       // Local Persistence is the Single Source of Truth for the UI
@@ -50,6 +62,14 @@ class PriceLogRepositoryImpl implements PriceLogRepository {
 
   @override
   Future<Either<Failure, List<PriceLog>>> getMyRecentLogs(String userId) async {
+    // WEB: Direct to Firestore (Bypass Isar)
+    if (kIsWeb) {
+      // TODO: Implement direct fetch from remoteDataSource if needed for Web history
+      // For now, return empty list or implement remote fetch in datasource
+      // Assuming RemoteDataSource has a method for this, or we return empty to avoid crash
+      return const Right([]); 
+    }
+
     try {
       final logs = await localDataSource.getLastLogs();
       return Right(logs);

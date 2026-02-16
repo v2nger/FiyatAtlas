@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/shared_providers.dart';
 import '../../../market_session/market_session_provider.dart';
+import '../../../product/data/product_remote_datasource.dart';
+import '../../../product/data/repositories/product_repository_impl.dart';
+import '../../../product/domain/repositories/product_repository.dart';
 import '../../data/datasources/price_log_local_datasource.dart';
 import '../../data/datasources/price_log_remote_datasource.dart';
 import '../../data/repositories/price_log_repository_impl.dart';
@@ -11,14 +14,19 @@ import '../../domain/usecases/submit_price_log_usecase.dart';
 
 // ================= DATA SOURCES =================
 
-final priceLogLocalDataSourceProvider =
-    Provider<PriceLogLocalDataSource>((ref) {
-  return PriceLogLocalDataSourceImpl(ref.watch(isarProvider));
-});
+// This provider is now conditionally exported
+import 'price_log_local_datasource_provider.dart';
+
+final priceLogLocalDataSourceProvider = priceLogDataSourceProvider;
 
 final priceLogRemoteDataSourceProvider =
     Provider<PriceLogRemoteDataSource>((ref) {
   return PriceLogRemoteDataSourceImpl(ref.watch(firestoreProvider));
+});
+
+final productRemoteDataSourceProvider =
+    Provider<ProductRemoteDataSource>((ref) {
+  return ProductRemoteDataSourceImpl(ref.watch(firestoreProvider));
 });
 
 // ================= REPOSITORY =================
@@ -32,11 +40,21 @@ final priceLogRepositoryProvider =
   );
 });
 
+final productRepositoryProvider =
+    Provider<ProductRepository>((ref) {
+  return ProductRepositoryImpl(
+    remoteDataSource: ref.watch(productRemoteDataSourceProvider),
+  );
+});
+
 // ================= USE CASE =================
 
 final submitPriceLogUseCaseProvider =
     Provider<SubmitPriceLog>((ref) {
-  return SubmitPriceLog(ref.watch(priceLogRepositoryProvider));
+  return SubmitPriceLog(
+    priceLogRepository: ref.watch(priceLogRepositoryProvider),
+    productRepository: ref.watch(productRepositoryProvider),
+  );
 });
 
 // ================= CONTROLLER =================

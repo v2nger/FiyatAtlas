@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/presentation/widgets/app_logo.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../auth/presentation/providers/auth_providers.dart';
 import '../../price/domain/price_status.dart';
 
@@ -23,95 +24,159 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
-        title: const AppLogo(height: 50),
+        title: const AppLogo(height: 40), 
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () => Navigator.pushNamed(context, '/map'),
-            icon: const Icon(Icons.map_outlined),
+            icon: const Icon(Icons.map_outlined, color: AppColors.textSecondary),
             tooltip: 'Market Haritası',
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_outlined),
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
+              ),
+              Positioned(
+                right: 12,
+                top: 12,
+                child: Container(
+                  height: 8,
+                  width: 8,
+                  decoration: const BoxDecoration(
+                    color: AppColors.notification, 
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              )
+            ],
           ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         children: [
           // 1. Haftalık Özet Kartı
-          Card(
-            clipBehavior: Clip.antiAlias,
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: InkWell(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  builder: (context) => const _PointHistorySheet(),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.emoji_events,
-                      size: 40,
-                      color: Colors.orange,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Toplam Puanın',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            user != null 
-                              ? '${user.points} Puan (${user.rank})' 
-                              : 'Giriş Yapılmadı'
-                          ),
-                        ],
+          Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1E293B), Color(0xFF0F172A)], // Dark metallic
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: AppColors.surface,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(24),
                       ),
                     ),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          '+80',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                            fontSize: 20,
-                          ),
+                    builder: (context) => const _PointHistorySheet(),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.gold.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.gold.withValues(alpha: 0.3)),
                         ),
-                        Text(
-                          'Bu Hafta',
-                          style: TextStyle(fontSize: 10, color: Colors.green),
+                        child: const Icon(
+                          Icons.emoji_events,
+                          size: 32,
+                          color: AppColors.gold,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Toplam Puanın',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              user != null 
+                                ? '${user.points} Puan' 
+                                : 'Giriş Yapılmadı',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.success.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text(
+                              '+80',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.success,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              'Bu Hafta',
+                              style: TextStyle(fontSize: 10, color: AppColors.success.withValues(alpha: 0.8)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
 
-          // 2. Öne Çıkan Fırsatlar
-          const Text(
-            'Yakınındaki Fırsatlar',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          // 2. Öne Çıkan Fırsatlar (Placeholder for now)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Yakınındaki Fırsatlar',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const Icon(Icons.arrow_forward, size: 16, color: AppColors.textSecondary),
+            ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           // TODO: Replace with Riverpod Promoted Products Provider
           /*
           SizedBox(
@@ -126,17 +191,36 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           */
-          const SizedBox(height: 16),
+          // Placeholder card
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border),
+            ),
+            alignment: Alignment.center,
+            child: const Text("Yakınında fırsat bulunamadı", style: TextStyle(color: AppColors.textSecondary)),
+          ),
+
+          const SizedBox(height: 32),
 
           // 3. Son Girişler
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Son Hareketler',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
-              TextButton(onPressed: () {}, child: const Text('Tümü')),
+              TextButton(
+                onPressed: () {}, 
+                style: TextButton.styleFrom(foregroundColor: AppColors.secondary),
+                child: const Text('Tümü')
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -145,8 +229,16 @@ class HomeScreen extends ConsumerWidget {
             data: (entries) {
               if (entries.isEmpty) {
                 return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('Henüz giriş yapılmadı.'),
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.history, color: AppColors.textTertiary, size: 40),
+                        SizedBox(height: 8),
+                        Text('Henüz giriş yapılmadı.', style: TextStyle(color: AppColors.textTertiary)),
+                      ],
+                    ),
+                  ),
                 );
               }
               
@@ -165,8 +257,8 @@ class HomeScreen extends ConsumerWidget {
                 },
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, stack) => Text('Hata: $err'),
+            loading: () => const Center(child: CircularProgressIndicator(color: AppColors.secondary)),
+            error: (err, stack) => Text('Hata: $err', style: const TextStyle(color: AppColors.error)),
           ),
         ],
       ),
@@ -195,15 +287,9 @@ class _EntryTile extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        border: Border.all(color: AppColors.border),
       ),
       child: Material(
         color: Colors.transparent,
@@ -220,18 +306,17 @@ class _EntryTile extends StatelessWidget {
               children: [
                 // Resim / İkon Alanı
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: 56,
+                  height: 56,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
+                    color: AppColors.background,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade100),
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.shopping_basket,
-                      color: Colors.orange,
-                      size: 28,
+                      color: AppColors.textSecondary,
+                      size: 24,
                     ),
                   ),
                 ),
@@ -246,38 +331,55 @@ class _EntryTile extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600, // Roboto Medium muadili
+                          fontWeight: FontWeight.w600, 
+                          color: AppColors.textPrimary,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
+                              horizontal: 8,
+                              vertical: 4,
                             ),
                             decoration: BoxDecoration(
                               color:
-                                  status ==
-                                      PriceVerificationStatus.verifiedPublic
-                                  ? Colors.green.shade50
-                                  : Colors.orange.shade50,
-                              borderRadius: BorderRadius.circular(4),
+                                  status == PriceVerificationStatus.verifiedPublic
+                                      ? AppColors.success.withValues(alpha: 0.1)
+                                      : AppColors.warning.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: status == PriceVerificationStatus.verifiedPublic
+                                    ? AppColors.success.withValues(alpha: 0.3)
+                                    : AppColors.warning.withValues(alpha: 0.3),
+                              )
                             ),
-                            child: Text(
-                              status.label,
-                              style: TextStyle(
-                                fontSize: 10,
-                                color:
-                                    status ==
-                                        PriceVerificationStatus.verifiedPublic
-                                    ? Colors.green.shade700
-                                    : Colors.orange.shade800,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  status == PriceVerificationStatus.verifiedPublic ? Icons.check_circle : Icons.pending,
+                                  size: 10,
+                                  color: status == PriceVerificationStatus.verifiedPublic
+                                      ? AppColors.success
+                                      : AppColors.warning,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  status.label,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color:
+                                        status == PriceVerificationStatus.verifiedPublic
+                                            ? AppColors.success
+                                            : AppColors.warning,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -293,26 +395,27 @@ class _EntryTile extends StatelessWidget {
                     Text(
                       '₺${price.toStringAsFixed(2)}',
                       style: const TextStyle(
-                        fontFamily:
-                            'Montserrat', // Eğer font yüklü değilse fallback çalışır
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900, // Extra Bold
-                        color: Colors.black87,
+                        fontFamily: 'Montserrat',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900, 
+                        color: AppColors.textPrimary,
+                        letterSpacing: -0.5,
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           isUp ? Icons.arrow_drop_down : Icons.arrow_drop_up,
-                          color: isUp ? Colors.green : Colors.red,
-                          size: 18,
+                          color: isUp ? AppColors.success : AppColors.error,
+                          size: 16,
                         ),
                         Text(
                           '%5', // Mock veri
                           style: TextStyle(
                             fontSize: 12,
-                            color: isUp ? Colors.green : Colors.red,
+                            color: isUp ? AppColors.success : AppColors.error,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -343,21 +446,35 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              const Icon(Icons.history, color: Colors.orange),
-              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.gold.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.history, color: AppColors.gold),
+              ),
+              const SizedBox(width: 12),
               Text(
                 'Puan Hareketleri',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
 
           // Sekmeler
           SegmentedButton<int>(
@@ -370,13 +487,27 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
             onSelectionChanged: (newSelection) {
               setState(() => _selectedTab = newSelection.first);
             },
+            style: ButtonStyle(
+               backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppColors.secondary;
+                }
+                return AppColors.background;
+              }),
+              foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppColors.primary;
+                }
+                return AppColors.textSecondary;
+              }),
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
 
           // İçerik (Mock Veri)
           _buildContentForTab(_selectedTab),
 
-          const Divider(height: 32),
+          const Divider(height: 32, color: AppColors.border),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -387,6 +518,7 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
+                  color: AppColors.textSecondary,
                 ),
               ),
               Text(
@@ -395,17 +527,26 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
                     : (_selectedTab == 1 ? '340 Puan' : '1250 Puan'),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.deepOrange,
-                  fontSize: 18,
+                  color: AppColors.gold,
+                  fontSize: 20,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
+            height: 50,
             child: FilledButton(
               onPressed: () => Navigator.pop(context),
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.background,
+                foregroundColor: AppColors.textPrimary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: AppColors.border),
+                ),
+              ),
               child: const Text('Kapat'),
             ),
           ),
@@ -487,16 +628,17 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
 
   Widget _buildItem(IconData icon, String title, String points, String date) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.orange.withValues(alpha: 0.1),
+              color: AppColors.background,
               shape: BoxShape.circle,
+              border: Border.all(color: AppColors.border),
             ),
-            child: Icon(icon, color: Colors.orange, size: 20),
+            child: Icon(icon, color: AppColors.gold, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -505,11 +647,11 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                 ),
                 Text(
                   date,
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                  style: const TextStyle(color: AppColors.textTertiary, fontSize: 12),
                 ),
               ],
             ),
@@ -518,7 +660,7 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
             points,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.green,
+              color: AppColors.success,
             ),
           ),
         ],

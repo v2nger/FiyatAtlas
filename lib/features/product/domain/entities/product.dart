@@ -6,6 +6,13 @@ class Product {
   final String? imageUrl;
   final bool isVerified; // Approved by admin or authoritative source (API)
   final String? source; // "OpenFoodFacts", "UPCitemdb", "User"
+  
+  // Auditing
+  final DateTime? createdAt;
+  final String? createdBy;
+
+  // Use barcode as ID
+  String get id => barcode;
 
   Product({
     required this.barcode,
@@ -15,6 +22,8 @@ class Product {
     this.imageUrl,
     this.isVerified = false,
     this.source,
+    this.createdAt,
+    this.createdBy,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +35,8 @@ class Product {
       'imageUrl': imageUrl,
       'isVerified': isVerified,
       'source': source,
+      'createdAt': createdAt?.toIso8601String(),
+      'createdBy': createdBy,
     };
   }
 

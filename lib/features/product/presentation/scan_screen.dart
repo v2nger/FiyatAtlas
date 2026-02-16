@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../../../core/theme/app_theme.dart';
 
 class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});
@@ -21,37 +22,25 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
   }
   
   Future<void> _handleBarcode(BuildContext context, String barcode) async {
-
-    // Lookup Product via Riverpod and assume it is cached or fetched
-    // We navigate to detail regardless, detail screen will fetch it again or show error
-    // Pre-fetching would be nicer but for now let's keep it simple as AsyncValue is in the detail screen
-    
-    // final productAsync = ref.read(productLookupProvider(barcode)); // pre-fetch trigger (optional)
-    
-    // Show Loading?
-    
-    // Note: productLookupProvider is a FutureProvider. 
-    // We can just navigate to detail regardless, or wait.
-    // For now, let's navigate to detail argument directly.
-    // The Detail screen will handle the lookup itself using the same provider.
-    
     Navigator.pushNamed(context, '/product-detail', arguments: barcode).then((_) {
-      // Resume scanning when coming back
       if (mounted) {
          setState(() {
            _isProcessed = false;
          });
       }
     });
-
   }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Barkod Tara'),
+        title: const Text('Barkod Tara', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             icon: ValueListenableBuilder(
@@ -59,11 +48,11 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
               builder: (context, state, child) {
                 switch (state.torchState) {
                   case TorchState.off:
-                    return const Icon(Icons.flash_off, color: Colors.grey);
+                    return const Icon(Icons.flash_off, color: Colors.white);
                   case TorchState.on:
-                    return const Icon(Icons.flash_on, color: Colors.yellow);
+                    return const Icon(Icons.flash_on, color: AppColors.gold);
                   case TorchState.auto:
-                    return const Icon(Icons.flash_auto, color: Colors.blue);
+                    return const Icon(Icons.flash_auto, color: AppColors.secondary);
                   case TorchState.unavailable:
                      return const Icon(Icons.flash_off, color: Colors.grey);
                 }
@@ -77,13 +66,13 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
               builder: (context, state, child) {
                 switch (state.cameraDirection) {
                   case CameraFacing.front:
-                    return const Icon(Icons.camera_front);
+                    return const Icon(Icons.camera_front, color: Colors.white);
                   case CameraFacing.back:
-                    return const Icon(Icons.camera_rear);
+                    return const Icon(Icons.camera_rear, color: Colors.white);
                   case CameraFacing.external:
-                    return const Icon(Icons.usb);
+                    return const Icon(Icons.usb, color: Colors.white);
                   case CameraFacing.unknown:
-                    return const Icon(Icons.device_unknown);
+                    return const Icon(Icons.device_unknown, color: Colors.grey);
                 }
               },
             ),
@@ -91,69 +80,155 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            flex: 2,
+          MobileScanner(
+            controller: controller,
+            onDetect: (capture) {
+              if (_isProcessed) return;
+              
+              final List<Barcode> barcodes = capture.barcodes;
+              if (barcodes.isNotEmpty) {
+                final code = barcodes.first.rawValue;
+                if (code != null) {
+                  setState(() {
+                    _isProcessed = true;
+                  });
+                  _handleBarcode(context, code);
+                }
+              }
+            },
+          ),
+          
+          // Custom Overlay
+          ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withValues(alpha: 0.6), 
+              BlendMode.srcOut
+            ),
             child: Stack(
               children: [
-                MobileScanner(
-                  controller: controller,
-                  onDetect: (capture) {
-                    if (_isProcessed) return;
-                    
-                    final List<Barcode> barcodes = capture.barcodes;
-                    if (barcodes.isNotEmpty) {
-                      final code = barcodes.first.rawValue;
-                      if (code != null) {
-                        setState(() {
-                          _isProcessed = true;
-                        });
-                        _handleBarcode(context, code);
-                      }
-                    }
-                  },
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    backgroundBlendMode: BlendMode.dstIn,
+                  ),
                 ),
                 Center(
                   child: Container(
-                    width: 250,
-                    height: 250,
+                    width: 280,
+                    height: 280,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red, width: 2),
-                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(24),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          Expanded(
-            flex: 1,
+          
+          // Scanner Borders
+          Center(
             child: Container(
-              padding: const EdgeInsets.all(24),
-              width: double.infinity,
-              color: Colors.white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              width: 280,
+              height: 280,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.secondary, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.secondary.withValues(alpha: 0.3),
+                    spreadRadius: 4,
+                    blurRadius: 20,
+                  )
+                ]
+              ),
+              child: Stack(
                 children: [
-                  const Text(
-                    'Kamerayı barkoda hizalayın',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Otomatik olarak taranacaktır.',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 24),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/price-entry');
-                    },
-                    icon: const Icon(Icons.edit),
-                    label: const Text('Elle Giriş Yap'),
-                  ),
+                   // Corner Indicators
+                   const Positioned(top: 20, left: 20, child: _Corner(color: AppColors.secondary)),
+                   const Positioned(top: 20, right: 20, child: RotatedBox(quarterTurns: 1, child: _Corner(color: AppColors.secondary))),
+                   const Positioned(bottom: 20, left: 20, child: RotatedBox(quarterTurns: 3, child: _Corner(color: AppColors.secondary))),
+                   const Positioned(bottom: 20, right: 20, child: RotatedBox(quarterTurns: 2, child: _Corner(color: AppColors.secondary))),
+                   // Scanning Line Animation (Static for now, could be animated)
+                   Center(
+                     child: Container(
+                       height: 2,
+                       width: 240,
+                       decoration: BoxDecoration(
+                         color: AppColors.error.withValues(alpha: 0.8),
+                         boxShadow: [
+                           const BoxShadow(
+                             color: AppColors.error,
+                             blurRadius: 10,
+                             spreadRadius: 1,
+                           )
+                         ]
+                       ),
+                     ),
+                   )
                 ],
+              ),
+            ),
+          ),
+
+          // Bottom Instruction Panel
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, -5))
+                ]
+              ),
+              child: SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.border,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Kamerayı barkoda hizalayın',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Otomatik olarak taranacaktır.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textSecondary
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/price-entry'); 
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.secondary,
+                        side: const BorderSide(color: AppColors.secondary),
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      icon: const Icon(Icons.keyboard_alt_outlined),
+                      label: const Text('Elle Giriş Yap'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -161,5 +236,23 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
       ),
     );
   }
+}
 
+class _Corner extends StatelessWidget {
+  final Color color;
+  const _Corner({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: color, width: 3),
+          left: BorderSide(color: color, width: 3),
+        ),
+      ),
+    );
+  }
 }

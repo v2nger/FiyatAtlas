@@ -6,6 +6,9 @@
 # invoked from the command line by running `flutter analyze`.
 
 analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
   plugins:
     - custom_lint
   # Strong mode configuration (optional but recommended for stricter checks)

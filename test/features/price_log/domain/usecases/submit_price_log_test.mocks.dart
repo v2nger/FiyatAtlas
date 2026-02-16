@@ -3,14 +3,18 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:dartz/dartz.dart' as _i2;
-import 'package:fiyatatlas/core/error/failures.dart' as _i5;
+import 'package:fiyatatlas/core/error/failures.dart' as _i6;
 import 'package:fiyatatlas/features/price_log/domain/entities/price_log.dart'
-    as _i6;
+    as _i7;
 import 'package:fiyatatlas/features/price_log/domain/repositories/price_log_repository.dart'
+    as _i4;
+import 'package:fiyatatlas/features/product/domain/entities/product.dart'
     as _i3;
+import 'package:fiyatatlas/features/product/domain/repositories/product_repository.dart'
+    as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -36,34 +40,44 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
         );
 }
 
+class _FakeProduct_1 extends _i1.SmartFake implements _i3.Product {
+  _FakeProduct_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [PriceLogRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPriceLogRepository extends _i1.Mock
-    implements _i3.PriceLogRepository {
+    implements _i4.PriceLogRepository {
   MockPriceLogRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> submitPriceLog(_i6.PriceLog? log) =>
+  _i5.Future<_i2.Either<_i6.Failure, void>> submitPriceLog(_i7.PriceLog? log) =>
       (super.noSuchMethod(
         Invocation.method(
           #submitPriceLog,
           [log],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
-            _FakeEither_0<_i5.Failure, void>(
+        returnValue: _i5.Future<_i2.Either<_i6.Failure, void>>.value(
+            _FakeEither_0<_i6.Failure, void>(
           this,
           Invocation.method(
             #submitPriceLog,
             [log],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+      ) as _i5.Future<_i2.Either<_i6.Failure, void>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.PriceLog>>> getMyRecentLogs(
+  _i5.Future<_i2.Either<_i6.Failure, List<_i7.PriceLog>>> getMyRecentLogs(
           String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -71,13 +85,61 @@ class MockPriceLogRepository extends _i1.Mock
           [userId],
         ),
         returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.PriceLog>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i6.PriceLog>>(
+            _i5.Future<_i2.Either<_i6.Failure, List<_i7.PriceLog>>>.value(
+                _FakeEither_0<_i6.Failure, List<_i7.PriceLog>>(
           this,
           Invocation.method(
             #getMyRecentLogs,
             [userId],
           ),
         )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.PriceLog>>>);
+      ) as _i5.Future<_i2.Either<_i6.Failure, List<_i7.PriceLog>>>);
+}
+
+/// A class which mocks [ProductRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProductRepository extends _i1.Mock implements _i8.ProductRepository {
+  MockProductRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<_i3.Product?> getByBarcode(String? barcode) => (super.noSuchMethod(
+        Invocation.method(
+          #getByBarcode,
+          [barcode],
+        ),
+        returnValue: _i5.Future<_i3.Product?>.value(),
+      ) as _i5.Future<_i3.Product?>);
+
+  @override
+  _i5.Future<_i3.Product> createIfNotExists({
+    required String? barcode,
+    required String? name,
+    required String? brand,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createIfNotExists,
+          [],
+          {
+            #barcode: barcode,
+            #name: name,
+            #brand: brand,
+          },
+        ),
+        returnValue: _i5.Future<_i3.Product>.value(_FakeProduct_1(
+          this,
+          Invocation.method(
+            #createIfNotExists,
+            [],
+            {
+              #barcode: barcode,
+              #name: name,
+              #brand: brand,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Product>);
 }

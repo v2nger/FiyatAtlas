@@ -1,7 +1,7 @@
 import 'package:fiyatatlas/features/market/domain/market_branch.dart';
 import 'package:fiyatatlas/features/price/domain/price_entry.dart';
 import 'package:fiyatatlas/features/price/domain/price_status.dart';
-import 'package:fiyatatlas/features/product/domain/product.dart';
+import 'package:fiyatatlas/features/product/domain/entities/product.dart';
 
 class InMemoryRepository {
   final List<Product> _products = [

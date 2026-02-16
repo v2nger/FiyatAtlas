@@ -1,18 +1,19 @@
+import 'package:fiyatatlas/features/market/domain/market_branch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:fiyatatlas/app_state.dart';
-import 'package:fiyatatlas/features/market/domain/market_branch.dart';
-import 'package:provider/provider.dart';
 
-class MapScreen extends StatefulWidget {
+import 'providers/market_providers.dart';
+
+class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  ConsumerState<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen> {
   final MapController _mapController = MapController();
 
   // Default center: Kadıköy/Istanbul
@@ -20,8 +21,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-    final branches = appState.branches;
+    final branchesAsync = ref.watch(nearbyBranchesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,36 +43,40 @@ class _MapScreenState extends State<MapScreen> {
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.fiyatatlas.app',
           ),
-          MarkerLayer(
-            markers: branches.map((branch) {
-              return Marker(
-                point: LatLng(branch.latitude, branch.longitude),
-                width: 40,
-                height: 40,
-                child: GestureDetector(
-                  onTap: () => _showBranchDetails(branch),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.3),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.store,
-                      color: Colors.white,
-                      size: 24,
+          branchesAsync.when(
+            data: (branches) => MarkerLayer(
+              markers: branches.map((branch) {
+                return Marker(
+                  point: LatLng(branch.latitude, branch.longitude),
+                  width: 40,
+                  height: 40,
+                  child: GestureDetector(
+                    onTap: () => _showBranchDetails(branch),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.store,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
+            error: (e, s) => const MarkerLayer(markers: []), // Show nothing on error or show snackbar
+            loading: () => const MarkerLayer(markers: []),
           ),
         ],
       ),
@@ -121,10 +125,14 @@ class _MapScreenState extends State<MapScreen> {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.pop(context);
-                    // Could navigate to store details or filter products by this store
+                    // Check in
+                    ref.read(currentBranchProvider.notifier).state = branch;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${branch.branchName} seçildi.')),
+                    );
                   },
-                  icon: const Icon(Icons.shopping_basket),
-                  label: const Text('Bu Marketin Fiyatlarını Gör'),
+                  icon: const Icon(Icons.check),
+                  label: const Text('Burayı Seç (Check-in)'),
                 ),
               ),
               const SizedBox(height: 16),

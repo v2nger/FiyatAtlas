@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:fiyatatlas/features/price/domain/price_entry.dart';
 import 'package:fiyatatlas/features/price/domain/price_status.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('PriceEntry Domain Test', () {

@@ -1,51 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:fiyatatlas/app_state.dart';
-import 'package:fiyatatlas/features/market/domain/badge.dart';
-import 'package:fiyatatlas/features/market/data/badges_data.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BadgesScreen extends StatelessWidget {
+import '../../auth/presentation/providers/auth_providers.dart';
+import '../data/badges_data.dart';
+import '../domain/badge.dart';
+
+class BadgesScreen extends ConsumerWidget {
   const BadgesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var user = context.watch<AppState>().currentUser;
+  Widget build(BuildContext context, WidgetRef ref) {
+    // CurrentUserProvider is AsyncValue<User?>
+    final userAsync = ref.watch(currentUserProvider);
 
-    if (user == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Rozetler')),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/'), 
-            child: const Text('Profil Sayfasına Git'),
+    return userAsync.when(
+      data: (user) {
+        if (user == null) {
+           // Not logged in
+          return Scaffold(
+            appBar: AppBar(title: const Text('Rozetler')),
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushReplacementNamed(context, '/login'), 
+                child: const Text('Giriş Yap'),
+              ),
+            ),
+          );
+        }
+
+        final earnedIds = user.earnedBadgeIds;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Rozet Koleksiyonu (${earnedIds.length}/${allBadges.length})'),
+            centerTitle: true,
           ),
-        ),
-      );
-    }
+          body: GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 0.75, 
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+            ),
+            itemCount: allBadges.length,
+            itemBuilder: (context, index) {
+              final badge = allBadges[index];
+              final isEarned = earnedIds.contains(badge.id);
 
-    final earnedIds = user.earnedBadgeIds;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Rozet Koleksiyonu (${earnedIds.length}/${allBadges.length})'),
-        centerTitle: true,
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 0.75, 
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: allBadges.length,
-        itemBuilder: (context, index) {
-          final badge = allBadges[index];
-          final isEarned = earnedIds.contains(badge.id);
-
-          return _BadgeCard(badge: badge, isEarned: isEarned);
-        },
-      ),
+              return _BadgeCard(badge: badge, isEarned: isEarned);
+            },
+          ),
+        );
+      },
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (e, s) => Scaffold(body: Center(child: Text('Error: $e'))),
     );
   }
 }
@@ -100,59 +109,27 @@ class _BadgeCard extends StatelessWidget {
                     blurRadius: 5,
                     offset: const Offset(0, 2),
                   )
-              ],
+                ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                if (isEarned)
-                   Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                         BoxShadow(color: badge.color.withValues(alpha: 0.6), blurRadius: 20, spreadRadius: 1)
-                      ],
-                    ),
-                  ),
-                isEarned
-                    ? Text(badge.emoji, style: const TextStyle(fontSize: 40))
-                    : ColorFiltered(
-                        colorFilter: const ColorFilter.mode(
-                          Colors.grey,
-                          BlendMode.saturation,
-                        ),
-                        child: Opacity(
-                          opacity: 0.5,
-                          child: Text(badge.emoji, style: const TextStyle(fontSize: 40)),
-                        ),
-                      ),
-              ],
+            Icon(
+              badge.icon,
+              size: 32,
+              color: isEarned ? badge.color : Colors.grey.shade500,
             ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Text(
-                badge.name,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: isEarned ? Colors.black87 : Colors.grey.shade600,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            const SizedBox(height: 8),
+            Text(
+              badge.name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 12, 
+                fontWeight: FontWeight.bold,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            if (!isEarned)
-              Padding(
-                 padding: const EdgeInsets.only(top: 8),
-                 child: Icon(Icons.lock_outline, size: 16, color: Colors.grey.shade400), 
-              ),
           ],
         ),
       ),
@@ -169,81 +146,81 @@ class _BadgeDetailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
+                color: isEarned 
+                  ? badge.color.withValues(alpha: 0.1)
+                  : Colors.grey.shade100,
                 shape: BoxShape.circle,
-                color: isEarned ? badge.color.withValues(alpha: 0.2) : Colors.grey.shade100,
               ),
-              child: isEarned
-                  ? Text(badge.emoji, style: const TextStyle(fontSize: 80))
-                  : ColorFiltered(
-                      colorFilter: const ColorFilter.mode(
-                        Colors.grey,
-                        BlendMode.saturation,
-                      ),
-                      child: Opacity(
-                        opacity: 0.5,
-                        child: Text(badge.emoji, style: const TextStyle(fontSize: 80)),
-                      ),
-                    ),
+              child: Icon(
+                badge.icon,
+                size: 64,
+                color: isEarned ? badge.color : Colors.grey,
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Text(
               badge.name,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: isEarned ? Colors.green.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                isEarned ? "Kazanıldı" : "Kilitli",
+                style: TextStyle(
+                  color: isEarned ? Colors.green : Colors.grey,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             Text(
               badge.description,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            const SizedBox(height: 8),
+            const Divider(),
+            const SizedBox(height: 8),
+             Text(
+              "Nasıl kazanılır?",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                color: Colors.grey[500]
+              ),
+            ),
+             const SizedBox(height: 4),
+            Text(
+              badge.requirement,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 24),
-            if (isEarned)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade100,
-                  borderRadius: BorderRadius.circular(20),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () => Navigator.pop(context),
+                style: FilledButton.styleFrom(
+                  backgroundColor: isEarned ? badge.color : Colors.grey,
                 ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check_circle, color: Colors.green, size: 20),
-                    SizedBox(width: 8),
-                    Text('Kazanıldı', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              )
-            else
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.lock, color: Colors.grey, size: 20),
-                    SizedBox(width: 8),
-                    Text('Kilitli', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
-                  ],
-                ),
+                child: const Text('Tamam'),
               ),
-             const SizedBox(height: 20),
-             TextButton(
-               onPressed: () => Navigator.pop(context),
-               child: const Text('Kapat'),
-             )
+            ),
           ],
         ),
       ),

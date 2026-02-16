@@ -1,6 +1,6 @@
 import '../../../core/services/firestore_service.dart';
-import '../../price/domain/price_entry.dart';
-import 'price_repository.dart';
+import '../domain/price_entry.dart';
+import '../domain/price_repository.dart';
 
 class PriceRepositoryImpl implements PriceRepository {
   final FirestoreService _firestoreService;

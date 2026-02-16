@@ -7,14 +7,24 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // Web Client ID'yi buraya sabit olarak ekliyoruz.
-  // Bu ID, google-services.json dosyasındaki "client_type": 3 olan android dışı client ID'dir.
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: kIsWeb 
+  
+  // Google Sign In Configuration
+  static const String? _webClientId = kIsWeb 
       ? '904641400932-sql9kfdqhgkr2ci89amk1809bbmc77up.apps.googleusercontent.com' 
-      : null,
-    scopes: ['email', 'profile'],
-  );
+      : null;
+  bool _isGoogleInit = false;
+
+  Future<void> _ensureGoogleInit() async {
+    if (_isGoogleInit) return;
+    try {
+      await GoogleSignIn.instance.initialize(
+        clientId: _webClientId,
+      );
+      _isGoogleInit = true;
+    } catch (e) {
+      debugPrint("Google Sign In Init Error: $e");
+    }
+  }
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
@@ -32,12 +42,26 @@ class AuthService {
 
   Future<User?> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return null; // Kullanıcı iptal etti
-
+      if (!_isGoogleInit) await _ensureGoogleInit();
+      
+      const scopes = ['email', 'profile'];
+      
+      // 1. Authenticate (Sign In)
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate(
+        scopeHint: scopes,
+      );
+      
+      // 2. Get ID Token
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      // 3. Get Access Token (Authorization)
+      // Note: authorizeScopes might require user interaction if not granted, 
+      // but scopeHint above helps.
+      final GoogleSignInClientAuthorization authClient = 
+          await googleUser.authorizationClient.authorizeScopes(scopes);
+
       final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
+        accessToken: authClient.accessToken,
         idToken: googleAuth.idToken,
       );
 
@@ -94,7 +118,11 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
+    try {
+      if (_isGoogleInit) {
+        await GoogleSignIn.instance.signOut();
+      }
+    } catch (_) {}
     await _auth.signOut();
   }
 }

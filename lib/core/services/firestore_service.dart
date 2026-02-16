@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:fiyatatlas/features/product/domain/product.dart';
 import 'package:fiyatatlas/features/auth/domain/user.dart';
 import 'package:fiyatatlas/features/market/domain/market_branch.dart';
 import 'package:fiyatatlas/features/price/domain/price_entry.dart';
 import 'package:fiyatatlas/features/price/domain/price_status.dart';
+import 'package:fiyatatlas/features/product/domain/entities/product.dart';
+import 'package:flutter/foundation.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -24,6 +24,10 @@ class FirestoreService {
     if (!doc.exists) {
       await docRef.set(user.toMap());
     }
+  }
+
+  Future<void> updateUser(User user) async {
+    await _db.collection(_usersCol).doc(user.id).update(user.toMap());
   }
 
   Future<User?> getUser(String uid) async {
@@ -86,6 +90,16 @@ class FirestoreService {
     }
   }
 
+  Future<List<Product>> getAllProducts() async {
+    try {
+      final snap = await _db.collection(_productsCol).limit(50).get();
+      return snap.docs.map((doc) => Product.fromMap(doc.data())).toList();
+    } catch (e) {
+      debugPrint("GetAllProducts error: $e");
+      return [];
+    }
+  }
+
   // --- Markets ---
 
   Future<void> addMarketBranch(MarketBranch branch) async {
@@ -131,7 +145,7 @@ class FirestoreService {
   }) async {
     try {
       // Key schema: verified_prices/{barcode}_{marketId}
-      final docId = '${barcode}_${marketId}';
+      final docId = '${barcode}_$marketId';
       
       await _db.collection(_verifiedPricesCol).doc(docId).set({
         'barcode': barcode,

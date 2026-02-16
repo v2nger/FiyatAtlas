@@ -12,20 +12,28 @@ class PriceLogRemoteDataSourceImpl implements PriceLogRemoteDataSource {
 
   @override
   Future<void> submitPriceLog(PriceLog log) async {
-    // Convert to Firestore Map
     final map = {
-      'id': log.id,
-      'userId': log.userId,
-      'barcode': log.productId, // Schema requirement
-      'marketBranchId': log.marketId,
+      // Backend required fields
+      'product_id': log.productId,
+      'market_id': log.marketId,
+      'user_id': log.userId,
       'price': log.price,
+      'timestamp': Timestamp.fromDate(log.timestamp),
+      'receipt_url': log.receiptImageUrl,
+      'device_hash': log.deviceHash,
+
+      // Default state (backend update edecek)
+      'status': 'pending',
+      'confidence_score': 0,
+
+      // Optional UI fields
+      'market_name': log.marketName,
       'currency': log.currency,
-      'entryDate': log.timestamp.toIso8601String(),
-      'hasReceipt': log.hasReceipt,
-      'receiptImageUrl': log.receiptImageUrl,
-      'isAvailable': log.isAvailable,
-      // Note: No confidence fields here. Backend handles that.
-      'device_timestamp': FieldValue.serverTimestamp(),
+      'has_receipt': log.hasReceipt,
+      'is_available': log.isAvailable,
+
+      // Server clock
+      'server_timestamp': FieldValue.serverTimestamp(),
     };
 
     await firestore.collection('price_logs').add(map);

@@ -8,55 +8,107 @@ class PriceLogModel {
   Id id = Isar.autoIncrement;
 
   @Index(unique: true, replace: true)
-  late String uuid; // mapped from entity.id
+  late String uuid; // entity.id
 
   late String userId;
-  
+
   @Index()
   late String productId;
-  
+
   late String marketId;
+  late String? marketName;
+
   late double price;
   late String currency;
   late DateTime timestamp;
+
   late bool hasReceipt;
   late String? receiptImageUrl;
   late bool isAvailable;
+
+  // Backend fields
+  late String deviceHash;
+  late String status; // private | pending | verified
+  double? confidenceScore;
+  String? abuseFlag;
 
   // Sync Logic
   @Enumerated(EnumType.ordinal)
   late SyncStatus syncStatus;
 
-  /// Converts API/Domain log to Local Model
-  static PriceLogModel fromEntity(PriceLog log, {SyncStatus status = SyncStatus.synced}) {
+  /* ============================
+     ENTITY → LOCAL
+  ============================ */
+
+  static PriceLogModel fromEntity(PriceLog log) {
     return PriceLogModel()
       ..uuid = log.id
       ..userId = log.userId
       ..productId = log.productId
       ..marketId = log.marketId
+      ..marketName = log.marketName
       ..price = log.price
       ..currency = log.currency
       ..timestamp = log.timestamp
       ..hasReceipt = log.hasReceipt
       ..receiptImageUrl = log.receiptImageUrl
       ..isAvailable = log.isAvailable
-      ..syncStatus = status;
+      ..deviceHash = log.deviceHash
+      ..status = log.status
+      ..confidenceScore = log.confidenceScore
+      ..abuseFlag = log.abuseFlag
+      ..syncStatus = _mapSyncStatus(log.syncStatus);
   }
 
-  /// Converts Local Model to Domain Entity
+  /* ============================
+     LOCAL → ENTITY
+  ============================ */
+
   PriceLog toEntity() {
     return PriceLog(
       id: uuid,
       userId: userId,
       productId: productId,
       marketId: marketId,
+      marketName: marketName,
       price: price,
       currency: currency,
       timestamp: timestamp,
       hasReceipt: hasReceipt,
       receiptImageUrl: receiptImageUrl,
       isAvailable: isAvailable,
+      deviceHash: deviceHash,
+      status: status,
+      confidenceScore: confidenceScore,
+      abuseFlag: abuseFlag,
+      syncStatus: _mapToDomainStatus(syncStatus),
     );
+  }
+
+  /* ============================
+     STATUS MAPPERS
+  ============================ */
+
+  static SyncStatus _mapSyncStatus(PriceLogSyncStatus status) {
+    switch (status) {
+      case PriceLogSyncStatus.synced:
+        return SyncStatus.synced;
+      case PriceLogSyncStatus.pending:
+        return SyncStatus.pending;
+      case PriceLogSyncStatus.failed:
+        return SyncStatus.failed;
+    }
+  }
+
+  static PriceLogSyncStatus _mapToDomainStatus(SyncStatus status) {
+    switch (status) {
+      case SyncStatus.synced:
+        return PriceLogSyncStatus.synced;
+      case SyncStatus.pending:
+        return PriceLogSyncStatus.pending;
+      case SyncStatus.failed:
+        return PriceLogSyncStatus.failed;
+    }
   }
 }
 

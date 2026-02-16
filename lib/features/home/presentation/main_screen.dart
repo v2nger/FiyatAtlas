@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fiyatatlas/features/home/presentation/home_screen.dart';
-import 'package:fiyatatlas/features/product/presentation/search_screen.dart';
-import 'package:fiyatatlas/features/product/presentation/category_screen.dart'; 
-import 'package:fiyatatlas/features/price/presentation/price_entry_screen.dart';
-import 'package:fiyatatlas/features/auth/presentation/profile_screen.dart';
+
+import '../../auth/presentation/profile_screen.dart';
+import '../../product/presentation/category_screen.dart';
+import '../../product/presentation/scan_screen.dart';
+import '../../product/presentation/search_screen.dart';
+import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,7 +19,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
-    const PriceEntryScreen(),
+    // Replace Direct Entry with Scanning First
+    const ScanScreen(), 
     const CategoryScreen(),
     const ProfileScreen(),
   ];

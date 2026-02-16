@@ -1,7 +1,8 @@
 import 'dart:convert';
+
+import 'package:fiyatatlas/features/product/domain/entities/product.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:fiyatatlas/features/product/domain/product.dart';
 
 class ProductLookupService {
   // Open Food Facts API (Free, No Key)

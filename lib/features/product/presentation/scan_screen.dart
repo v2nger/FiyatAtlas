@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:provider/provider.dart';
-import 'package:fiyatatlas/app_state.dart';
 
-class ScanScreen extends StatefulWidget {
+
+class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});
 
   @override
-  State<ScanScreen> createState() => _ScanScreenState();
+  ConsumerState<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
+class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController();
   bool _isProcessed = false;
 
@@ -19,6 +19,33 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
     controller.dispose();
     super.dispose();
   }
+  
+  Future<void> _handleBarcode(BuildContext context, String barcode) async {
+
+    // Lookup Product via Riverpod and assume it is cached or fetched
+    // We navigate to detail regardless, detail screen will fetch it again or show error
+    // Pre-fetching would be nicer but for now let's keep it simple as AsyncValue is in the detail screen
+    
+    // final productAsync = ref.read(productLookupProvider(barcode)); // pre-fetch trigger (optional)
+    
+    // Show Loading?
+    
+    // Note: productLookupProvider is a FutureProvider. 
+    // We can just navigate to detail regardless, or wait.
+    // For now, let's navigate to detail argument directly.
+    // The Detail screen will handle the lookup itself using the same provider.
+    
+    Navigator.pushNamed(context, '/product-detail', arguments: barcode).then((_) {
+      // Resume scanning when coming back
+      if (mounted) {
+         setState(() {
+           _isProcessed = false;
+         });
+      }
+    });
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,23 +162,4 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
     );
   }
 
-  void _handleBarcode(BuildContext context, String barcode) {
-    debugPrint('Barcode found: $barcode');
-    final appState = context.read<AppState>();
-    
-    // Ürün var mı kontrol et
-    bool exists = false;
-    try {
-        appState.products.firstWhere((p) => p.barcode == barcode);
-        exists = true;
-    } catch (_) {}
-
-    if (exists) {
-        // Detaya git
-        Navigator.pushReplacementNamed(context, '/product-detail', arguments: barcode);
-    } else {
-        // Yeni giriş ekranına git (Barkodu argüman olarak gönder)
-        Navigator.pushReplacementNamed(context, '/price-entry', arguments: barcode);
-    }
-  }
 }

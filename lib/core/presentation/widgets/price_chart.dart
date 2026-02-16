@@ -1,8 +1,7 @@
+import 'package:fiyatatlas/features/price/domain/price_entry.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'package:fiyatatlas/features/price/domain/price_entry.dart';
 
 class PriceChart extends StatelessWidget {
   const PriceChart({super.key, required this.history});

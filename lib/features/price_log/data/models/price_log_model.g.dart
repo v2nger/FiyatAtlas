@@ -17,59 +17,84 @@ const PriceLogModelSchema = CollectionSchema(
   name: r'PriceLogModel',
   id: 1292558803559634231,
   properties: {
-    r'currency': PropertySchema(
+    r'abuseFlag': PropertySchema(
       id: 0,
+      name: r'abuseFlag',
+      type: IsarType.string,
+    ),
+    r'confidenceScore': PropertySchema(
+      id: 1,
+      name: r'confidenceScore',
+      type: IsarType.double,
+    ),
+    r'currency': PropertySchema(
+      id: 2,
       name: r'currency',
       type: IsarType.string,
     ),
+    r'deviceHash': PropertySchema(
+      id: 3,
+      name: r'deviceHash',
+      type: IsarType.string,
+    ),
     r'hasReceipt': PropertySchema(
-      id: 1,
+      id: 4,
       name: r'hasReceipt',
       type: IsarType.bool,
     ),
     r'isAvailable': PropertySchema(
-      id: 2,
+      id: 5,
       name: r'isAvailable',
       type: IsarType.bool,
     ),
     r'marketId': PropertySchema(
-      id: 3,
+      id: 6,
       name: r'marketId',
       type: IsarType.string,
     ),
+    r'marketName': PropertySchema(
+      id: 7,
+      name: r'marketName',
+      type: IsarType.string,
+    ),
     r'price': PropertySchema(
-      id: 4,
+      id: 8,
       name: r'price',
       type: IsarType.double,
     ),
     r'productId': PropertySchema(
-      id: 5,
+      id: 9,
       name: r'productId',
       type: IsarType.string,
     ),
     r'receiptImageUrl': PropertySchema(
-      id: 6,
+      id: 10,
       name: r'receiptImageUrl',
       type: IsarType.string,
     ),
+    r'status': PropertySchema(
+      id: 11,
+      name: r'status',
+      type: IsarType.string,
+    ),
     r'syncStatus': PropertySchema(
-      id: 7,
+      id: 12,
       name: r'syncStatus',
       type: IsarType.byte,
       enumMap: _PriceLogModelsyncStatusEnumValueMap,
     ),
     r'timestamp': PropertySchema(
-      id: 8,
+      id: 13,
       name: r'timestamp',
       type: IsarType.dateTime,
     ),
     r'userId': PropertySchema(
-      id: 9,
+      id: 14,
       name: r'userId',
       type: IsarType.string,
     ),
     r'uuid': PropertySchema(
-      id: 10,
+      id: 15,
       name: r'uuid',
       type: IsarType.string,
     )
@@ -121,8 +146,21 @@ int _priceLogModelEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.abuseFlag;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.currency.length * 3;
+  bytesCount += 3 + object.deviceHash.length * 3;
   bytesCount += 3 + object.marketId.length * 3;
+  {
+    final value = object.marketName;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.productId.length * 3;
   {
     final value = object.receiptImageUrl;
@@ -130,6 +168,7 @@ int _priceLogModelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.status.length * 3;
   bytesCount += 3 + object.userId.length * 3;
   bytesCount += 3 + object.uuid.length * 3;
   return bytesCount;
@@ -141,17 +180,22 @@ void _priceLogModelSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.currency);
-  writer.writeBool(offsets[1], object.hasReceipt);
-  writer.writeBool(offsets[2], object.isAvailable);
-  writer.writeString(offsets[3], object.marketId);
-  writer.writeDouble(offsets[4], object.price);
-  writer.writeString(offsets[5], object.productId);
-  writer.writeString(offsets[6], object.receiptImageUrl);
-  writer.writeByte(offsets[7], object.syncStatus.index);
-  writer.writeDateTime(offsets[8], object.timestamp);
-  writer.writeString(offsets[9], object.userId);
-  writer.writeString(offsets[10], object.uuid);
+  writer.writeString(offsets[0], object.abuseFlag);
+  writer.writeDouble(offsets[1], object.confidenceScore);
+  writer.writeString(offsets[2], object.currency);
+  writer.writeString(offsets[3], object.deviceHash);
+  writer.writeBool(offsets[4], object.hasReceipt);
+  writer.writeBool(offsets[5], object.isAvailable);
+  writer.writeString(offsets[6], object.marketId);
+  writer.writeString(offsets[7], object.marketName);
+  writer.writeDouble(offsets[8], object.price);
+  writer.writeString(offsets[9], object.productId);
+  writer.writeString(offsets[10], object.receiptImageUrl);
+  writer.writeString(offsets[11], object.status);
+  writer.writeByte(offsets[12], object.syncStatus.index);
+  writer.writeDateTime(offsets[13], object.timestamp);
+  writer.writeString(offsets[14], object.userId);
+  writer.writeString(offsets[15], object.uuid);
 }
 
 PriceLogModel _priceLogModelDeserialize(
@@ -161,20 +205,25 @@ PriceLogModel _priceLogModelDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = PriceLogModel();
-  object.currency = reader.readString(offsets[0]);
-  object.hasReceipt = reader.readBool(offsets[1]);
+  object.abuseFlag = reader.readStringOrNull(offsets[0]);
+  object.confidenceScore = reader.readDoubleOrNull(offsets[1]);
+  object.currency = reader.readString(offsets[2]);
+  object.deviceHash = reader.readString(offsets[3]);
+  object.hasReceipt = reader.readBool(offsets[4]);
   object.id = id;
-  object.isAvailable = reader.readBool(offsets[2]);
-  object.marketId = reader.readString(offsets[3]);
-  object.price = reader.readDouble(offsets[4]);
-  object.productId = reader.readString(offsets[5]);
-  object.receiptImageUrl = reader.readStringOrNull(offsets[6]);
-  object.syncStatus =
-      _PriceLogModelsyncStatusValueEnumMap[reader.readByteOrNull(offsets[7])] ??
-          SyncStatus.synced;
-  object.timestamp = reader.readDateTime(offsets[8]);
-  object.userId = reader.readString(offsets[9]);
-  object.uuid = reader.readString(offsets[10]);
+  object.isAvailable = reader.readBool(offsets[5]);
+  object.marketId = reader.readString(offsets[6]);
+  object.marketName = reader.readStringOrNull(offsets[7]);
+  object.price = reader.readDouble(offsets[8]);
+  object.productId = reader.readString(offsets[9]);
+  object.receiptImageUrl = reader.readStringOrNull(offsets[10]);
+  object.status = reader.readString(offsets[11]);
+  object.syncStatus = _PriceLogModelsyncStatusValueEnumMap[
+          reader.readByteOrNull(offsets[12])] ??
+      SyncStatus.synced;
+  object.timestamp = reader.readDateTime(offsets[13]);
+  object.userId = reader.readString(offsets[14]);
+  object.uuid = reader.readString(offsets[15]);
   return object;
 }
 
@@ -186,28 +235,38 @@ P _priceLogModelDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readBool(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 2:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 5:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 6:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 7:
-      return (_PriceLogModelsyncStatusValueEnumMap[
-              reader.readByteOrNull(offset)] ??
-          SyncStatus.synced) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 8:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 9:
       return (reader.readString(offset)) as P;
     case 10:
+      return (reader.readStringOrNull(offset)) as P;
+    case 11:
+      return (reader.readString(offset)) as P;
+    case 12:
+      return (_PriceLogModelsyncStatusValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          SyncStatus.synced) as P;
+    case 13:
+      return (reader.readDateTime(offset)) as P;
+    case 14:
+      return (reader.readString(offset)) as P;
+    case 15:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -467,6 +526,244 @@ extension PriceLogModelQueryWhere
 extension PriceLogModelQueryFilter
     on QueryBuilder<PriceLogModel, PriceLogModel, QFilterCondition> {
   QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'abuseFlag',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'abuseFlag',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'abuseFlag',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'abuseFlag',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'abuseFlag',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'abuseFlag',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'abuseFlag',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'abuseFlag',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'abuseFlag',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'abuseFlag',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'abuseFlag',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      abuseFlagIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'abuseFlag',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      confidenceScoreIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'confidenceScore',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      confidenceScoreIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'confidenceScore',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      confidenceScoreEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'confidenceScore',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      confidenceScoreGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'confidenceScore',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      confidenceScoreLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'confidenceScore',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      confidenceScoreBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'confidenceScore',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
       currencyEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -597,6 +894,142 @@ extension PriceLogModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'currency',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'deviceHash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'deviceHash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'deviceHash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'deviceHash',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'deviceHash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'deviceHash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'deviceHash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'deviceHash',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'deviceHash',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      deviceHashIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'deviceHash',
         value: '',
       ));
     });
@@ -807,6 +1240,160 @@ extension PriceLogModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'marketId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'marketName',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'marketName',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'marketName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'marketName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'marketName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'marketName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'marketName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'marketName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'marketName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'marketName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'marketName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      marketNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'marketName',
         value: '',
       ));
     });
@@ -1163,6 +1750,142 @@ extension PriceLogModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'receiptImageUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'status',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'status',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'status',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterFilterCondition>
+      statusIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'status',
         value: '',
       ));
     });
@@ -1560,6 +2283,33 @@ extension PriceLogModelQueryLinks
 
 extension PriceLogModelQuerySortBy
     on QueryBuilder<PriceLogModel, PriceLogModel, QSortBy> {
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByAbuseFlag() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'abuseFlag', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      sortByAbuseFlagDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'abuseFlag', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      sortByConfidenceScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'confidenceScore', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      sortByConfidenceScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'confidenceScore', Sort.desc);
+    });
+  }
+
   QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByCurrency() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.asc);
@@ -1570,6 +2320,19 @@ extension PriceLogModelQuerySortBy
       sortByCurrencyDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByDeviceHash() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceHash', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      sortByDeviceHashDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceHash', Sort.desc);
     });
   }
 
@@ -1612,6 +2375,19 @@ extension PriceLogModelQuerySortBy
     });
   }
 
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByMarketName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'marketName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      sortByMarketNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'marketName', Sort.desc);
+    });
+  }
+
   QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByPrice() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'price', Sort.asc);
@@ -1648,6 +2424,18 @@ extension PriceLogModelQuerySortBy
       sortByReceiptImageUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'receiptImageUrl', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> sortByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
     });
   }
 
@@ -1704,6 +2492,33 @@ extension PriceLogModelQuerySortBy
 
 extension PriceLogModelQuerySortThenBy
     on QueryBuilder<PriceLogModel, PriceLogModel, QSortThenBy> {
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByAbuseFlag() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'abuseFlag', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      thenByAbuseFlagDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'abuseFlag', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      thenByConfidenceScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'confidenceScore', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      thenByConfidenceScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'confidenceScore', Sort.desc);
+    });
+  }
+
   QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByCurrency() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.asc);
@@ -1714,6 +2529,19 @@ extension PriceLogModelQuerySortThenBy
       thenByCurrencyDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currency', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByDeviceHash() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceHash', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      thenByDeviceHashDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deviceHash', Sort.desc);
     });
   }
 
@@ -1768,6 +2596,19 @@ extension PriceLogModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByMarketName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'marketName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy>
+      thenByMarketNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'marketName', Sort.desc);
+    });
+  }
+
   QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByPrice() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'price', Sort.asc);
@@ -1804,6 +2645,18 @@ extension PriceLogModelQuerySortThenBy
       thenByReceiptImageUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'receiptImageUrl', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QAfterSortBy> thenByStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
     });
   }
 
@@ -1860,10 +2713,31 @@ extension PriceLogModelQuerySortThenBy
 
 extension PriceLogModelQueryWhereDistinct
     on QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> {
+  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByAbuseFlag(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'abuseFlag', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct>
+      distinctByConfidenceScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'confidenceScore');
+    });
+  }
+
   QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByCurrency(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'currency', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByDeviceHash(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'deviceHash', caseSensitive: caseSensitive);
     });
   }
 
@@ -1887,6 +2761,13 @@ extension PriceLogModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByMarketName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'marketName', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByPrice() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'price');
@@ -1905,6 +2786,13 @@ extension PriceLogModelQueryWhereDistinct
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'receiptImageUrl',
           caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<PriceLogModel, PriceLogModel, QDistinct> distinctByStatus(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
     });
   }
 
@@ -1943,9 +2831,28 @@ extension PriceLogModelQueryProperty
     });
   }
 
+  QueryBuilder<PriceLogModel, String?, QQueryOperations> abuseFlagProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'abuseFlag');
+    });
+  }
+
+  QueryBuilder<PriceLogModel, double?, QQueryOperations>
+      confidenceScoreProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'confidenceScore');
+    });
+  }
+
   QueryBuilder<PriceLogModel, String, QQueryOperations> currencyProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'currency');
+    });
+  }
+
+  QueryBuilder<PriceLogModel, String, QQueryOperations> deviceHashProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'deviceHash');
     });
   }
 
@@ -1967,6 +2874,12 @@ extension PriceLogModelQueryProperty
     });
   }
 
+  QueryBuilder<PriceLogModel, String?, QQueryOperations> marketNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'marketName');
+    });
+  }
+
   QueryBuilder<PriceLogModel, double, QQueryOperations> priceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'price');
@@ -1983,6 +2896,12 @@ extension PriceLogModelQueryProperty
       receiptImageUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'receiptImageUrl');
+    });
+  }
+
+  QueryBuilder<PriceLogModel, String, QQueryOperations> statusProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'status');
     });
   }
 

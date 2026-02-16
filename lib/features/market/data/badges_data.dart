@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fiyatatlas/features/market/domain/badge.dart';
+import 'package:flutter/material.dart';
 
 final List<UserBadge> allBadges = [
   // --- 1. Seviye & Giriş (Rütbe) ---

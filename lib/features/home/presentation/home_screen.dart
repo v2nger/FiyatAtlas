@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:fiyatatlas/app_state.dart';
-import 'package:fiyatatlas/features/price/domain/price_status.dart';
-import 'package:fiyatatlas/core/presentation/widgets/app_logo.dart'; // Add this import
+import '../../../core/presentation/widgets/app_logo.dart';
+import '../../auth/presentation/providers/auth_providers.dart';
+import '../../price/domain/price_status.dart';
 
-class HomeScreen extends StatelessWidget {
+// Needs a provider to fetch recent entries. 
+// For now, we stub this list or implement a provider for it.
+final recentEntriesProvider = FutureProvider<List<dynamic>>((ref) async {
+  // TODO: Implement getRecentEntries UseCase
+  return [];
+});
+
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-    final entries = appState.entries;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider).value;
+    final entriesAsync = ref.watch(recentEntriesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -67,7 +74,11 @@ class HomeScreen extends StatelessWidget {
                             'Toplam Puanın',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          const Text('1250 Puan (Bronz Üye)'),
+                          Text(
+                            user != null 
+                              ? '${user.points} Puan (${user.rank})' 
+                              : 'Giriş Yapılmadı'
+                          ),
                         ],
                       ),
                     ),
@@ -101,65 +112,20 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
+          // TODO: Replace with Riverpod Promoted Products Provider
+          /*
           SizedBox(
             height: 140,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: appState.products.take(5).length,
+              itemCount: 0, // Placeholder
               itemBuilder: (context, index) {
-                final product = appState.products[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/product-detail',
-                      arguments: product.barcode,
-                    );
-                  },
-                  child: Container(
-                    width: 200,
-                    margin: const EdgeInsets.only(right: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(12),
-                            ),
-                          ),
-                          child: Hero(
-                            tag: 'product_img_${product.barcode}',
-                            child: Icon(
-                              Icons.shopping_bag,
-                              color: Colors.teal.shade200,
-                              size: 40,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '${product.brand} ${product.name}',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                // ...
+              return SizedBox();
               },
             ),
           ),
+          */
           const SizedBox(height: 16),
 
           // 3. Son Girişler
@@ -174,22 +140,34 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          if (entries.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Henüz giriş yapılmadı.'),
-            ),
-          for (final entry in entries)
-            _EntryTile(
-              name: appState.products.any((p) => p.barcode == entry.barcode)
-                  ? appState.products
-                        .firstWhere((p) => p.barcode == entry.barcode)
-                        .name
-                  : 'Barkod: ${entry.barcode}',
-              price: entry.price,
-              status: entry.status,
-              barcode: entry.barcode,
-            ),
+          
+          entriesAsync.when(
+            data: (entries) {
+              if (entries.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text('Henüz giriş yapılmadı.'),
+                );
+              }
+              
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: entries.length,
+                itemBuilder: (context, index) {
+                   // Mock mapping for now to satisfy unused element warning
+                   return const _EntryTile(
+                     name: 'Ürün Name',
+                     price: 0.0,
+                     status: PriceVerificationStatus.pendingPrivate,
+                     barcode: '000000',
+                   );
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Text('Hata: $err'),
+          ),
         ],
       ),
     );

@@ -1,18 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'package:provider/provider.dart';
-import 'package:fiyatatlas/l10n/app_localizations.dart';
-import 'package:fiyatatlas/app_state.dart';
 import 'package:fiyatatlas/core/constants/agreements.dart';
+import 'package:fiyatatlas/features/auth/presentation/providers/auth_providers.dart';
+import 'package:fiyatatlas/l10n/app_localizations.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginScreen extends StatefulWidget {
+import '../../../../core/providers/locale_provider.dart';
+
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isLogin = true; // Login vs Register mode
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -26,8 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final appState = context.read<AppState>();
-    final isTr = appState.locale.languageCode == 'tr';
+    // final appState = context.read<AppState>(); // Legacy
+    final locale = ref.watch(localeNotifierProvider);
+    final isTr = locale.languageCode == 'tr';
 
     final kvkkTitle = isTr 
       ? "KVKK Aydınlatma Metni'ni okudum ve kabul ediyorum."
@@ -66,14 +69,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextButton.icon(
                       onPressed: () {
-                         final current = appState.locale;
+                         final current = ref.read(localeNotifierProvider);
                          final newLocale = current.languageCode == 'tr' 
                              ? const Locale('en') 
                              : const Locale('tr');
-                         appState.setLocale(newLocale);
+                         ref.read(localeNotifierProvider.notifier).setLocale(newLocale);
                       },
                       icon: const Icon(Icons.language),
-                      label: Text(appState.locale.languageCode.toUpperCase()),
+                      label: Text(locale.languageCode.toUpperCase()),
                     ),
                   ],
                 ),
@@ -228,13 +231,13 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     setState(() => _isLoading = true);
-    final appState = context.read<AppState>();
+    final authController = ref.read(authControllerProvider);
 
     try {
       if (_isLogin) {
-        await appState.loginWithEmail(email, password);
+        await authController.signInWithEmail(email, password);
       } else {
-        await appState.registerWithEmail(email, password);
+        await authController.registerWithEmail(email, password);
       }
       
       if (mounted) {
@@ -253,19 +256,20 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!_validateAgreements(context)) return;
     
     setState(() => _isLoading = true);
-    final appState = context.read<AppState>();
+    final authController = ref.read(authControllerProvider);
     
     try {
       if (provider == 'google') {
-        await appState.loginWithGoogle();
+        await authController.signInWithGoogle();
       } else if (provider == 'apple') {
-        await appState.loginWithApple();
+        await authController.signInWithApple();
       }
 
       if (!mounted) return;
 
       // Check if actually logged in (user might have cancelled social login)
-      if (appState.isLoggedIn) {
+      final user = ref.read(currentUserProvider).value;
+      if (user != null) {
           Navigator.pushReplacementNamed(this.context, '/home');
       }
     } catch (e) {
@@ -310,7 +314,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 final email = dialogEmailController.text.trim();
                 if (email.isNotEmpty) {
                   try {
-                    await context.read<AppState>().sendPasswordReset(email);
+                    await ref.read(authControllerProvider).sendPasswordResetEmail(email);
                     if (context.mounted) {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -341,8 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
     try {
       // Use the context from the build method to read the provider before the async gap
-      final appState = context.read<AppState>();
-      await appState.loginAnonymously();
+      await ref.read(authControllerProvider).signInAnonymously();
        
        if (mounted) {
         // Use this.context (the State's context) after the async gap and mounted check

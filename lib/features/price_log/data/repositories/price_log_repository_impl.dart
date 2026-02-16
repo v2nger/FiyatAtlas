@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/price_log.dart';
 import '../../domain/repositories/price_log_repository.dart';
@@ -22,32 +21,30 @@ class PriceLogRepositoryImpl implements PriceLogRepository {
   Future<Either<Failure, void>> submitPriceLog(PriceLog log) async {
     // 1. Always save to local DB first (Optimistic UI support + Backup)
     try {
+      // Local Persistence is the Single Source of Truth for the UI
+      await localDataSource.cachePriceLog(log, isPending: true); 
+
+      // 2. Try Push if Online (Best Effort)
       if (await networkInfo.isConnected) {
-        // Online: Try to push
         try {
-          await remoteDataSource.submitPriceLog(log);
-          // Save valid state to local (synced)
-          await localDataSource.cachePriceLog(log, isPending: false);
-          return const Right(null);
+           // Prevent double submission if sync manager picks it up too fast?
+           // Actually, we just try to push. If successful, mark synced.
+           await remoteDataSource.submitPriceLog(log);
+           await localDataSource.markAsSynced(log.id);
         } catch (e) {
-          // Push failed, but we are "online" (maybe timeout). Save as pending.
-          await localDataSource.cachePriceLog(log, isPending: true);
-          return Left(ServerFailure(e.toString())); 
-          // Note: Returning Left here informs UI of failure, 
-          // but data is safe locally pending sync.
-          // Alternatively, return Right and background sync handles it.
-          // For "Exit-focused" robust apps, transparency is key. 
-          // But "Offline-first" usually implies success to user if saved locally.
-          // Let's return Right but maybe queue a background job.
-          // I will return Right(null) because the primary goal (Persist User Intent) succeeded.
+           // Remote push failed.
+           // Do NOT fail the operation. The user's intent is captured.
+           // Background Sync Manager will handle retries.
+           // Log error for analytics if needed.
         }
-      } else {
-        // Offline
-        await localDataSource.cachePriceLog(log, isPending: true);
-        return const Right(null); 
       }
+      
+      // ALWAYS return success if local save worked.
+      return const Right(null);
+
     } on Exception catch (e) {
-      return Left(CacheFailure(e.toString()));
+      // Only fail if LOCAL DB fails (Critical Error)
+      return Left(DatabaseFailure('Local persistence failed: $e'));
     }
   }
 

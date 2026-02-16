@@ -1,9 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../../features/auth/data/auth_service.dart';
-import '../services/firestore_service.dart';
 import '../../features/product/data/product_lookup_service.dart';
-import '../data/in_memory_repository.dart';
 import '../../features/verification/data/verification_service.dart';
+import '../data/in_memory_repository.dart';
+import '../services/firestore_service.dart';
 
 part 'core_providers.g.dart';
 

@@ -1,11 +1,12 @@
-import '../../auth/domain/user.dart';
-import '../../gamification/domain/gamification_service.dart';
-import '../../market/domain/market_branch.dart';
-import '../../product/domain/product.dart';
-import '../domain/price_entry.dart';
-import '../domain/price_repository.dart';
-import '../domain/price_status.dart';
-import '../domain/consensus_service.dart';
+import 'package:fiyatatlas/features/auth/domain/user.dart';
+import 'package:fiyatatlas/features/gamification/domain/gamification_service.dart';
+import 'package:fiyatatlas/features/market/domain/market_branch.dart';
+import 'package:fiyatatlas/features/product/domain/entities/product.dart';
+
+import '../consensus_service.dart';
+import '../price_entry.dart';
+import '../price_repository.dart';
+import '../price_status.dart';
 
 class LogPriceUseCase {
   final PriceRepository _priceRepository;

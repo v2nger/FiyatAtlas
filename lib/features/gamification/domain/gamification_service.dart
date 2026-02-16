@@ -1,7 +1,7 @@
 import '../../auth/domain/user.dart';
-import '../../price/domain/price_entry.dart';
-import '../../product/domain/product.dart';
 import '../../market/domain/market_branch.dart';
+import '../../price/domain/price_entry.dart';
+import '../../product/domain/entities/product.dart';
 
 class GamificationService {
   /// Evaluates the user's current status and the new entry to determine

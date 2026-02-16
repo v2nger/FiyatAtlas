@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'app_state.dart';
+import 'core/providers/locale_provider.dart';
 import 'features/auth/presentation/login_screen.dart';
+import 'features/auth/presentation/onboarding_screen.dart';
+import 'features/auth/presentation/splash_screen.dart';
 import 'features/home/presentation/main_screen.dart';
 import 'features/market/presentation/map_screen.dart';
-import 'features/auth/presentation/onboarding_screen.dart';
 import 'features/price/presentation/price_entry_screen.dart';
 import 'features/product/presentation/product_detail_screen.dart';
 import 'features/product/presentation/scan_screen.dart';
 import 'features/product/presentation/search_screen.dart';
-import 'features/auth/presentation/splash_screen.dart';
 import 'features/verification/presentation/verification_screen.dart';
+import 'l10n/app_localizations.dart';
 
-class FiyatAtlasApp extends StatelessWidget {
+class FiyatAtlasApp extends ConsumerWidget {
   const FiyatAtlasApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Listen to AppState to change locale dynamically
-    final appState = context.watch<AppState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Listen to LocaleProvider
+    final locale = ref.watch(localeNotifierProvider);
 
     // Google Fonts ile tema oluşturma
     final textTheme = GoogleFonts.poppinsTextTheme();
@@ -33,7 +33,7 @@ class FiyatAtlasApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // Localization Configuration
-      locale: appState.locale,
+      locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -59,10 +59,23 @@ class FiyatAtlasApp extends StatelessWidget {
         '/map': (_) => const MapScreen(),
         '/onboarding': (_) => const OnboardingScreen(),
         '/scan': (_) => const ScanScreen(),
-        '/price-entry': (_) => const PriceEntryScreen(),
         '/search': (_) => const SearchScreen(),
         '/verification': (_) => const VerificationScreen(),
         '/product-detail': (_) => const ProductDetailScreen(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/price-entry') {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) {
+              return PriceEntryScreen(
+                product: args['product'],
+                branch: args['branch'],
+              );
+            },
+          );
+        }
+        return null; // Let the default route handler fail if not found
       },
     );
   }

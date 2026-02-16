@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'core_providers.dart';
+
 import '../../features/auth/domain/user.dart';
+import 'core_providers.dart';
 
 part 'auth_providers.g.dart';
 

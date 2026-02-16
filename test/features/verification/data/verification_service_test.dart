@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:fiyatatlas/core/data/in_memory_repository.dart';
 import 'package:fiyatatlas/features/price/domain/price_entry.dart';
 import 'package:fiyatatlas/features/price/domain/price_status.dart';
 import 'package:fiyatatlas/features/verification/data/verification_service.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   late InMemoryRepository repository;

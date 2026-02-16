@@ -31,7 +31,7 @@ class VerificationService {
     ).toList();
     
     // Unique user count (mock implementation assuming different entries implied different users for now if userId is null)
-    int uniqueUserCount = relatedEntries.map((e) => e.userId ?? e.id).toSet().length;
+    final int uniqueUserCount = relatedEntries.map((e) => e.userId ?? e.id).toSet().length;
     score += (uniqueUserCount * 15);
 
     // 2. Receipt Present & OCR Verification
@@ -46,7 +46,7 @@ class VerificationService {
       if (entry.receiptImageUrl != null && entry.receiptImageUrl!.isNotEmpty) {
         // Mock OCR: Eğer URL içinde "valid" kelimesi geçiyorsa veya belirli bir kurala uyuyorsa ek puan ver.
         // Bu, görselin gerçekten işlendiği senaryoyu temsil eder.
-        bool ocrMatchedPrice = true; // Şimdilik varsayılan true kabul edelim
+        const bool ocrMatchedPrice = true; // Şimdilik varsayılan true kabul edelim
         if (ocrMatchedPrice) {
           score += 15; // OCR ile fiyat etiketi teyit edilirse ekstra güven
         }
@@ -61,9 +61,9 @@ class VerificationService {
 
     // 4. Anomaly Penalty
     if (relatedEntries.isNotEmpty) {
-      double averagePrice = relatedEntries.map((e) => e.price).reduce((a, b) => a + b) / relatedEntries.length;
-      double difference = (entry.price - averagePrice).abs();
-      double percentageDiff = (difference / averagePrice) * 100;
+      final double averagePrice = relatedEntries.map((e) => e.price).reduce((a, b) => a + b) / relatedEntries.length;
+      final double difference = (entry.price - averagePrice).abs();
+      final double percentageDiff = (difference / averagePrice) * 100;
 
       if (percentageDiff > 50) {
         score -= 50; // Büyük sapma cezası

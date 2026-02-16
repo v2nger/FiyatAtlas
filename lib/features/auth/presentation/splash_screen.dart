@@ -1,85 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fiyatatlas/app_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SplashScreen extends StatefulWidget {
+import 'providers/auth_providers.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Use addPostFrameCallback to ensure context is ready
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkFlow();
-    });
+    _checkFlow();
   }
 
   Future<void> _checkFlow() async {
-    // Biraz bekle (Logo görünsün)
-    await Future.delayed(const Duration(seconds: 2));
-    
-    final prefs = await SharedPreferences.getInstance();
-    final seen = prefs.getBool('seenOnboarding') ?? false;
+    // Show splash for at least 2 seconds
+    final minWait = Future.delayed(const Duration(seconds: 2));
 
-    if (!mounted) return;
+    // Wait for auth to be determined
+    // This will wait for Firebase Auth -> Firestore User fetch
+    final authFuture = ref.read(currentUserProvider.future);
 
-    // Check Auth State from Provider
-    final appState = context.read<AppState>();
-    
-    // If logged in -> Home
-    if (appState.isLoggedIn) {
-      Navigator.pushReplacementNamed(context, '/home');
-      return;
-    }
+    try {
+      // Wait for both tasks to complete
+      final results = await Future.wait([minWait, authFuture]);
+      
+      if (!mounted) return;
 
-    // Not logged in -> Onboarding (if not seen) or Login
-    if (seen) {
+      final user = results[1] as dynamic; // Get the user object from results
+
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    } catch (e) {
+      debugPrint('Splash Flow Error: $e');
+      if (!mounted) return;
+      // Navigate to login on error (or show error screen)
       Navigator.pushReplacementNamed(context, '/login');
-    } else {
-      Navigator.pushReplacementNamed(context, '/onboarding');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Arkaplan Resmi (Logo)
-          // "İkiyana yaslayıp arkaplanda duvarkağıdı olarak"
-          Opacity(
-            opacity: 0.1, // Hafif silik görünmesi için
-            child: Image.asset(
-              'assets/images/logo.png',
-              fit: BoxFit.cover, // Ekranı kaplaması için
-            ),
-          ),
-          // Ortada Logoyu net göstermek istersek (Opsiyonel ama şık durur)
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                 // Logonun orijinal hali ortada
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    fit: BoxFit.fitWidth, 
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const CircularProgressIndicator(),
-              ],
-            ),
-          ),
-        ],
+    return const Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Using placeholder logic for logo
+            FlutterLogo(size: 100),
+            SizedBox(height: 20),
+            CircularProgressIndicator(),
+          ],
+        ),
       ),
     );
   }

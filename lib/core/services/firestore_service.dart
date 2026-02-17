@@ -17,7 +17,7 @@ class FirestoreService {
   static const String _verifiedPricesCol = 'verified_prices';
 
   // --- Users ---
-  
+
   Future<void> createUserIfNotExists(User user) async {
     final docRef = _db.collection(_usersCol).doc(user.id);
     final doc = await docRef.get();
@@ -41,7 +41,7 @@ class FirestoreService {
     }
     return null;
   }
-  
+
   // --- Products ---
 
   Future<Product?> getProduct(String barcode) async {
@@ -60,11 +60,17 @@ class FirestoreService {
     try {
       // If it's verified (from API), save directly to products
       if (product.isVerified) {
-        await _db.collection(_productsCol).doc(product.barcode).set(product.toMap());
+        await _db
+            .collection(_productsCol)
+            .doc(product.barcode)
+            .set(product.toMap());
       } else {
         // If it's user suggested, save to pending_products for review
         // For MVP, we can save to products but mark as unverified
-        await _db.collection(_productsCol).doc(product.barcode).set(product.toMap());
+        await _db
+            .collection(_productsCol)
+            .doc(product.barcode)
+            .set(product.toMap());
       }
     } catch (e) {
       debugPrint("Firestore addProduct error: $e");
@@ -73,16 +79,17 @@ class FirestoreService {
   }
 
   // --- Search ---
-  
+
   // Basic search by name prefix (case-sensitive in Firestore usually, needs workaround for robust search)
   Future<List<Product>> searchProducts(String query) async {
     try {
-      final snap = await _db.collection(_productsCol)
+      final snap = await _db
+          .collection(_productsCol)
           .where('name', isGreaterThanOrEqualTo: query)
           .where('name', isLessThan: '${query}z')
           .limit(10)
           .get();
-      
+
       return snap.docs.map((doc) => Product.fromMap(doc.data())).toList();
     } catch (e) {
       debugPrint("Search error: $e");
@@ -127,7 +134,7 @@ class FirestoreService {
     try {
       // 1. Add to Append-Only Log
       await _db.collection(_priceLogsCol).add(entry.toMap());
-      // Note: We no longer auto-update verified prices here. 
+      // Note: We no longer auto-update verified prices here.
       // That is now handled by the Consensus Engine.
     } catch (e) {
       debugPrint("logPriceEntry error: $e");
@@ -146,13 +153,13 @@ class FirestoreService {
     try {
       // Key schema: verified_prices/{barcode}_{marketId}
       final docId = '${barcode}_$marketId';
-      
+
       await _db.collection(_verifiedPricesCol).doc(docId).set({
         'barcode': barcode,
         'price': price,
         'marketId': marketId,
         'updatedAt': DateTime.now().toIso8601String(),
-        'status': PriceVerificationStatus.verifiedPublic.name, 
+        'status': PriceVerificationStatus.verifiedPublic.name,
         'confidenceScore': confidenceScore,
         'confirmationCount': confirmationCount,
       });
@@ -161,14 +168,19 @@ class FirestoreService {
     }
   }
 
-  Future<List<PriceEntry>> getLogHistoryForConsensus(String barcode, String marketId, DateTime since) async {
+  Future<List<PriceEntry>> getLogHistoryForConsensus(
+    String barcode,
+    String marketId,
+    DateTime since,
+  ) async {
     try {
-      final snap = await _db.collection(_priceLogsCol)
-          .where('barcode', isEqualTo: barcode)
-          .where('marketBranchId', isEqualTo: marketId)
-          .where('entryDate', isGreaterThanOrEqualTo: since.toIso8601String())
+      final snap = await _db
+          .collection(_priceLogsCol)
+          .where('product_id', isEqualTo: barcode)
+          .where('market_id', isEqualTo: marketId)
+          .where('timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(since))
           .get();
-          
+
       return snap.docs.map((doc) => PriceEntry.fromMap(doc.data())).toList();
     } catch (e) {
       debugPrint("getLogHistoryForConsensus error: $e");
@@ -178,11 +190,12 @@ class FirestoreService {
 
   Future<List<PriceEntry>> getRecentPriceLogs({int limit = 20}) async {
     try {
-      final snap = await _db.collection(_priceLogsCol)
+      final snap = await _db
+          .collection(_priceLogsCol)
           .orderBy('entryDate', descending: true)
           .limit(limit)
           .get();
-      
+
       return snap.docs.map((doc) => PriceEntry.fromMap(doc.data())).toList();
     } catch (e) {
       debugPrint("getRecentPriceLogs error: $e");

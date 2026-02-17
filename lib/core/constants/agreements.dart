@@ -32,7 +32,8 @@ KVKK'nın 11. maddesi uyarınca veri sahibi olarak;
 Taleplerinizi uygulama içi "Destek" bölümünden veya info@fiyatatlas.com adresinden iletebilirsiniz.
 """;
 
-  static const String userAgreementTitleTR = "Kullanıcı Sözleşmesi ve Kullanım Koşulları";
+  static const String userAgreementTitleTR =
+      "Kullanıcı Sözleşmesi ve Kullanım Koşulları";
   static const String userAgreementTextTR = """
 FiyatAtlas Kullanıcı Sözleşmesi
 
@@ -89,7 +90,8 @@ You have the right to:
 You can submit your requests via the in-app "Support" section or email info@fiyatatlas.com.
 """;
 
-  static const String userAgreementTitleEN = "Terms of Service (User Agreement)";
+  static const String userAgreementTitleEN =
+      "Terms of Service (User Agreement)";
   static const String userAgreementTextEN = """
 FiyatAtlas - Terms of Service
 

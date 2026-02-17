@@ -30,21 +30,21 @@ class VerifiedPriceCard extends StatelessWidget {
                     children: [
                       Text(
                         'Product ID: $productId',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Market ID: $marketId',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey,
-                            ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         '₺${verifiedPrice.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
                               color: Colors.greenAccent,
                               fontWeight: FontWeight.bold,
                             ),
@@ -52,7 +52,11 @@ class VerifiedPriceCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          const Icon(Icons.people, size: 16, color: Colors.grey),
+                          const Icon(
+                            Icons.people,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
                           const SizedBox(width: 4),
                           Text('$sampleSize samples'),
                         ],
@@ -96,7 +100,10 @@ class VerifiedPriceCard extends StatelessWidget {
               top: 0,
               right: 0,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: const BoxDecoration(
                   color: Colors.redAccent,
                   borderRadius: BorderRadius.only(

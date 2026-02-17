@@ -6,7 +6,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../auth/presentation/providers/auth_providers.dart';
 import '../../price/domain/price_status.dart';
 
-// Needs a provider to fetch recent entries. 
+// Needs a provider to fetch recent entries.
 // For now, we stub this list or implement a provider for it.
 final recentEntriesProvider = FutureProvider<List<dynamic>>((ref) async {
   // TODO: Implement getRecentEntries UseCase
@@ -24,19 +24,25 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
-        title: const AppLogo(height: 40), 
+        title: const AppLogo(height: 40),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () => Navigator.pushNamed(context, '/map'),
-            icon: const Icon(Icons.map_outlined, color: AppColors.textSecondary),
+            icon: const Icon(
+              Icons.map_outlined,
+              color: AppColors.textSecondary,
+            ),
             tooltip: 'Market Haritası',
           ),
           Stack(
             children: [
               IconButton(
                 onPressed: () {},
-                icon: const Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  color: AppColors.textSecondary,
+                ),
               ),
               Positioned(
                 right: 12,
@@ -45,11 +51,11 @@ class HomeScreen extends ConsumerWidget {
                   height: 8,
                   width: 8,
                   decoration: const BoxDecoration(
-                    color: AppColors.notification, 
+                    color: AppColors.notification,
                     shape: BoxShape.circle,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ],
@@ -72,7 +78,7 @@ class HomeScreen extends ConsumerWidget {
                   color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
-                )
+                ),
               ],
             ),
             child: Material(
@@ -100,7 +106,9 @@ class HomeScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: AppColors.gold.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.gold.withValues(alpha: 0.3)),
+                          border: Border.all(
+                            color: AppColors.gold.withValues(alpha: 0.3),
+                          ),
                         ),
                         child: const Icon(
                           Icons.emoji_events,
@@ -115,23 +123,28 @@ class HomeScreen extends ConsumerWidget {
                           children: [
                             Text(
                               'Toplam Puanın',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: AppColors.textSecondary),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              user != null 
-                                ? '${user.points} Puan' 
-                                : 'Giriş Yapılmadı',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              user != null
+                                  ? '${user.points} Puan'
+                                  : 'Giriş Yapılmadı',
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.success.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -149,7 +162,10 @@ class HomeScreen extends ConsumerWidget {
                             ),
                             Text(
                               'Bu Hafta',
-                              style: TextStyle(fontSize: 10, color: AppColors.success.withValues(alpha: 0.8)),
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.success.withValues(alpha: 0.8),
+                              ),
                             ),
                           ],
                         ),
@@ -173,7 +189,11 @@ class HomeScreen extends ConsumerWidget {
                   color: AppColors.textPrimary,
                 ),
               ),
-              const Icon(Icons.arrow_forward, size: 16, color: AppColors.textSecondary),
+              const Icon(
+                Icons.arrow_forward,
+                size: 16,
+                color: AppColors.textSecondary,
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -200,7 +220,10 @@ class HomeScreen extends ConsumerWidget {
               border: Border.all(color: AppColors.border),
             ),
             alignment: Alignment.center,
-            child: const Text("Yakınında fırsat bulunamadı", style: TextStyle(color: AppColors.textSecondary)),
+            child: const Text(
+              "Yakınında fırsat bulunamadı",
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
           ),
 
           const SizedBox(height: 32),
@@ -217,14 +240,16 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {}, 
-                style: TextButton.styleFrom(foregroundColor: AppColors.secondary),
-                child: const Text('Tümü')
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.secondary,
+                ),
+                child: const Text('Tümü'),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          
+
           entriesAsync.when(
             data: (entries) {
               if (entries.isEmpty) {
@@ -233,32 +258,44 @@ class HomeScreen extends ConsumerWidget {
                   child: Center(
                     child: Column(
                       children: [
-                        Icon(Icons.history, color: AppColors.textTertiary, size: 40),
+                        Icon(
+                          Icons.history,
+                          color: AppColors.textTertiary,
+                          size: 40,
+                        ),
                         SizedBox(height: 8),
-                        Text('Henüz giriş yapılmadı.', style: TextStyle(color: AppColors.textTertiary)),
+                        Text(
+                          'Henüz giriş yapılmadı.',
+                          style: TextStyle(color: AppColors.textTertiary),
+                        ),
                       ],
                     ),
                   ),
                 );
               }
-              
+
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: entries.length,
                 itemBuilder: (context, index) {
-                   // Mock mapping for now to satisfy unused element warning
-                   return const _EntryTile(
-                     name: 'Ürün Name',
-                     price: 0.0,
-                     status: PriceVerificationStatus.pendingPrivate,
-                     barcode: '000000',
-                   );
+                  // Mock mapping for now to satisfy unused element warning
+                  return const _EntryTile(
+                    name: 'Ürün Name',
+                    price: 0.0,
+                    status: PriceVerificationStatus.pendingPrivate,
+                    barcode: '000000',
+                  );
                 },
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator(color: AppColors.secondary)),
-            error: (err, stack) => Text('Hata: $err', style: const TextStyle(color: AppColors.error)),
+            loading: () => const Center(
+              child: CircularProgressIndicator(color: AppColors.secondary),
+            ),
+            error: (err, stack) => Text(
+              'Hata: $err',
+              style: const TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),
@@ -331,7 +368,7 @@ class _EntryTile extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600, 
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                         maxLines: 2,
@@ -347,23 +384,31 @@ class _EntryTile extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color:
-                                  status == PriceVerificationStatus.verifiedPublic
-                                      ? AppColors.success.withValues(alpha: 0.1)
-                                      : AppColors.warning.withValues(alpha: 0.1),
+                                  status ==
+                                      PriceVerificationStatus.verifiedPublic
+                                  ? AppColors.success.withValues(alpha: 0.1)
+                                  : AppColors.warning.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                               border: Border.all(
-                                color: status == PriceVerificationStatus.verifiedPublic
+                                color:
+                                    status ==
+                                        PriceVerificationStatus.verifiedPublic
                                     ? AppColors.success.withValues(alpha: 0.3)
                                     : AppColors.warning.withValues(alpha: 0.3),
-                              )
+                              ),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(
-                                  status == PriceVerificationStatus.verifiedPublic ? Icons.check_circle : Icons.pending,
+                                  status ==
+                                          PriceVerificationStatus.verifiedPublic
+                                      ? Icons.check_circle
+                                      : Icons.pending,
                                   size: 10,
-                                  color: status == PriceVerificationStatus.verifiedPublic
+                                  color:
+                                      status ==
+                                          PriceVerificationStatus.verifiedPublic
                                       ? AppColors.success
                                       : AppColors.warning,
                                 ),
@@ -373,9 +418,11 @@ class _EntryTile extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 10,
                                     color:
-                                        status == PriceVerificationStatus.verifiedPublic
-                                            ? AppColors.success
-                                            : AppColors.warning,
+                                        status ==
+                                            PriceVerificationStatus
+                                                .verifiedPublic
+                                        ? AppColors.success
+                                        : AppColors.warning,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -397,7 +444,7 @@ class _EntryTile extends StatelessWidget {
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 18,
-                        fontWeight: FontWeight.w900, 
+                        fontWeight: FontWeight.w900,
                         color: AppColors.textPrimary,
                         letterSpacing: -0.5,
                       ),
@@ -469,7 +516,7 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
                 'Puan Hareketleri',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -488,7 +535,7 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
               setState(() => _selectedTab = newSelection.first);
             },
             style: ButtonStyle(
-               backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
                 if (states.contains(WidgetState.selected)) {
                   return AppColors.secondary;
                 }
@@ -647,11 +694,17 @@ class _PointHistorySheetState extends State<_PointHistorySheet> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
                 Text(
                   date,
-                  style: const TextStyle(color: AppColors.textTertiary, fontSize: 12),
+                  style: const TextStyle(
+                    color: AppColors.textTertiary,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),

@@ -46,5 +46,15 @@
     "resetPasswordDesc": "Lütfen e-posta adresinizi girin, sıfırlama bağlantısı gönderelim.",
     "sendResetLink": "Gönder",
     "cancel": "İptal",
-    "resetLinkSent": "Sıfırlama bağlantısı gönderildi."
+    "resetLinkSent": "Sıfırlama bağlantısı gönderildi.",
+    "productDetailTitle": "Ürün Detayı",
+    "productNameLabel": "Ürün Adı",
+    "brandLabel": "Marka",
+    "createProductButton": "Ürün Ekle",
+    "newProductTitle": "Yeni Ürün",
+    "priceHistoryTitle": "Fiyat Geçmişi",
+    "noPriceHistory": "Henüz fiyat girişi yok.",
+    "newPriceAddButton": "YENİ FİYAT EKLE",
+    "productNotFound": "Ürün bulunamadı.",
+    "loginToCreateProduct": "Ürün eklemek için giriş yapmalısınız."
 }

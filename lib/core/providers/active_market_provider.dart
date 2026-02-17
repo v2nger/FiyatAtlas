@@ -27,10 +27,12 @@ class DeviceHashService {
 /// ================= MARKET SESSION PROVIDER =================
 /// Kullanıcı X marketteyim → session tutar
 
-final activeMarketProvider =
-    StateProvider<Map<String, dynamic>?>((ref) => null);
+final activeMarketProvider = StateProvider<Map<String, dynamic>?>(
+  (ref) => null,
+);
 
-void enterMarket(WidgetRef ref, {
+void enterMarket(
+  WidgetRef ref, {
   required String marketId,
   required String marketName,
 }) {

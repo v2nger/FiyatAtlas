@@ -93,8 +93,4 @@ class PriceLogIsarEntry {
   }
 }
 
-enum SyncStatus {
-  synced,
-  pending,
-  failed,
-}
+enum SyncStatus { synced, pending, failed }

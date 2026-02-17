@@ -379,6 +379,66 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Sıfırlama bağlantısı gönderildi.'**
   String get resetLinkSent;
+
+  /// No description provided for @productDetailTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün Detayı'**
+  String get productDetailTitle;
+
+  /// No description provided for @productNameLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün Adı'**
+  String get productNameLabel;
+
+  /// No description provided for @brandLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Marka'**
+  String get brandLabel;
+
+  /// No description provided for @createProductButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün Ekle'**
+  String get createProductButton;
+
+  /// No description provided for @newProductTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Ürün'**
+  String get newProductTitle;
+
+  /// No description provided for @priceHistoryTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fiyat Geçmişi'**
+  String get priceHistoryTitle;
+
+  /// No description provided for @noPriceHistory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz fiyat girişi yok.'**
+  String get noPriceHistory;
+
+  /// No description provided for @newPriceAddButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'YENİ FİYAT EKLE'**
+  String get newPriceAddButton;
+
+  /// No description provided for @productNotFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün bulunamadı.'**
+  String get productNotFound;
+
+  /// No description provided for @loginToCreateProduct.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün eklemek için giriş yapmalısınız.'**
+  String get loginToCreateProduct;
 }
 
 class _AppLocalizationsDelegate

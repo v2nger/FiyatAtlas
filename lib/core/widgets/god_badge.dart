@@ -9,10 +9,7 @@ class GodBadge extends StatelessWidget {
       backgroundColor: Colors.purple,
       label: Text(
         "GOD MODE",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }

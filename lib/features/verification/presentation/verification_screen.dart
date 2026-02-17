@@ -19,9 +19,9 @@ class VerificationScreen extends ConsumerWidget {
           // Replicate legacy logic: Filter for items that are not verified yet (mock logic mostly)
           // Since PriceLog usually doesn't have status, we assume all local logs are 'pending' verification in this mock context unless syncStatus changes
           // But here we just show what we have.
-          
+
           final pending = entries; // Show all history for now
-          
+
           if (pending.isEmpty) {
             return const Center(
               child: Card(
@@ -48,7 +48,9 @@ class VerificationScreen extends ConsumerWidget {
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(
                     leading: const Icon(Icons.pending_actions),
-                    title: Text('Ürün ID: ${entry.productId}'), // Use product lookup if needed for name
+                    title: Text(
+                      'Ürün ID: ${entry.productId}',
+                    ), // Use product lookup if needed for name
                     subtitle: Text('Market ID: ${entry.marketId}'),
                     trailing: Text('${entry.price.toStringAsFixed(2)} ₺'),
                   ),

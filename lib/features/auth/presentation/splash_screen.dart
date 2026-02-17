@@ -28,7 +28,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     try {
       // Wait for both tasks to complete
       final results = await Future.wait([minWait, authFuture]);
-      
+
       if (!mounted) return;
 
       final user = results[1] as dynamic; // Get the user object from results

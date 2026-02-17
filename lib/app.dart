@@ -23,7 +23,7 @@ class FiyatAtlasApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to LocaleProvider
     final locale = ref.watch(localeNotifierProvider);
-    
+
     // Uygulama koyu modda çalışacağı için default olarak AppTheme.darkTheme
     return MaterialApp(
       title: 'FiyatAtlas',
@@ -37,21 +37,18 @@ class FiyatAtlasApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('tr'),
-        Locale('en'),
-      ],
-      
+      supportedLocales: const [Locale('tr'), Locale('en')],
+
       // THEME CONFIGURATION
       themeMode: ThemeMode.dark,
       theme: ThemeData.light(), // Fallback unused
       darkTheme: AppTheme.darkTheme,
-      
+
       initialRoute: '/',
       routes: {
         '/': (_) => const SplashScreen(),
         '/login': (_) => const LoginScreen(), // Add login route
-        '/home': (_) => const MainScreen(), 
+        '/home': (_) => const MainScreen(),
         '/map': (_) => const MapScreen(),
         '/onboarding': (_) => const OnboardingScreen(),
         '/scan': (_) => const ScanScreen(),

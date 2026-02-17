@@ -15,8 +15,8 @@ class MarketSelectionScreen extends ConsumerStatefulWidget {
       _MarketSelectionScreenState();
 }
 
-class _MarketSelectionScreenState
-    extends ConsumerState<MarketSelectionScreen> with SingleTickerProviderStateMixin {
+class _MarketSelectionScreenState extends ConsumerState<MarketSelectionScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
   final MapController _mapController = MapController();
@@ -79,9 +79,9 @@ class _MarketSelectionScreenState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Check-in failed: $e")),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Check-in failed: $e")));
       }
     }
   }
@@ -105,7 +105,7 @@ class _MarketSelectionScreenState
         data: (originalBranches) {
           // Initialize filtered list if empty and clean slate
           if (_filteredBranches.isEmpty && _searchController.text.isEmpty) {
-             _filteredBranches = originalBranches;
+            _filteredBranches = originalBranches;
           }
 
           return Column(
@@ -129,7 +129,7 @@ class _MarketSelectionScreenState
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
-                  physics: const NeverScrollableScrollPhysics(), 
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     // LIST VIEW
                     _buildListView(),
@@ -158,16 +158,20 @@ class _MarketSelectionScreenState
       itemBuilder: (context, index) {
         final branch = _filteredBranches[index];
         final isSelected = ref.watch(currentBranchProvider)?.id == branch.id;
-        
+
         return ListTile(
           leading: CircleAvatar(
             backgroundColor: Colors.teal.shade100,
-            child: Text(branch.chainName.isNotEmpty ? branch.chainName[0].toUpperCase() : "?"),
+            child: Text(
+              branch.chainName.isNotEmpty
+                  ? branch.chainName[0].toUpperCase()
+                  : "?",
+            ),
           ),
           title: Text(branch.displayName),
           subtitle: Text("${branch.district}, ${branch.city}"),
-          trailing: isSelected 
-              ? const Icon(Icons.check_circle, color: Colors.green) 
+          trailing: isSelected
+              ? const Icon(Icons.check_circle, color: Colors.green)
               : const Icon(Icons.chevron_right),
           onTap: () => _selectMarket(branch),
         );
@@ -179,9 +183,12 @@ class _MarketSelectionScreenState
     return FlutterMap(
       mapController: _mapController,
       options: MapOptions(
-        initialCenter: _filteredBranches.isNotEmpty 
-             ? LatLng(_filteredBranches.first.latitude, _filteredBranches.first.longitude)
-             : _initialCenter,
+        initialCenter: _filteredBranches.isNotEmpty
+            ? LatLng(
+                _filteredBranches.first.latitude,
+                _filteredBranches.first.longitude,
+              )
+            : _initialCenter,
         initialZoom: 13.0,
       ),
       children: [
@@ -191,20 +198,21 @@ class _MarketSelectionScreenState
         ),
         MarkerLayer(
           markers: _filteredBranches.map((branch) {
-            final isSelected = ref.watch(currentBranchProvider)?.id == branch.id;
+            final isSelected =
+                ref.watch(currentBranchProvider)?.id == branch.id;
             return Marker(
               point: LatLng(branch.latitude, branch.longitude),
               width: 40,
               height: 40,
               child: GestureDetector(
                 onTap: () {
-                   showModalBottomSheet(
-                     context: context,
-                     builder: (_) => _buildMarketDetailSheet(branch),
-                   );
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (_) => _buildMarketDetailSheet(branch),
+                  );
                 },
                 child: Icon(
-                  Icons.location_on, 
+                  Icons.location_on,
                   color: isSelected ? Colors.green : Colors.red,
                   size: 40,
                 ),
@@ -214,11 +222,7 @@ class _MarketSelectionScreenState
         ),
         // Simple attribution
         const RichAttributionWidget(
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-            ),
-          ],
+          attributions: [TextSourceAttribution('OpenStreetMap contributors')],
         ),
       ],
     );
@@ -231,7 +235,10 @@ class _MarketSelectionScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(branch.displayName, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(
+            branch.displayName,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           Text("${branch.district}, ${branch.city}"),
           const Spacer(),
@@ -247,10 +254,9 @@ class _MarketSelectionScreenState
               backgroundColor: Colors.teal,
               foregroundColor: Colors.white,
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
-

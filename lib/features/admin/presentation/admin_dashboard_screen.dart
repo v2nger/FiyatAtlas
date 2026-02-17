@@ -15,8 +15,7 @@ class AdminDashboardScreen extends ConsumerStatefulWidget {
       _AdminDashboardScreenState();
 }
 
-class _AdminDashboardScreenState
-    extends ConsumerState<AdminDashboardScreen> {
+class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
   int _selectedIndex = 0;
 
   Stream<Map<String, dynamic>?> activeMarketStream() {
@@ -95,13 +94,11 @@ class _AdminDashboardScreenState
                   label: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.store,
-                          size: 16, color: Colors.white),
+                      const Icon(Icons.store, size: 16, color: Colors.white),
                       const SizedBox(width: 6),
                       Text(
                         market["market_name"] ?? "Market",
-                        style:
-                            const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ],
                   ),
@@ -109,16 +106,10 @@ class _AdminDashboardScreenState
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: () {}),
         ],
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: pages,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (idx) {

@@ -22,11 +22,15 @@ class ProfileScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   const Icon(Icons.account_circle, size: 80, color: Colors.grey),
-                   const SizedBox(height: 16),
-                   const Text('Profilinizi görmek için giriş yapmalısınız.'),
-                   const SizedBox(height: 24),
-                   ElevatedButton.icon(
+                  const Icon(
+                    Icons.account_circle,
+                    size: 80,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Profilinizi görmek için giriş yapmalısınız.'),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
                     onPressed: () {
                       ref.read(authControllerProvider).signInAnonymously();
                       // Or navigate to login screen if that's better
@@ -69,9 +73,13 @@ class ProfileScreen extends ConsumerWidget {
                             CircleAvatar(
                               radius: 50,
                               backgroundColor: Colors.grey.shade200,
-                              backgroundImage: NetworkImage(user.avatarUrl), 
-                              child: user.avatarUrl.isEmpty 
-                                  ? const Icon(Icons.person, size: 50, color: Colors.grey)
+                              backgroundImage: NetworkImage(user.avatarUrl),
+                              child: user.avatarUrl.isEmpty
+                                  ? const Icon(
+                                      Icons.person,
+                                      size: 50,
+                                      color: Colors.grey,
+                                    )
                                   : null,
                             ),
                             Container(
@@ -80,7 +88,11 @@ class ProfileScreen extends ConsumerWidget {
                                 color: Colors.blue,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                              child: const Icon(
+                                Icons.edit,
+                                size: 16,
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
@@ -93,21 +105,31 @@ class ProfileScreen extends ConsumerWidget {
                           children: [
                             Text(
                               user.name,
-                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(width: 8),
-                            const Icon(Icons.edit, size: 18, color: Colors.grey),
+                            const Icon(
+                              Icons.edit,
+                              size: 18,
+                              color: Colors.grey,
+                            ),
                           ],
                         ),
                       ),
                       Text(
                         user.rank,
-                        style: const TextStyle(color: Colors.grey, fontSize: 16),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
 
                 // İstatistikler Kartı
@@ -115,15 +137,25 @@ class ProfileScreen extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Card(
                     elevation: 2,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _buildStatItem('Puan', '${user.points}', Colors.orange),
+                          _buildStatItem(
+                            'Puan',
+                            '${user.points}',
+                            Colors.orange,
+                          ),
                           _buildVerticalDivider(),
-                          _buildStatItem('Katkı', '${user.entryCount}', Colors.blue),
+                          _buildStatItem(
+                            'Katkı',
+                            '${user.entryCount}',
+                            Colors.blue,
+                          ),
                           _buildVerticalDivider(),
                           _buildStatItem('Sıralama', '#TODO', Colors.green),
                         ],
@@ -136,31 +168,33 @@ class ProfileScreen extends ConsumerWidget {
 
                 // Menü Listesi
                 _buildMenuItem(
-                  context, 
-                  icon: Icons.history, 
-                  title: 'Fiyat Geçmişim', 
+                  context,
+                  icon: Icons.history,
+                  title: 'Fiyat Geçmişim',
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const _UserHistoryScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const _UserHistoryScreen(),
+                      ),
                     );
                   },
                 ),
                 _buildMenuItem(
-                  context, 
-                  icon: Icons.verified, 
-                  title: 'Rozetlerim', 
+                  context,
+                  icon: Icons.verified,
+                  title: 'Rozetlerim',
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const BadgesScreen()), 
+                      MaterialPageRoute(builder: (_) => const BadgesScreen()),
                     );
                   },
                 ),
                 _buildMenuItem(
-                  context, 
-                  icon: Icons.settings, 
-                  title: 'Ayarlar', 
+                  context,
+                  icon: Icons.settings,
+                  title: 'Ayarlar',
                   onTap: () {
                     // Ayarlar Sayfası (Mock placeholder)
                   },
@@ -170,7 +204,8 @@ class ProfileScreen extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, s) => Scaffold(body: Center(child: Text("Hata: $e"))),
     );
   }
@@ -181,32 +216,27 @@ class ProfileScreen extends ConsumerWidget {
         Text(
           value,
           style: TextStyle(
-            fontSize: 20, 
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: color,
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
-        ),
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
       ],
     );
   }
 
   Widget _buildVerticalDivider() {
-    return Container(
-      height: 40,
-      width: 1,
-      color: Colors.grey.shade300,
-    );
+    return Container(height: 40, width: 1, color: Colors.grey.shade300);
   }
 
-  Widget _buildMenuItem(BuildContext context, {required IconData icon, required String title, required VoidCallback onTap}) {
+  Widget _buildMenuItem(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(8),
@@ -224,7 +254,7 @@ class ProfileScreen extends ConsumerWidget {
 
   void _showEditProfileDialog(BuildContext context, WidgetRef ref, User user) {
     final nameController = TextEditingController(text: user.name);
-    
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -245,7 +275,9 @@ class ProfileScreen extends ConsumerWidget {
             onPressed: () {
               final newName = nameController.text.trim();
               if (newName.isNotEmpty) {
-                 ref.read(currentUserProvider.notifier).updateProfile(name: newName);
+                ref
+                    .read(currentUserProvider.notifier)
+                    .updateProfile(name: newName);
               }
               Navigator.pop(ctx);
             },
@@ -269,20 +301,22 @@ class _UserHistoryScreen extends ConsumerWidget {
       body: logsAsync.when(
         data: (logs) {
           if (logs.isEmpty) {
-             return const Center(child: Text("Henüz fiyat girişi yok."));
+            return const Center(child: Text("Henüz fiyat girişi yok."));
           }
-           return ListView.builder(
+          return ListView.builder(
             itemCount: logs.length,
             itemBuilder: (context, index) {
-               final entry = logs[index];
-               return ListTile(
-                  leading: const Icon(Icons.history),
-                  title: Text("${entry.price} ₺"),
-                  subtitle: Text("Market: ${entry.marketId}\nBarkod: ${entry.productId}"),
-                  isThreeLine: true,
-               );
-            }
-           );
+              final entry = logs[index];
+              return ListTile(
+                leading: const Icon(Icons.history),
+                title: Text("${entry.price} ₺"),
+                subtitle: Text(
+                  "Market: ${entry.marketId}\nBarkod: ${entry.productId}",
+                ),
+                isThreeLine: true,
+              );
+            },
+          );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, s) => Center(child: Text("Hata: $e")),

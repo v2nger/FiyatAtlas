@@ -15,43 +15,32 @@ class LeaderboardView extends ConsumerWidget {
     return stream.when(
       data: (users) {
         if (users.isEmpty) {
-          return const Center(
-              child: Text("No users found"));
+          return const Center(child: Text("No users found"));
         }
 
         return ListView.builder(
           itemCount: users.length,
           itemBuilder: (context, index) {
             final userData = users[index];
-            final trustScore =
-                (userData['trust_score'] as num?)
-                        ?.toInt() ??
-                    50;
-            final tier =
-                userData['reputation_tier_current'] ??
-                    'Bronze';
-            final name =
-                userData['name'] ?? 'Anonymous';
-            final avatarUrl =
-                userData['avatar_url'];
+            final trustScore = (userData['trust_score'] as num?)?.toInt() ?? 50;
+            final tier = userData['reputation_tier_current'] ?? 'Bronze';
+            final name = userData['name'] ?? 'Anonymous';
+            final avatarUrl = userData['avatar_url'];
 
             final isAtlas = tier == 'Atlas';
 
             return Container(
-              margin: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
-                borderRadius:
-                    BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12),
                 boxShadow: isAtlas
                     ? [
                         BoxShadow(
-                          color: Colors.amberAccent
-                              .withValues(alpha: 0.6),
+                          color: Colors.amberAccent.withValues(alpha: 0.6),
                           blurRadius: 15,
                           spreadRadius: 2,
-                        )
+                        ),
                       ]
                     : [],
               ),
@@ -60,31 +49,24 @@ class LeaderboardView extends ConsumerWidget {
                   backgroundImage: avatarUrl != null
                       ? NetworkImage(avatarUrl)
                       : null,
-                  child: avatarUrl == null
-                      ? Text(name[0])
-                      : null,
+                  child: avatarUrl == null ? Text(name[0]) : null,
                 ),
                 title: Text(
                   name,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: isAtlas
-                        ? Colors.amber
-                        : null,
+                    color: isAtlas ? Colors.amber : null,
                   ),
                 ),
-                subtitle:
-                    Text('Score: $trustScore'),
+                subtitle: Text('Score: $trustScore'),
                 trailing: _TierBadge(tier: tier),
               ),
             );
           },
         );
       },
-      loading: () =>
-          const Center(child: CircularProgressIndicator()),
-      error: (e, _) =>
-          Center(child: Text('Error: $e')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
 }
@@ -111,14 +93,11 @@ class _TierBadge extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.2),
-        borderRadius:
-            BorderRadius.circular(20),
-        border:
-            Border.all(color: color, width: 1.5),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color, width: 1.5),
       ),
       child: Text(
         tier.toUpperCase(),

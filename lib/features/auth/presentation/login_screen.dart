@@ -18,10 +18,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isLogin = true; // Login vs Register mode
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+
   bool _kvkkApproved = false;
   bool _userAgreementApproved = false;
-  
+
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -32,14 +32,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final locale = ref.watch(localeNotifierProvider);
     final isTr = locale.languageCode == 'tr';
 
-    final kvkkTitle = isTr 
-      ? "KVKK Aydınlatma Metni'ni okudum ve kabul ediyorum."
-      : "I have read and accept the Privacy Policy.";
+    final kvkkTitle = isTr
+        ? "KVKK Aydınlatma Metni'ni okudum ve kabul ediyorum."
+        : "I have read and accept the Privacy Policy.";
     final kvkkLink = isTr ? "KVKK Aydınlatma Metni" : "Privacy Policy";
-    
+
     final userAgreementTitle = isTr
-      ? "Kullanıcı Sözleşmesi'ni okudum ve kabul ediyorum."
-      : "I have read and accept the User Agreement.";
+        ? "Kullanıcı Sözleşmesi'ni okudum ve kabul ediyorum."
+        : "I have read and accept the User Agreement.";
     final userAgreementLink = isTr ? "Kullanıcı Sözleşmesi" : "User Agreement";
 
     return Scaffold(
@@ -69,11 +69,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     TextButton.icon(
                       onPressed: () {
-                         final current = ref.read(localeNotifierProvider);
-                         final newLocale = current.languageCode == 'tr' 
-                             ? const Locale('en') 
-                             : const Locale('tr');
-                         ref.read(localeNotifierProvider.notifier).setLocale(newLocale);
+                        final current = ref.read(localeNotifierProvider);
+                        final newLocale = current.languageCode == 'tr'
+                            ? const Locale('en')
+                            : const Locale('tr');
+                        ref
+                            .read(localeNotifierProvider.notifier)
+                            .setLocale(newLocale);
                       },
                       icon: const Icon(Icons.language),
                       label: Text(locale.languageCode.toUpperCase()),
@@ -101,7 +103,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   obscureText: true,
                 ),
-                
+
                 // Forgot Password
                 if (_isLogin)
                   Align(
@@ -121,22 +123,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   title: kvkkTitle,
                   linkText: kvkkLink,
                   value: _kvkkApproved,
-                  onChanged: (val) => setState(() => _kvkkApproved = val ?? false),
+                  onChanged: (val) =>
+                      setState(() => _kvkkApproved = val ?? false),
                   onLinkPressed: () => _showAgreementDialog(
-                    context, 
-                    isTr ? AppAgreements.kvkkTitleTR : AppAgreements.kvkkTitleEN, 
-                    isTr ? AppAgreements.kvkkTextTR : AppAgreements.kvkkTextEN
+                    context,
+                    isTr
+                        ? AppAgreements.kvkkTitleTR
+                        : AppAgreements.kvkkTitleEN,
+                    isTr ? AppAgreements.kvkkTextTR : AppAgreements.kvkkTextEN,
                   ),
                 ),
                 _buildAgreementCheckbox(
                   title: userAgreementTitle,
                   linkText: userAgreementLink,
                   value: _userAgreementApproved,
-                  onChanged: (val) => setState(() => _userAgreementApproved = val ?? false),
+                  onChanged: (val) =>
+                      setState(() => _userAgreementApproved = val ?? false),
                   onLinkPressed: () => _showAgreementDialog(
-                    context, 
-                    isTr ? AppAgreements.userAgreementTitleTR : AppAgreements.userAgreementTitleEN, 
-                    isTr ? AppAgreements.userAgreementTextTR : AppAgreements.userAgreementTextEN
+                    context,
+                    isTr
+                        ? AppAgreements.userAgreementTitleTR
+                        : AppAgreements.userAgreementTitleEN,
+                    isTr
+                        ? AppAgreements.userAgreementTextTR
+                        : AppAgreements.userAgreementTextEN,
                   ),
                 ),
 
@@ -158,13 +168,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: _isLoading 
-                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                    : Text(_isLogin ? l10n.login : l10n.register),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(_isLogin ? l10n.login : l10n.register),
                 ),
 
                 const SizedBox(height: 16),
-                
+
                 // Toggle Login/Register
                 TextButton(
                   onPressed: () {
@@ -173,20 +190,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _errorMessage = null;
                     });
                   },
-                  child: Text(_isLogin 
-                      ? "Hesabın yok mu? Kayıt Ol" 
-                      : "Zaten hesabın var mı? Giriş Yap"),
+                  child: Text(
+                    _isLogin
+                        ? "Hesabın yok mu? Kayıt Ol"
+                        : "Zaten hesabın var mı? Giriş Yap",
+                  ),
                 ),
 
                 const SizedBox(height: 24),
-                
+
                 // Divider
                 Row(
                   children: [
                     const Expanded(child: Divider()),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(l10n.orContinueWith, style: const TextStyle(color: Colors.grey)),
+                      child: Text(
+                        l10n.orContinueWith,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
                     ),
                     const Expanded(child: Divider()),
                   ],
@@ -196,7 +218,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Social Logins
                 OutlinedButton.icon(
                   onPressed: () => _handleSocialLogin(context, 'google'),
-                  icon: const Icon(Icons.g_mobiledata, size: 28), // Placeholder icon
+                  icon: const Icon(
+                    Icons.g_mobiledata,
+                    size: 28,
+                  ), // Placeholder icon
                   label: Text(l10n.googleSignIn),
                 ),
                 const SizedBox(height: 12),
@@ -205,7 +230,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   icon: const Icon(Icons.apple, size: 28),
                   label: Text(l10n.appleSignIn),
                 ),
-                
+
                 const SizedBox(height: 12),
                 TextButton(
                   onPressed: () => _handleGuestLogin(context),
@@ -226,8 +251,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-        setState(() => _errorMessage = "Lütfen alanları doldurun."); // Localization needed here too properly
-        return;
+      setState(
+        () => _errorMessage = "Lütfen alanları doldurun.",
+      ); // Localization needed here too properly
+      return;
     }
 
     setState(() => _isLoading = true);
@@ -239,7 +266,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       } else {
         await authController.registerWithEmail(email, password);
       }
-      
+
       if (mounted) {
         Navigator.pushReplacementNamed(this.context, '/home');
       }
@@ -254,10 +281,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _handleSocialLogin(BuildContext context, String provider) async {
     if (!_validateAgreements(context)) return;
-    
+
     setState(() => _isLoading = true);
     final authController = ref.read(authControllerProvider);
-    
+
     try {
       if (provider == 'google') {
         await authController.signInWithGoogle();
@@ -270,7 +297,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // Check if actually logged in (user might have cancelled social login)
       final user = ref.read(currentUserProvider).value;
       if (user != null) {
-          Navigator.pushReplacementNamed(this.context, '/home');
+        Navigator.pushReplacementNamed(this.context, '/home');
       }
     } catch (e) {
       if (mounted) {
@@ -282,61 +309,65 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _showForgotPasswordDialog(BuildContext context) async {
-      final l10n = AppLocalizations.of(context)!;
-      final dialogEmailController = TextEditingController(text: _emailController.text);
+    final l10n = AppLocalizations.of(context)!;
+    final dialogEmailController = TextEditingController(
+      text: _emailController.text,
+    );
 
-      await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(l10n.resetPasswordTitle), // "Şifre Sıfırlama"
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(l10n.resetPasswordDesc), // "E-posta girin..."
-              const SizedBox(height: 16),
-              TextField(
-                controller: dialogEmailController,
-                decoration: InputDecoration(
-                  labelText: l10n.emailLabel,
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.resetPasswordTitle), // "Şifre Sıfırlama"
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(l10n.resetPasswordDesc), // "E-posta girin..."
+            const SizedBox(height: 16),
+            TextField(
+              controller: dialogEmailController,
+              decoration: InputDecoration(
+                labelText: l10n.emailLabel,
+                border: const OutlineInputBorder(),
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () async {
-                final email = dialogEmailController.text.trim();
-                if (email.isNotEmpty) {
-                  try {
-                    await ref.read(authControllerProvider).sendPasswordResetEmail(email);
-                    if (context.mounted) {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.resetLinkSent)),
-                      );
-                    }
-                  } catch (e) {
-                     // Error handling is inside AppState/AuthService but we might want to show it here
-                     if (context.mounted) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Error: $e")),
-                        );
-                     }
-                  }
-                }
-              },
-              child: Text(l10n.sendResetLink),
+              keyboardType: TextInputType.emailAddress,
             ),
           ],
         ),
-      );
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () async {
+              final email = dialogEmailController.text.trim();
+              if (email.isNotEmpty) {
+                try {
+                  await ref
+                      .read(authControllerProvider)
+                      .sendPasswordResetEmail(email);
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(l10n.resetLinkSent)));
+                  }
+                } catch (e) {
+                  // Error handling is inside AppState/AuthService but we might want to show it here
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Error: $e")));
+                  }
+                }
+              }
+            },
+            child: Text(l10n.sendResetLink),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _handleGuestLogin(BuildContext context) async {
@@ -346,8 +377,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     try {
       // Use the context from the build method to read the provider before the async gap
       await ref.read(authControllerProvider).signInAnonymously();
-       
-       if (mounted) {
+
+      if (mounted) {
         // Use this.context (the State's context) after the async gap and mounted check
         Navigator.pushReplacementNamed(this.context, '/home');
       }
@@ -385,7 +416,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Row(
       children: [
         Checkbox(
-          value: value, 
+          value: value,
           onChanged: onChanged,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
@@ -398,9 +429,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 TextSpan(
                   text: linkText,
                   style: const TextStyle(
-                    color: Colors.blue, 
-                    fontWeight: FontWeight.bold, 
-                    decoration: TextDecoration.underline
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
                   ),
                   recognizer: TapGestureRecognizer()..onTap = onLinkPressed,
                 ),
@@ -413,14 +444,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _showAgreementDialog(BuildContext context, String title, String content) {
+  void _showAgreementDialog(
+    BuildContext context,
+    String title,
+    String content,
+  ) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(title),
-        content: SingleChildScrollView(
-          child: Text(content),
-        ),
+        content: SingleChildScrollView(child: Text(content)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),

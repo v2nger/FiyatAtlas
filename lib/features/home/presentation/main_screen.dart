@@ -16,11 +16,9 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [
+  final List<Widget> _mainTabs = [
     const HomeScreen(),
     const SearchScreen(),
-    // Replace Direct Entry with Scanning First
-    const ScanScreen(), 
     const CategoryScreen(),
     const ProfileScreen(),
   ];
@@ -33,11 +31,32 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine the body content based on the selected index
+    // We treat the Scan page (index 2) specially to ensure the camera lifecycle is managed correctly.
+    // When switching away from index 2, the ScanScreen is removed from the tree, disposing the camera.
+
+    Widget bodyContent;
+
+    if (_selectedIndex == 2) {
+      // The Scan Screen (Camera)
+      bodyContent = const ScanScreen();
+    } else {
+      // For tabs 0, 1, 3, 4, we map them to the corresponding index in _mainTabs
+      // 0 -> 0 (Home)
+      // 1 -> 1 (Search)
+      // 3 -> 2 (Category)
+      // 4 -> 3 (Profile)
+
+      int tabIndex = _selectedIndex;
+      if (tabIndex > 2) {
+        tabIndex--; // Adjust for the missing Scan tab in the list
+      }
+
+      bodyContent = IndexedStack(index: tabIndex, children: _mainTabs);
+    }
+
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
+      body: bodyContent,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onItemTapped,
@@ -52,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
             selectedIcon: Icon(Icons.search),
             label: 'Ara',
           ),
-           NavigationDestination(
+          NavigationDestination(
             icon: Icon(Icons.add_circle_outline),
             selectedIcon: Icon(Icons.add_circle),
             label: 'Ekle',

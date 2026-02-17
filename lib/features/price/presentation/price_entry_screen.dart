@@ -25,7 +25,7 @@ class PriceEntryScreen extends ConsumerStatefulWidget {
 class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
   final _formKey = GlobalKey<FormState>();
   final _priceController = TextEditingController();
-  
+
   bool _hasReceipt = false;
   bool _isAvailable = true;
 
@@ -40,20 +40,21 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
 
     final user = ref.read(currentUserProvider).value;
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lütfen önce giriş yapın.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Lütfen önce giriş yapın.')));
       return;
     }
 
     final price = double.parse(_priceController.text.replaceAll(',', '.'));
-    
+
     // Generate Device Hash
     final deviceHash = await DeviceHashService.generate();
 
     // Create Log Entity
     final log = PriceLog(
-      id: DateTime.now().millisecondsSinceEpoch.toString(), // Temporary ID for local
+      id: DateTime.now().millisecondsSinceEpoch
+          .toString(), // Temporary ID for local
       userId: user.id,
       productId: widget.product.barcode,
       marketId: widget.branch.id,
@@ -64,7 +65,7 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
       isAvailable: _isAvailable,
       deviceHash: deviceHash,
       // Default to pending, system handles update
-      syncStatus: PriceLogSyncStatus.pending, 
+      syncStatus: PriceLogSyncStatus.pending,
     );
 
     // Call Controller
@@ -72,28 +73,25 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
 
     // Check Result (Success is mostly guaranteed due to offline-first policy)
     if (mounted) {
-       final state = ref.read(submitPriceLogControllerProvider);
-       
-       state.when(
-         data: (_) {
-           ScaffoldMessenger.of(context).showSnackBar(
-             const SnackBar(
-               content: Text('Fiyat kaydedildi! (Senkronize ediliyor...)'),
-               backgroundColor: Colors.green,
-             ),
-           );
-           Navigator.pop(context); // Return to previous screen
-         },
-         error: (err, _) {
-           ScaffoldMessenger.of(context).showSnackBar(
-             SnackBar(
-               content: Text('Hata: $err'),
-               backgroundColor: Colors.red,
-             ),
-           );
-         },
-         loading: () {}, // Handled by UI blocking
-       );
+      final state = ref.read(submitPriceLogControllerProvider);
+
+      state.when(
+        data: (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Fiyat kaydedildi! (Senkronize ediliyor...)'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context); // Return to previous screen
+        },
+        error: (err, _) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Hata: $err'), backgroundColor: Colors.red),
+          );
+        },
+        loading: () {}, // Handled by UI blocking
+      );
     }
   }
 
@@ -103,9 +101,7 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
     final isLoading = state.isLoading;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Fiyat Gir', style: GoogleFonts.poppins()),
-      ),
+      appBar: AppBar(title: Text('Fiyat Gir', style: GoogleFonts.poppins())),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -116,15 +112,15 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
               // Product Info Card
               Card(
                 child: ListTile(
-                  leading: widget.product.imageUrl != null 
-                    ? Image.network(widget.product.imageUrl!, width: 50)
-                    : const Icon(Icons.shopping_bag),
+                  leading: widget.product.imageUrl != null
+                      ? Image.network(widget.product.imageUrl!, width: 50)
+                      : const Icon(Icons.shopping_bag),
                   title: Text(widget.product.name),
                   subtitle: Text(widget.product.barcode),
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // Market Info
               Text(
                 'Market: ${widget.branch.displayName}',
@@ -135,7 +131,9 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
               // Price Input
               TextFormField(
                 controller: _priceController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 decoration: const InputDecoration(
                   labelText: 'Fiyat (TL)',
                   border: OutlineInputBorder(),
@@ -143,7 +141,9 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Fiyat giriniz';
-                  if (double.tryParse(value.replaceAll(',', '.')) == null) return 'Geçersiz fiyat';
+                  if (double.tryParse(value.replaceAll(',', '.')) == null) {
+                    return 'Geçersiz fiyat';
+                  }
                   return null;
                 },
               ),
@@ -171,9 +171,9 @@ class _PriceEntryScreenState extends ConsumerState<PriceEntryScreen> {
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Colors.white,
                 ),
-                child: isLoading 
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text('KAYDET'),
+                child: isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text('KAYDET'),
               ),
             ],
           ),

@@ -70,8 +70,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '904641400932',
     projectId: 'fiyatatlas',
     storageBucket: 'fiyatatlas.firebasestorage.app',
-    androidClientId: '904641400932-u6aa57np0viaq0oiomvnoi033jd08v30.apps.googleusercontent.com',
-    iosClientId: '904641400932-er5dh8upr4r2d15f15hfr59ilnasfbu5.apps.googleusercontent.com',
+    androidClientId:
+        '904641400932-u6aa57np0viaq0oiomvnoi033jd08v30.apps.googleusercontent.com',
+    iosClientId:
+        '904641400932-er5dh8upr4r2d15f15hfr59ilnasfbu5.apps.googleusercontent.com',
     iosBundleId: 'com.example.fiyatatlas',
   );
 
@@ -81,8 +83,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '904641400932',
     projectId: 'fiyatatlas',
     storageBucket: 'fiyatatlas.firebasestorage.app',
-    androidClientId: '904641400932-u6aa57np0viaq0oiomvnoi033jd08v30.apps.googleusercontent.com',
-    iosClientId: '904641400932-er5dh8upr4r2d15f15hfr59ilnasfbu5.apps.googleusercontent.com',
+    androidClientId:
+        '904641400932-u6aa57np0viaq0oiomvnoi033jd08v30.apps.googleusercontent.com',
+    iosClientId:
+        '904641400932-er5dh8upr4r2d15f15hfr59ilnasfbu5.apps.googleusercontent.com',
     iosBundleId: 'com.example.fiyatatlas',
   );
 
@@ -95,5 +99,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'fiyatatlas.firebasestorage.app',
     measurementId: 'G-DG33Z4MLDK',
   );
-
 }

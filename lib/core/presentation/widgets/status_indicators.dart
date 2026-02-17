@@ -22,11 +22,11 @@ class ConfidenceBadge extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
           boxShadow: [
-             BoxShadow(
-               color: AppColors.secondary.withValues(alpha: 0.3),
-               blurRadius: 4,
-               offset: const Offset(0, 2),
-             )
+            BoxShadow(
+              color: AppColors.secondary.withValues(alpha: 0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
           ],
         ),
         child: const Row(
@@ -36,7 +36,11 @@ class ConfidenceBadge extends StatelessWidget {
             SizedBox(width: 4),
             Text(
               'Verified',
-              style: TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: AppColors.primary,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -52,7 +56,11 @@ class ConfidenceBadge extends StatelessWidget {
         ),
         child: const Text(
           'Pending',
-          style: TextStyle(color: AppColors.warning, fontSize: 10, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: AppColors.warning,
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       );
     } else {
@@ -66,7 +74,11 @@ class ConfidenceBadge extends StatelessWidget {
         ),
         child: const Text(
           'Unverified',
-          style: TextStyle(color: AppColors.textSecondary, fontSize: 10, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       );
     }
@@ -106,8 +118,8 @@ class SyncIndicator extends StatelessWidget {
               color: color.withValues(alpha: 0.4),
               blurRadius: 4,
               spreadRadius: 1,
-            )
-          ]
+            ),
+          ],
         ),
       ),
     );

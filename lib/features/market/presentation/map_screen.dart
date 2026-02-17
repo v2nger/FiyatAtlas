@@ -75,7 +75,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 );
               }).toList(),
             ),
-            error: (e, s) => const MarkerLayer(markers: []), // Show nothing on error or show snackbar
+            error: (e, s) => const MarkerLayer(
+              markers: [],
+            ), // Show nothing on error or show snackbar
             loading: () => const MarkerLayer(markers: []),
           ),
         ],

@@ -15,7 +15,7 @@ class PriceLogLocalDataSourceImpl implements PriceLogLocalDataSource {
     final statusToSave = isPending
         ? PriceLogSyncStatus.pending
         : PriceLogSyncStatus.synced;
-    
+
     // Create new copy with correct status to map
     final entityToSave = log.copyWith(syncStatus: statusToSave);
 
@@ -38,7 +38,10 @@ class PriceLogLocalDataSourceImpl implements PriceLogLocalDataSource {
   @override
   Future<void> markAsSynced(String uuid) async {
     await isar.writeTxn(() async {
-      final entry = await isar.priceLogIsarEntrys.filter().uuidEqualTo(uuid).findFirst();
+      final entry = await isar.priceLogIsarEntrys
+          .filter()
+          .uuidEqualTo(uuid)
+          .findFirst();
       if (entry != null) {
         entry.syncStatus = SyncStatus.synced;
         await isar.priceLogIsarEntrys.put(entry);

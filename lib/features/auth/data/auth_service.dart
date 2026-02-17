@@ -1,30 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:sign_in_with_apple/sign_in_with_apple.dart'; 
-// Note: Apple Sign In usually requires iOS/macOS setup or a service ID for Android/Web.
-// For simplicity in this demo environment, we will structure it but might mock the actual call if needed.
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
-  // Google Sign In Configuration
-  static const String? _webClientId = kIsWeb 
-      ? '904641400932-sql9kfdqhgkr2ci89amk1809bbmc77up.apps.googleusercontent.com' 
-      : null;
-  bool _isGoogleInit = false;
 
-  Future<void> _ensureGoogleInit() async {
-    if (_isGoogleInit) return;
-    try {
-      await GoogleSignIn.instance.initialize(
-        clientId: _webClientId,
-      );
-      _isGoogleInit = true;
-    } catch (e) {
-      debugPrint("Google Sign In Init Error: $e");
-    }
-  }
+  // Google Sign In Configuration
+  // Web Client ID from Google Cloud Console (OAuth 2.0 Client IDs -> Web application)
+  static const String? _webClientId = kIsWeb
+      ? '904641400932-sql9kfdqhgkr2ci89amk1809bbmc77up.apps.googleusercontent.com'
+      : null;
+
+  AuthService();
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
@@ -42,48 +30,69 @@ class AuthService {
 
   Future<User?> signInWithGoogle() async {
     try {
-      if (!_isGoogleInit) await _ensureGoogleInit();
-      
-      const scopes = ['email', 'profile'];
-      
-      // 1. Authenticate (Sign In)
-      final GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate(
-        scopeHint: scopes,
+      // 1. Trigger the authentication flow
+      // GoogleSignIn singleton instance kullanımı
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        clientId: _webClientId,
+        scopes: ['email', 'profile'],
       );
       
-      // 2. Get ID Token
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      // 3. Get Access Token (Authorization)
-      // Note: authorizeScopes might require user interaction if not granted, 
-      // but scopeHint above helps.
-      final GoogleSignInClientAuthorization authClient = 
-          await googleUser.authorizationClient.authorizeScopes(scopes);
+      if (googleUser == null) {
+        // The user canceled the sign-in
+        return null;
+      }
 
+      // 2. Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // 3. Create a new credential
+      // accessToken ARTIK KULLANILMIYOR (v7+)
+      // idToken yeterlidir.
       final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: authClient.accessToken,
+        accessToken: null, 
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
       return userCredential.user;
     } catch (e) {
       debugPrint("Google Sign In Error: $e");
       return null;
     }
   }
-  
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+      try {
+        await GoogleSignIn().signOut();
+      } catch (_) {
+        // Ignored
+      }
+    } catch (e) {
+      debugPrint("Sign Out Error: $e");
+    }
+  }
+
   // Apple Sign In (Platform check required)
   Future<User?> signInWithApple() async {
-      // Gerçek implementasyon için 'sign_in_with_apple' paketi ve yapılandırma gerekir.
-      // Şimdilik yer tutucu olarak bırakıyoruz veya sadece bir hata fırlatmayacak şekilde yapılandırıyoruz.
-      debugPrint("Apple Sign In tetiklendi (Mock)");
-      return null;
+    // Gerçek implementasyon için 'sign_in_with_apple' paketi ve yapılandırma gerekir.
+    // Şimdilik yer tutucu olarak bırakıyoruz veya sadece bir hata fırlatmayacak şekilde yapılandırıyoruz.
+    debugPrint("Apple Sign In tetiklendi (Mock)");
+    return null;
   }
 
   Future<User?> signInWithEmailPassword(String email, String password) async {
     try {
-      final credential = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final credential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       return credential.user;
     } catch (e) {
       debugPrint("Email Login Error: $e");
@@ -93,7 +102,10 @@ class AuthService {
 
   Future<User?> registerWithEmailPassword(String email, String password) async {
     try {
-      final credential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      final credential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       return credential.user;
     } catch (e) {
       debugPrint("Register Error: $e");
@@ -115,14 +127,5 @@ class AuthService {
     if (user != null && !user.emailVerified) {
       await user.sendEmailVerification();
     }
-  }
-
-  Future<void> signOut() async {
-    try {
-      if (_isGoogleInit) {
-        await GoogleSignIn.instance.signOut();
-      }
-    } catch (_) {}
-    await _auth.signOut();
   }
 }

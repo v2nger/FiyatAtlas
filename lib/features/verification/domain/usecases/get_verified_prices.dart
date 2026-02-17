@@ -10,7 +10,9 @@ class GetVerifiedPrices implements UseCase<List<VerifiedPrice>, String> {
   GetVerifiedPrices(this.repository);
 
   @override
-  Future<Either<Failure, List<VerifiedPrice>>> call(String barcodeParams) async {
+  Future<Either<Failure, List<VerifiedPrice>>> call(
+    String barcodeParams,
+  ) async {
     return await repository.searchVerifiedPrices(barcodeParams);
   }
 }

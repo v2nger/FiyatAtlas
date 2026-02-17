@@ -5,8 +5,7 @@ abstract class PriceLogRemoteDataSource {
   Future<void> submitPriceLog(PriceLog log);
 }
 
-class PriceLogRemoteDataSourceImpl
-    implements PriceLogRemoteDataSource {
+class PriceLogRemoteDataSourceImpl implements PriceLogRemoteDataSource {
   final FirebaseFirestore firestore;
 
   PriceLogRemoteDataSourceImpl(this.firestore);
@@ -21,6 +20,8 @@ class PriceLogRemoteDataSourceImpl
       'price': log.price,
       'currency': log.currency,
       'timestamp': log.timestamp,
+      'device_timestamp':
+          log.timestamp, // Ensure backend gets this if it expects it separately
       'receipt_url': log.receiptImageUrl,
       'receipt_raw_text': log.receiptRawText,
       'device_hash': log.deviceHash,

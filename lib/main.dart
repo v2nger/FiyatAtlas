@@ -3,8 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart'; // Isar type is needed for overriding provider
-import 'package:path_provider/path_provider.dart';
 
 import 'app.dart';
 import 'core/app_setup/isar_setup.dart'; // Conditional Isar Setup
@@ -27,8 +25,9 @@ final syncManagerProvider = Provider<PriceLogSyncManager>((ref) {
 
 // ================= AUTH =================
 
-final firebaseAuthProvider =
-    Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
+final firebaseAuthProvider = Provider<FirebaseAuth>(
+  (ref) => FirebaseAuth.instance,
+);
 
 final currentUserProvider = StreamProvider<User?>((ref) {
   return ref.watch(firebaseAuthProvider).authStateChanges();
@@ -44,7 +43,7 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    
+
     debugPrint('Is Web: $kIsWeb');
 
     // Isar Initialization (Conditional)
@@ -52,9 +51,7 @@ void main() async {
     final isar = await initIsar();
 
     final container = ProviderContainer(
-      overrides: [
-        if (isar != null) isarProvider.overrideWithValue(isar),
-      ],
+      overrides: [if (isar != null) isarProvider.overrideWithValue(isar)],
     );
 
     if (!kIsWeb) {
@@ -78,11 +75,7 @@ void main() async {
     debugPrint('Initialization Error: $e\n$stack');
     runApp(
       MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Text('Initialization Error: $e'),
-          ),
-        ),
+        home: Scaffold(body: Center(child: Text('Initialization Error: $e'))),
       ),
     );
   }

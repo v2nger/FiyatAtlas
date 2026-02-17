@@ -18,5 +18,12 @@ class VerifiedPrice extends Equatable {
   });
 
   @override
-  List<Object?> get props => [barcode, marketId, price, confidenceScore, confirmationCount, lastVerifiedAt];
+  List<Object?> get props => [
+    barcode,
+    marketId,
+    price,
+    confidenceScore,
+    confirmationCount,
+    lastVerifiedAt,
+  ];
 }

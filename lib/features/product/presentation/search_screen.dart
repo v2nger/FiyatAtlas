@@ -62,9 +62,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             ],
           ),
           Expanded(
-            child: _query.isEmpty 
-              ? const _SearchIdle()
-              : _buildResults(context, ref),
+            child: _query.isEmpty
+                ? const _SearchIdle()
+                : _buildResults(context, ref),
           ),
         ],
       ),
@@ -88,7 +88,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 subtitle: Text('${p.brand} (${p.category})'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  Navigator.pushNamed(context, '/product-detail', arguments: p.barcode);
+                  Navigator.pushNamed(
+                    context,
+                    '/product-detail',
+                    arguments: p.barcode,
+                  );
                 },
               );
             },
@@ -111,7 +115,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 leading: const Icon(Icons.storefront),
                 title: Text(b.displayName),
                 subtitle: Text('${b.district}, ${b.city}'),
-                trailing: const Icon(Icons.location_on_outlined), 
+                trailing: const Icon(Icons.location_on_outlined),
                 onTap: () {
                   _showCheckInDialog(context, ref, b);
                 },
@@ -132,13 +136,18 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         title: Text(b.displayName),
         content: const Text('Bu markete check-in yapmak ister misiniz?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('İptal')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('İptal'),
+          ),
           FilledButton(
             onPressed: () {
               ref.read(currentBranchProvider.notifier).state = b;
-              Navigator.pop(ctx); 
+              Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${b.displayName} şubesine giriş yapıldı.')),
+                SnackBar(
+                  content: Text('${b.displayName} şubesine giriş yapıldı.'),
+                ),
               );
             },
             child: const Text('Check-in Yap'),
@@ -168,7 +177,9 @@ class _FilterTab extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: isSelected ? Theme.of(context).primaryColor : Colors.transparent,
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : Colors.transparent,
               width: 3,
             ),
           ),
@@ -200,9 +211,9 @@ class _SearchIdle extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Yukarıdaki arama çubuğuna ürün veya market adı yazın.',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.grey,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
           ),
         ],
       ),

@@ -6,7 +6,7 @@ class Product {
   final String? imageUrl;
   final bool isVerified; // Approved by admin or authoritative source (API)
   final String? source; // "OpenFoodFacts", "UPCitemdb", "User"
-  
+
   // Auditing
   final DateTime? createdAt;
   final String? createdBy;

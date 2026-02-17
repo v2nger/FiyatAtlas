@@ -46,5 +46,15 @@
     "resetPasswordDesc": "Please enter your email address to receive a reset link.",
     "sendResetLink": "Send",
     "cancel": "Cancel",
-    "resetLinkSent": "Reset link sent."
+    "resetLinkSent": "Reset link sent.",
+    "productDetailTitle": "Product Detail",
+    "productNameLabel": "Product Name",
+    "brandLabel": "Brand",
+    "createProductButton": "Create Product",
+    "newProductTitle": "New Product",
+    "priceHistoryTitle": "Price History",
+    "noPriceHistory": "No price history yet.",
+    "newPriceAddButton": "ADD NEW PRICE",
+    "productNotFound": "Product not found.",
+    "loginToCreateProduct": "You must login to add products."
 }

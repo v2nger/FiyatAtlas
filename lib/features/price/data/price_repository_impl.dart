@@ -18,10 +18,17 @@ class PriceRepositoryImpl implements PriceRepository {
   }
 
   @override
-  Future<List<PriceEntry>> getConsensusCandidates(String barcode, String marketId) async {
+  Future<List<PriceEntry>> getConsensusCandidates(
+    String barcode,
+    String marketId,
+  ) async {
     // Look back 48 hours for consensus
     final since = DateTime.now().subtract(const Duration(hours: 48));
-    return _firestoreService.getLogHistoryForConsensus(barcode, marketId, since);
+    return _firestoreService.getLogHistoryForConsensus(
+      barcode,
+      marketId,
+      since,
+    );
   }
 
   @override

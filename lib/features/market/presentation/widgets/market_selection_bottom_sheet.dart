@@ -12,9 +12,7 @@ class MarketSelectionBottomSheet extends ConsumerStatefulWidget {
 
 class _MarketSelectionBottomSheetState
     extends ConsumerState<MarketSelectionBottomSheet> {
-
-  final TextEditingController _searchController =
-      TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   final List<Map<String, String>> _markets = [
     {"id": "migros", "name": "Migros"},
@@ -26,24 +24,22 @@ class _MarketSelectionBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-
     final filtered = _markets
-        .where((m) => m["name"]!
-            .toLowerCase()
-            .contains(_searchController.text.toLowerCase()))
+        .where(
+          (m) => m["name"]!.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ),
+        )
         .toList();
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-
           /// Drag Indicator
           Container(
             width: 60,
@@ -58,10 +54,7 @@ class _MarketSelectionBottomSheetState
 
           const Text(
             "Markete Girdim",
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 20),
@@ -110,11 +103,9 @@ class _MarketSelectionBottomSheetState
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.teal.shade800,
-              minimumSize:
-                  const Size(double.infinity, 55),
+              minimumSize: const Size(double.infinity, 55),
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(18),
               ),
             ),
             onPressed: () {

@@ -31,15 +31,10 @@ class PriceStatusBadge extends StatelessWidget {
 
     return Chip(
       backgroundColor: color.withValues(alpha: .15),
-      shape: StadiumBorder(
-        side: BorderSide(color: color),
-      ),
+      shape: StadiumBorder(side: BorderSide(color: color)),
       label: Text(
         "$label • $confidence",
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: color, fontWeight: FontWeight.bold),
       ),
     );
   }

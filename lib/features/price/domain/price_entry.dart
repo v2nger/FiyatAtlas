@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'price_status.dart';
 
 class PriceEntry {
@@ -16,9 +17,10 @@ class PriceEntry {
   });
 
   final String id;
-  /// The ID of the user who created this entry. 
+
+  /// The ID of the user who created this entry.
   /// Nullable for backward compatibility or anonymous entries.
-  final String? userId; 
+  final String? userId;
   final String barcode;
   final String marketBranchId;
   final double price;
@@ -60,14 +62,14 @@ class PriceEntry {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'userId': userId,
-      'barcode': barcode,
-      'marketBranchId': marketBranchId,
+      'user_id': userId,
+      'product_id': barcode,
+      'market_id': marketBranchId,
       'price': price,
       'currency': currency,
-      'entryDate': entryDate.toIso8601String(),
+      'timestamp': Timestamp.fromDate(entryDate),
       'hasReceipt': hasReceipt,
-      'receiptImageUrl': receiptImageUrl,
+      'receipt_url': receiptImageUrl,
       'isAvailable': isAvailable,
       'status': status.name, // Enum to string
     };
@@ -75,23 +77,23 @@ class PriceEntry {
 
   factory PriceEntry.fromMap(Map<String, dynamic> map) {
     return PriceEntry(
-      id: map['id'] ?? '',
-      userId: map['userId'],
-      barcode: map['barcode'] ?? '',
-      marketBranchId: map['marketBranchId'] ?? '',
+      id: map['id'] ?? map['uuid'] ?? '',
+      userId: map['userId'] ?? map['user_id'],
+      barcode: map['barcode'] ?? map['product_id'] ?? '',
+      marketBranchId: map['marketBranchId'] ?? map['market_id'] ?? '',
       price: (map['price'] ?? 0).toDouble(),
       currency: map['currency'] ?? 'TRY',
-      entryDate: map['entryDate'] != null 
-          ? DateTime.parse(map['entryDate']) 
-          : DateTime.now(),
-      hasReceipt: map['hasReceipt'] ?? false,
-      receiptImageUrl: map['receiptImageUrl'],
+      entryDate: map['timestamp'] is Timestamp
+          ? (map['timestamp'] as Timestamp).toDate()
+          : (map['entryDate'] != null
+                ? DateTime.parse(map['entryDate'])
+                : DateTime.now()),
+      hasReceipt: map['hasReceipt'] ?? (map['receipt_url'] != null),
+      receiptImageUrl: map['receiptImageUrl'] ?? map['receipt_url'],
       isAvailable: map['isAvailable'] ?? true,
       status: map['status'] != null
-          ? PriceVerificationStatus.values.firstWhere(
-              (e) => e.name == map['status'],
-              orElse: () => PriceVerificationStatus.pendingPrivate,
-            )
+          ? (PriceVerificationStatus.values.asNameMap()[map['status']] ??
+                PriceVerificationStatus.pendingPrivate)
           : PriceVerificationStatus.pendingPrivate,
     );
   }

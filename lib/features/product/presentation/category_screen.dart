@@ -10,17 +10,15 @@ class CategoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productsAsync = ref.watch(allProductsProvider);
-    
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Kategoriler'),
-      ),
+      appBar: AppBar(title: const Text('Kategoriler')),
       body: productsAsync.when(
         data: (products) {
           if (products.isEmpty) {
-             return const Center(child: Text("Hencüz ürün bulunmamaktadır."));
+            return const Center(child: Text("Hencüz ürün bulunmamaktadır."));
           }
-           // Unique categories
+          // Unique categories
           final categories = products.map((p) => p.category).toSet().toList();
 
           return ListView.builder(
@@ -28,12 +26,12 @@ class CategoryScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final category = categories[index];
               // Count products in this category
-              final productCount = products.where((p) => p.category == category).length;
+              final productCount = products
+                  .where((p) => p.category == category)
+                  .length;
 
               return ListTile(
-                leading: const CircleAvatar(
-                  child: Icon(Icons.category),
-                ),
+                leading: const CircleAvatar(child: Icon(Icons.category)),
                 title: Text(category),
                 subtitle: Text('$productCount Ürün'),
                 trailing: const Icon(Icons.chevron_right),
@@ -42,8 +40,10 @@ class CategoryScreen extends ConsumerWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => _CategoryProductList(
-                        category: category, 
-                        products: products.where((p) => p.category == category).toList()
+                        category: category,
+                        products: products
+                            .where((p) => p.category == category)
+                            .toList(),
                       ),
                     ),
                   );
@@ -54,7 +54,7 @@ class CategoryScreen extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, s) => Center(child: Text("Yüklenirken hata oluştu: $e")),
-      )
+      ),
     );
   }
 }
@@ -79,10 +79,10 @@ class _CategoryProductList extends StatelessWidget {
             subtitle: Text('${product.brand} - ${product.barcode}'),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
-               Navigator.pushNamed(
-                context, 
+              Navigator.pushNamed(
+                context,
                 '/product-detail',
-                arguments: product.barcode, 
+                arguments: product.barcode,
               );
             },
           );

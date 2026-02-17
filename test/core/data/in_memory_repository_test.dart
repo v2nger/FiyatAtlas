@@ -24,7 +24,7 @@ void main() {
       );
 
       repository.addEntry(entry);
-      
+
       final entries = repository.getEntries();
       expect(entries.length, greaterThanOrEqualTo(1));
       expect(entries.first.id, '1');
@@ -44,12 +44,14 @@ void main() {
 
       repository.addEntry(entry);
 
-      final updatedEntry = entry.copyWith(status: PriceVerificationStatus.verifiedPublic);
+      final updatedEntry = entry.copyWith(
+        status: PriceVerificationStatus.verifiedPublic,
+      );
       repository.updateEntry(updatedEntry);
 
       final entries = repository.getEntries();
       final retrieved = entries.firstWhere((e) => e.id == '2');
-      
+
       expect(retrieved.status, PriceVerificationStatus.verifiedPublic);
     });
   });

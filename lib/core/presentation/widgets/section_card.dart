@@ -21,10 +21,7 @@ class SectionCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            if (icon != null) ...[
-              Icon(icon),
-              const SizedBox(width: 12),
-            ],
+            if (icon != null) ...[Icon(icon), const SizedBox(width: 12)],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

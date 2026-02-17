@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/product.dart';
 
 class ProductCreateDialog extends StatefulWidget {
@@ -14,12 +15,10 @@ class ProductCreateDialog extends StatefulWidget {
   });
 
   @override
-  State<ProductCreateDialog> createState() =>
-      _ProductCreateDialogState();
+  State<ProductCreateDialog> createState() => _ProductCreateDialogState();
 }
 
-class _ProductCreateDialogState
-    extends State<ProductCreateDialog> {
+class _ProductCreateDialogState extends State<ProductCreateDialog> {
   final _nameController = TextEditingController();
   final _brandController = TextEditingController();
 
@@ -28,7 +27,12 @@ class _ProductCreateDialogState
     return AlertDialog(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Text("New Product", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary)),
+      title: Text(
+        AppLocalizations.of(context)!.newProductTitle,
+        style: Theme.of(
+          context,
+        ).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -44,24 +48,36 @@ class _ProductCreateDialogState
               children: [
                 const Icon(Icons.qr_code, color: AppColors.secondary, size: 20),
                 const SizedBox(width: 8),
-                Text(widget.barcode, style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.bold)),
+                Text(
+                  widget.barcode,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),
           const SizedBox(height: 16),
           TextField(
             controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: "Product Name",
-              prefixIcon: Icon(Icons.label, color: AppColors.textTertiary),
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.productNameLabel,
+              prefixIcon: const Icon(
+                Icons.label,
+                color: AppColors.textTertiary,
+              ),
             ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _brandController,
-            decoration: const InputDecoration(
-              labelText: "Brand",
-              prefixIcon: Icon(Icons.branding_watermark, color: AppColors.textTertiary),
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.brandLabel,
+              prefixIcon: const Icon(
+                Icons.branding_watermark,
+                color: AppColors.textTertiary,
+              ),
             ),
           ),
         ],
@@ -70,12 +86,12 @@ class _ProductCreateDialogState
         TextButton(
           onPressed: () => Navigator.pop(context),
           style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
-          child: const Text("Cancel"),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         ElevatedButton(
           onPressed: () {
             if (_nameController.text.trim().isEmpty) return;
-            
+
             final product = Product(
               barcode: widget.barcode,
               name: _nameController.text.trim(),
@@ -89,9 +105,11 @@ class _ProductCreateDialogState
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.secondary,
             foregroundColor: AppColors.primary,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
-          child: const Text("Create Product"),
+          child: Text(AppLocalizations.of(context)!.createProductButton),
         ),
       ],
     );

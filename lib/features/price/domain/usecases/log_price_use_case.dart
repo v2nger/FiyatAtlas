@@ -14,7 +14,7 @@ class LogPriceUseCase {
   final ConsensusService _consensusService;
 
   LogPriceUseCase(
-    this._priceRepository, 
+    this._priceRepository,
     this._gamificationService,
     this._consensusService,
   );
@@ -30,7 +30,7 @@ class LogPriceUseCase {
     required List<MarketBranch> allBranches,
     required List<PriceEntry> userPastEntries,
   }) async {
-    // 1. Create Entry 
+    // 1. Create Entry
     final entry = PriceEntry(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       userId: currentUser.id,
@@ -51,39 +51,42 @@ class LogPriceUseCase {
 
     // 3. Trigger Consensus Engine
     // Fetch all candidates (last 48h)
-    final candidates = await _priceRepository.getConsensusCandidates(barcode, marketBranchId);
-    
+    final candidates = await _priceRepository.getConsensusCandidates(
+      barcode,
+      marketBranchId,
+    );
+
     // Evaluate
     final result = _consensusService.evaluate(candidates);
 
     if (result != null && result.isVerified) {
-       // 4. Update Public Dataset (Verified Collection)
-       await _priceRepository.updateVerifiedPrice(
-         barcode: barcode, 
-         marketId: marketBranchId, 
-         price: result.price,
-         confidence: result.confidenceScore,
-         count: result.confirmationCount,
-       );
+      // 4. Update Public Dataset (Verified Collection)
+      await _priceRepository.updateVerifiedPrice(
+        barcode: barcode,
+        marketId: marketBranchId,
+        price: result.price,
+        confidence: result.confidenceScore,
+        count: result.confirmationCount,
+      );
     } else {
       // Logic for "Single User Pending" update?
       // In a strict P2P system, we might NOT show this to public yet.
-      // Or we show it with "Unverified" badge. 
-      // For this implementation, we only write to verified verified_prices 
-      // if logic allows, OR if we want to show unverified data, we might write it 
+      // Or we show it with "Unverified" badge.
+      // For this implementation, we only write to verified verified_prices
+      // if logic allows, OR if we want to show unverified data, we might write it
       // but mark status as pending.
       // Let's adopt a "Show Latest Unverified" approach for MVP but mark it clearly,
       // OR strictly hide until verifiable.
       // User request: "Gerçek 2+ bağımsız kullanıcı eşleştirme... Public dataset ayrımı"
       // This implies we should ONLY write to VerifiedPublic if result.isVerified is true.
-      // But for UX, users want to see their own price. 
+      // But for UX, users want to see their own price.
       // Answer: User sees their own price via Local State / Logs. Public sees Verified.
     }
 
     // 5. Game Mechanics
     // Points rule: +10 points per entry
     int pointsEarned = 10;
-    
+
     // Check Badges
     final newBadges = _gamificationService.checkBadges(
       user: currentUser,
@@ -95,11 +98,11 @@ class LogPriceUseCase {
 
     // Bonus points for badges (50 per badge)
     pointsEarned += (newBadges.length * 50);
-    
+
     // Bonus for Consensus: If this entry triggered a verification
     if (result != null && result.isVerified && result.confirmationCount == 2) {
-       // This user was the 2nd one to confirm! Big bonus.
-       pointsEarned += 20;
+      // This user was the 2nd one to confirm! Big bonus.
+      pointsEarned += 20;
     }
 
     // 6. Return Updated User

@@ -38,31 +38,37 @@ void main() {
 
   test('should call submitPriceLog from repository', () async {
     // arrange
-    when(mockRepository.submitPriceLog(tPriceLog))
-        .thenAnswer((_) async => const Right(null));
+    when(
+      mockRepository.submitPriceLog(tPriceLog),
+    ).thenAnswer((_) async => const Right(null));
 
-    when(mockProductRepository.createIfNotExists(
-      barcode: anyNamed('barcode'),
-      name: anyNamed('name'),
-      brand: anyNamed('brand'),
-    )).thenAnswer((_) async => Product(
-          barcode: tPriceLog.productId,
-          name: 'Test Product',
-          brand: 'Test Brand',
-        ));
+    when(
+      mockProductRepository.createIfNotExists(
+        barcode: anyNamed('barcode'),
+        name: anyNamed('name'),
+        brand: anyNamed('brand'),
+      ),
+    ).thenAnswer(
+      (_) async => Product(
+        barcode: tPriceLog.productId,
+        name: 'Test Product',
+        brand: 'Test Brand',
+      ),
+    );
 
     // act
     final result = await useCase(PriceLogParams(log: tPriceLog));
 
     // assert
     expect(result, const Right(null));
-    verify(mockProductRepository.createIfNotExists(
-      barcode: tPriceLog.productId,
-      name: tPriceLog.marketName ?? "Bilinmiyor",
-      brand: "Bilinmiyor",
-    ));
+    verify(
+      mockProductRepository.createIfNotExists(
+        barcode: tPriceLog.productId,
+        name: tPriceLog.marketName ?? "Bilinmiyor",
+        brand: "Bilinmiyor",
+      ),
+    );
     verify(mockRepository.submitPriceLog(tPriceLog));
     verifyNoMoreInteractions(mockRepository);
   });
 }
-

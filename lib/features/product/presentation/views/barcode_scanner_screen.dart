@@ -5,12 +5,10 @@ class BarcodeScannerScreen extends StatefulWidget {
   const BarcodeScannerScreen({super.key});
 
   @override
-  State<BarcodeScannerScreen> createState() =>
-      _BarcodeScannerScreenState();
+  State<BarcodeScannerScreen> createState() => _BarcodeScannerScreenState();
 }
 
-class _BarcodeScannerScreenState
-    extends State<BarcodeScannerScreen> {
+class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   bool _found = false;
 
   @override

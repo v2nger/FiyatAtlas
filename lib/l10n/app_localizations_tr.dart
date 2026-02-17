@@ -150,4 +150,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get resetLinkSent => 'Sıfırlama bağlantısı gönderildi.';
+
+  @override
+  String get productDetailTitle => 'Ürün Detayı';
+
+  @override
+  String get productNameLabel => 'Ürün Adı';
+
+  @override
+  String get brandLabel => 'Marka';
+
+  @override
+  String get createProductButton => 'Ürün Ekle';
+
+  @override
+  String get newProductTitle => 'Yeni Ürün';
+
+  @override
+  String get priceHistoryTitle => 'Fiyat Geçmişi';
+
+  @override
+  String get noPriceHistory => 'Henüz fiyat girişi yok.';
+
+  @override
+  String get newPriceAddButton => 'YENİ FİYAT EKLE';
+
+  @override
+  String get productNotFound => 'Ürün bulunamadı.';
+
+  @override
+  String get loginToCreateProduct => 'Ürün eklemek için giriş yapmalısınız.';
 }

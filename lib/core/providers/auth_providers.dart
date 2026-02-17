@@ -38,7 +38,8 @@ class CurrentUser extends _$CurrentUser {
         id: firebaseUser.uid,
         name: firebaseUser.displayName ?? 'Kullanıcı',
         email: firebaseUser.email ?? '',
-        avatarUrl: firebaseUser.photoURL ?? 
+        avatarUrl:
+            firebaseUser.photoURL ??
             'https://i.pravatar.cc/300?img=${firebaseUser.uid.hashCode % 70}',
         joinDate: DateTime.now(),
       );
@@ -48,10 +49,10 @@ class CurrentUser extends _$CurrentUser {
 
     return fetchedUser;
   }
-  
+
   // Method to manually refresh user profile
   Future<void> refresh() async {
-      ref.invalidateSelf();
-      await future; 
+    ref.invalidateSelf();
+    await future;
   }
 }

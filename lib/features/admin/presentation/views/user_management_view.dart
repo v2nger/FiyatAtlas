@@ -28,11 +28,17 @@ class UserManagementView extends ConsumerWidget {
             final deviceAbuse = user['device_abuse_count'] ?? 0;
 
             return ListTile(
-              title: Text(user['name'] ?? 'Unknown User', style: TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(
+                user['name'] ?? 'Unknown User',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               subtitle: Text(user['email'] ?? 'No Email'),
               leading: CircleAvatar(
                 backgroundColor: shadowBanned ? Colors.grey : Colors.teal,
-                child: Icon(shadowBanned ? Icons.block : Icons.check, color: Colors.white),
+                child: Icon(
+                  shadowBanned ? Icons.block : Icons.check,
+                  color: Colors.white,
+                ),
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -41,9 +47,18 @@ class UserManagementView extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Trust: $trustScore', style: TextStyle(color: _getTrustColor(trustScore))),
+                      Text(
+                        'Trust: $trustScore',
+                        style: TextStyle(color: _getTrustColor(trustScore)),
+                      ),
                       if (deviceAbuse > 0)
-                        Text('Abuse: $deviceAbuse', style: TextStyle(color: Colors.redAccent, fontSize: 10)),
+                        Text(
+                          'Abuse: $deviceAbuse',
+                          style: TextStyle(
+                            color: Colors.redAccent,
+                            fontSize: 10,
+                          ),
+                        ),
                     ],
                   ),
                   const SizedBox(width: 10),

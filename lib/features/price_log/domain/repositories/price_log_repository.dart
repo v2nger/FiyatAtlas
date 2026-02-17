@@ -4,7 +4,7 @@ import '../entities/price_log.dart';
 
 abstract class PriceLogRepository {
   /// Submits a price log.
-  /// 
+  ///
   /// In offline-first architecture, this:
   /// 1. Saves to Local DB always.
   /// 2. If online -> Pushes to Remote and updates sync status.

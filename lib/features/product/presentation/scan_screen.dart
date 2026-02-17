@@ -11,7 +11,8 @@ class ScanScreen extends ConsumerStatefulWidget {
   ConsumerState<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObserver {
+class _ScanScreenState extends ConsumerState<ScanScreen>
+    with WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController();
   bool _isProcessed = false;
 
@@ -20,17 +21,18 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
     controller.dispose();
     super.dispose();
   }
-  
+
   Future<void> _handleBarcode(BuildContext context, String barcode) async {
-    Navigator.pushNamed(context, '/product-detail', arguments: barcode).then((_) {
+    Navigator.pushNamed(context, '/product-detail', arguments: barcode).then((
+      _,
+    ) {
       if (mounted) {
-         setState(() {
-           _isProcessed = false;
-         });
+        setState(() {
+          _isProcessed = false;
+        });
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +54,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
                   case TorchState.on:
                     return const Icon(Icons.flash_on, color: AppColors.gold);
                   case TorchState.auto:
-                    return const Icon(Icons.flash_auto, color: AppColors.secondary);
+                    return const Icon(
+                      Icons.flash_auto,
+                      color: AppColors.secondary,
+                    );
                   case TorchState.unavailable:
-                     return const Icon(Icons.flash_off, color: Colors.grey);
+                    return const Icon(Icons.flash_off, color: Colors.grey);
                 }
               },
             ),
@@ -86,7 +91,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
             controller: controller,
             onDetect: (capture) {
               if (_isProcessed) return;
-              
+
               final List<Barcode> barcodes = capture.barcodes;
               if (barcodes.isNotEmpty) {
                 final code = barcodes.first.rawValue;
@@ -99,12 +104,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
               }
             },
           ),
-          
+
           // Custom Overlay
           ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha: 0.6), 
-              BlendMode.srcOut
+              Colors.black.withValues(alpha: 0.6),
+              BlendMode.srcOut,
             ),
             child: Stack(
               children: [
@@ -127,7 +132,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
               ],
             ),
           ),
-          
+
           // Scanner Borders
           Center(
             child: Container(
@@ -141,33 +146,58 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
                     color: AppColors.secondary.withValues(alpha: 0.3),
                     spreadRadius: 4,
                     blurRadius: 20,
-                  )
-                ]
+                  ),
+                ],
               ),
               child: Stack(
                 children: [
-                   // Corner Indicators
-                   const Positioned(top: 20, left: 20, child: _Corner(color: AppColors.secondary)),
-                   const Positioned(top: 20, right: 20, child: RotatedBox(quarterTurns: 1, child: _Corner(color: AppColors.secondary))),
-                   const Positioned(bottom: 20, left: 20, child: RotatedBox(quarterTurns: 3, child: _Corner(color: AppColors.secondary))),
-                   const Positioned(bottom: 20, right: 20, child: RotatedBox(quarterTurns: 2, child: _Corner(color: AppColors.secondary))),
-                   // Scanning Line Animation (Static for now, could be animated)
-                   Center(
-                     child: Container(
-                       height: 2,
-                       width: 240,
-                       decoration: BoxDecoration(
-                         color: AppColors.error.withValues(alpha: 0.8),
-                         boxShadow: [
-                           const BoxShadow(
-                             color: AppColors.error,
-                             blurRadius: 10,
-                             spreadRadius: 1,
-                           )
-                         ]
-                       ),
-                     ),
-                   )
+                  // Corner Indicators
+                  const Positioned(
+                    top: 20,
+                    left: 20,
+                    child: _Corner(color: AppColors.secondary),
+                  ),
+                  const Positioned(
+                    top: 20,
+                    right: 20,
+                    child: RotatedBox(
+                      quarterTurns: 1,
+                      child: _Corner(color: AppColors.secondary),
+                    ),
+                  ),
+                  const Positioned(
+                    bottom: 20,
+                    left: 20,
+                    child: RotatedBox(
+                      quarterTurns: 3,
+                      child: _Corner(color: AppColors.secondary),
+                    ),
+                  ),
+                  const Positioned(
+                    bottom: 20,
+                    right: 20,
+                    child: RotatedBox(
+                      quarterTurns: 2,
+                      child: _Corner(color: AppColors.secondary),
+                    ),
+                  ),
+                  // Scanning Line Animation (Static for now, could be animated)
+                  Center(
+                    child: Container(
+                      height: 2,
+                      width: 240,
+                      decoration: BoxDecoration(
+                        color: AppColors.error.withValues(alpha: 0.8),
+                        boxShadow: [
+                          const BoxShadow(
+                            color: AppColors.error,
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -181,10 +211,16 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
               width: double.infinity,
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(32),
+                ),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, -5))
-                ]
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, -5),
+                  ),
+                ],
               ),
               child: SafeArea(
                 child: Column(
@@ -203,26 +239,31 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with WidgetsBindingObse
                       'Kamerayı barkoda hizalayın',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'Otomatik olarak taranacaktır.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 24),
                     OutlinedButton.icon(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/price-entry'); 
+                        Navigator.pushNamed(context, '/price-entry');
                       },
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.secondary,
                         side: const BorderSide(color: AppColors.secondary),
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       icon: const Icon(Icons.keyboard_alt_outlined),
                       label: const Text('Elle Giriş Yap'),

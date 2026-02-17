@@ -6,10 +6,12 @@ import 'package:http/http.dart' as http;
 
 class ProductLookupService {
   // Open Food Facts API (Free, No Key)
-  static const String _offUrl = 'https://world.openfoodfacts.org/api/v2/product/';
-  
+  static const String _offUrl =
+      'https://world.openfoodfacts.org/api/v2/product/';
+
   // UPCitemdb API (Free Trial, No Key)
-  static const String _upcUrl = 'https://api.upcitemdb.com/prod/trial/lookup?upc=';
+  static const String _upcUrl =
+      'https://api.upcitemdb.com/prod/trial/lookup?upc=';
 
   Future<Product?> lookupBarcode(String barcode) async {
     // 1. Try Open Food Facts first (Best for Turkey/Food)
@@ -30,7 +32,8 @@ class ProductLookupService {
           final p = data['product'];
           return Product(
             barcode: barcode,
-            name: p['product_name'] ?? p['product_name_tr'] ?? 'Bilinmeyen Ürün',
+            name:
+                p['product_name'] ?? p['product_name_tr'] ?? 'Bilinmeyen Ürün',
             brand: p['brands'] ?? '',
             category: p['categories'] ?? '',
             imageUrl: p['image_url'],
@@ -56,15 +59,19 @@ class ProductLookupService {
             barcode: barcode,
             name: item['title'] ?? '',
             brand: item['brand'] ?? '',
-            category: item['category'] ?? '', // UPCitemdb categories can be long strings
-            imageUrl: (item['images'] as List).isNotEmpty ? item['images'][0] : null,
+            category:
+                item['category'] ??
+                '', // UPCitemdb categories can be long strings
+            imageUrl: (item['images'] as List).isNotEmpty
+                ? item['images'][0]
+                : null,
             isVerified: true, // Trusted API source
             source: 'UPCitemdb',
           );
         }
       }
     } catch (e) {
-       debugPrint("UPCitemdb Error: $e");
+      debugPrint("UPCitemdb Error: $e");
     }
     return null;
   }

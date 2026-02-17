@@ -15,7 +15,7 @@ extension GetPriceLogIsarEntryCollection on Isar {
 
 const PriceLogIsarEntrySchema = CollectionSchema(
   name: r'PriceLogIsarEntry',
-  id: -20230206123456789, // Manually fixed safe integer for JS
+  id: 7199653460955740745,
   properties: {
     r'currency': PropertySchema(
       id: 0,

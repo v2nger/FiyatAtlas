@@ -72,25 +72,21 @@ class PriceLog extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        userId,
-        productId,
-        marketId,
-        marketName,
-        price,
-        currency,
-        timestamp,
-        hasReceipt,
-        receiptImageUrl,
-        receiptRawText,
-        isAvailable,
-        deviceHash,
-        syncStatus,
-      ];
+    id,
+    userId,
+    productId,
+    marketId,
+    marketName,
+    price,
+    currency,
+    timestamp,
+    hasReceipt,
+    receiptImageUrl,
+    receiptRawText,
+    isAvailable,
+    deviceHash,
+    syncStatus,
+  ];
 }
 
-enum PriceLogSyncStatus {
-  synced,
-  pending,
-  failed,
-}
+enum PriceLogSyncStatus { synced, pending, failed }

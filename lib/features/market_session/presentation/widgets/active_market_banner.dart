@@ -25,10 +25,7 @@ class ActiveMarketBanner extends ConsumerWidget {
         }
 
         return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           color: Colors.teal.shade900,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,11 +41,8 @@ class ActiveMarketBanner extends ConsumerWidget {
                 onPressed: () async {
                   await controller.exitMarket();
                 },
-                child: const Text(
-                  "Çık",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
+                child: const Text("Çık", style: TextStyle(color: Colors.white)),
+              ),
             ],
           ),
         );

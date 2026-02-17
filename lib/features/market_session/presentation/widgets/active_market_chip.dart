@@ -24,10 +24,16 @@ class ActiveMarketChip extends ConsumerWidget {
 
         return InputChip(
           avatar: const Icon(Icons.check_circle, size: 16, color: Colors.green),
-          label: Text(activeMarket['market_name'] ?? 'Unknown Market', 
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            activeMarket['market_name'] ?? 'Unknown Market',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           backgroundColor: Colors.teal.shade50,
-          deleteIcon: const Icon(Icons.exit_to_app, size: 16, color: Colors.red),
+          deleteIcon: const Icon(
+            Icons.exit_to_app,
+            size: 16,
+            color: Colors.red,
+          ),
           onDeleted: () {
             _exitMarket(context, ref);
           },
@@ -38,18 +44,18 @@ class ActiveMarketChip extends ConsumerWidget {
         );
       },
       loading: () => const SizedBox(
-        width: 100, 
-        height: 32, 
-        child: Center(child: LinearProgressIndicator())
+        width: 100,
+        height: 32,
+        child: Center(child: LinearProgressIndicator()),
       ),
       error: (e, s) => const SizedBox(),
     );
   }
 
   void _goToMarketSelection(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const MarketSelectionScreen()),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const MarketSelectionScreen()));
   }
 
   Future<void> _exitMarket(BuildContext context, WidgetRef ref) async {
@@ -57,10 +63,18 @@ class ActiveMarketChip extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text("Check Out?"),
-        content: const Text("Are you sure you want to end your shopping session at this market?"),
+        content: const Text(
+          "Are you sure you want to end your shopping session at this market?",
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text("Cancel")),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text("Check Out")),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text("Check Out"),
+          ),
         ],
       ),
     );
@@ -70,4 +84,3 @@ class ActiveMarketChip extends ConsumerWidget {
     }
   }
 }
-

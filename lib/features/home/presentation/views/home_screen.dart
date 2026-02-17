@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/presentation/widgets/status_indicators.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../god_mode/data/god_mode_providers.dart';
+import '../../../god_mode/presentation/god_mode_panel.dart';
 import '../../../market_session/presentation/widgets/active_market_chip.dart';
 import '../../../price_log/domain/entities/price_log.dart';
 import '../../../price_log/presentation/providers/submit_price_log_provider.dart';
@@ -14,12 +17,48 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recentLogsAsync = ref.watch(userPriceLogsProvider);
+    final isGodAsync = ref.watch(isGodProvider);
+    final invisibleMode = ref.watch(invisibleModeProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FiyatAtlas'),
-        actions: const [
-          Padding(
+        title: GestureDetector(
+          onLongPress: () {
+            // Secret way to reopen panel if invisible
+            isGodAsync.whenData((isGod) {
+              if (isGod) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const GodModePanel()),
+                );
+              }
+            });
+          },
+          child: const Text('FiyatAtlas'),
+        ),
+        actions: [
+          // God Mode Badge
+          isGodAsync.when(
+            data: (isGod) {
+              if (isGod && !invisibleMode) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: ActionChip(
+                    label: const Text('👑 GOD MODE'),
+                    backgroundColor: Colors.amber,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const GodModePanel()),
+                      );
+                    },
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (_, _) => const SizedBox.shrink(),
+          ),
+          const Padding(
             padding: EdgeInsets.only(right: 16.0),
             child: ActiveMarketChip(),
           ),
@@ -85,7 +124,8 @@ class _PriceLogCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductDetailScreen(productId: log.productId),
+              builder: (context) =>
+                  ProductDetailScreen(productId: log.productId),
             ),
           );
         },
@@ -100,8 +140,8 @@ class _PriceLogCard extends StatelessWidget {
                     child: Text(
                       log.marketName ?? 'Unknown Market',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -133,15 +173,19 @@ class _PriceLogCard extends StatelessWidget {
                       ConfidenceBadge(confidence: confidence),
                       const SizedBox(width: 8),
                       if (log.hasReceipt)
-                        const Icon(Icons.receipt_long, size: 16, color: Colors.teal),
+                        const Icon(
+                          Icons.receipt_long,
+                          size: 16,
+                          color: Colors.teal,
+                        ),
                     ],
                   ),
                   Text(
                     '${log.price.toStringAsFixed(2)} ${log.currency}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.green[800],
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: Colors.green[800],
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -152,4 +196,3 @@ class _PriceLogCard extends StatelessWidget {
     );
   }
 }
-

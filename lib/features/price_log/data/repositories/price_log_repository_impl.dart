@@ -34,26 +34,25 @@ class PriceLogRepositoryImpl implements PriceLogRepository {
     // 1. Always save to local DB first (Optimistic UI support + Backup)
     try {
       // Local Persistence is the Single Source of Truth for the UI
-      await localDataSource.cachePriceLog(log, isPending: true); 
+      await localDataSource.cachePriceLog(log, isPending: true);
 
       // 2. Try Push if Online (Best Effort)
       if (await networkInfo.isConnected) {
         try {
-           // Prevent double submission if sync manager picks it up too fast?
-           // Actually, we just try to push. If successful, mark synced.
-           await remoteDataSource.submitPriceLog(log);
-           await localDataSource.markAsSynced(log.id);
+          // Prevent double submission if sync manager picks it up too fast?
+          // Actually, we just try to push. If successful, mark synced.
+          await remoteDataSource.submitPriceLog(log);
+          await localDataSource.markAsSynced(log.id);
         } catch (e) {
-           // Remote push failed.
-           // Do NOT fail the operation. The user's intent is captured.
-           // Background Sync Manager will handle retries.
-           // Log error for analytics if needed.
+          // Remote push failed.
+          // Do NOT fail the operation. The user's intent is captured.
+          // Background Sync Manager will handle retries.
+          // Log error for analytics if needed.
         }
       }
-      
+
       // ALWAYS return success if local save worked.
       return const Right(null);
-
     } on Exception catch (e) {
       // Only fail if LOCAL DB fails (Critical Error)
       return Left(DatabaseFailure('Local persistence failed: $e'));
@@ -67,7 +66,7 @@ class PriceLogRepositoryImpl implements PriceLogRepository {
       // TODO: Implement direct fetch from remoteDataSource if needed for Web history
       // For now, return empty list or implement remote fetch in datasource
       // Assuming RemoteDataSource has a method for this, or we return empty to avoid crash
-      return const Right([]); 
+      return const Right([]);
     }
 
     try {

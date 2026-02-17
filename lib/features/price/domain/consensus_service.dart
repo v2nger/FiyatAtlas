@@ -7,8 +7,8 @@ class ConsensusResult {
   final bool isVerified;
 
   ConsensusResult({
-    required this.price, 
-    required this.confidenceScore, 
+    required this.price,
+    required this.confidenceScore,
     required this.confirmationCount,
     this.isVerified = false,
   });
@@ -18,7 +18,7 @@ class ConsensusResult {
 /// This service is kept temporarily to prevent compilation errors in legacy code.
 class ConsensusService {
   ConsensusResult? evaluate(List<PriceEntry> entries) {
-    // Logic moved to backend. 
+    // Logic moved to backend.
     // Return null to ensure client doesn't attempt to write to verified collection.
     return null;
   }

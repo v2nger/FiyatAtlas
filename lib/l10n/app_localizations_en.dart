@@ -150,4 +150,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetLinkSent => 'Reset link sent.';
+
+  @override
+  String get productDetailTitle => 'Product Detail';
+
+  @override
+  String get productNameLabel => 'Product Name';
+
+  @override
+  String get brandLabel => 'Brand';
+
+  @override
+  String get createProductButton => 'Create Product';
+
+  @override
+  String get newProductTitle => 'New Product';
+
+  @override
+  String get priceHistoryTitle => 'Price History';
+
+  @override
+  String get noPriceHistory => 'No price history yet.';
+
+  @override
+  String get newPriceAddButton => 'ADD NEW PRICE';
+
+  @override
+  String get productNotFound => 'Product not found.';
+
+  @override
+  String get loginToCreateProduct => 'You must login to add products.';
 }

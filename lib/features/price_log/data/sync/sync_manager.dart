@@ -9,7 +9,7 @@ class PriceLogSyncManager {
   final PriceLogLocalDataSource localDataSource;
   final PriceLogRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
-  
+
   // Retry Logic Configuration
   static const int maxRetries = 5;
   static const int initialDelaySeconds = 2;
@@ -26,19 +26,19 @@ class PriceLogSyncManager {
   void init() {
     // Initial Sync
     syncPendingLogs();
-    
+
     // Listen for connectivity changes could be added here if stream is available
   }
 
   /// Triggers the sync process with exponential backoff
   Future<void> syncPendingLogs({int retryCount = 0}) async {
     if (_isSyncing) return;
-    
+
     // Check connectivity
     if (!await networkInfo.isConnected) return;
 
     _isSyncing = true;
-    
+
     try {
       final pending = await localDataSource.getPendingLogs();
       if (pending.isEmpty) {
@@ -54,9 +54,9 @@ class PriceLogSyncManager {
         try {
           final entity = logModel; // It IS an entity now
           // Check for Duplicates / Rate Limiting (Optimistic)
-          // Ideally check remote if it already exists, but for Append-Only logs, 
+          // Ideally check remote if it already exists, but for Append-Only logs,
           // we can rely on ID idempotency if the ID is preserved.
-          
+
           await remoteDataSource.submitPriceLog(entity);
           await localDataSource.markAsSynced(logModel.id); // uuid -> id
           debugPrint('SyncManager: Synced ${logModel.id}');
@@ -70,16 +70,17 @@ class PriceLogSyncManager {
       if (anyFailed && retryCount < maxRetries) {
         // Exponential Backoff
         final delay = initialDelaySeconds * pow(2, retryCount).toInt();
-        debugPrint('SyncManager: Retrying in $delay seconds (Attempt ${retryCount + 1})');
-        
+        debugPrint(
+          'SyncManager: Retrying in $delay seconds (Attempt ${retryCount + 1})',
+        );
+
         _retryTimer?.cancel();
         _retryTimer = Timer(Duration(seconds: delay), () {
-           _isSyncing = false; 
-           syncPendingLogs(retryCount: retryCount + 1);
+          _isSyncing = false;
+          syncPendingLogs(retryCount: retryCount + 1);
         });
         return; // Return here, callback will handle reset of _isSyncing
       }
-
     } finally {
       // If we didn't schedule a retry, free the lock
       if (_retryTimer == null || !_retryTimer!.isActive) {

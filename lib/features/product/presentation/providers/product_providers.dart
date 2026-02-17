@@ -11,7 +11,10 @@ final productLookupServiceProvider = Provider<ProductLookupService>((ref) {
 
 // Single Product Fetch Logic
 // This replicates AppState.lookupProduct with caching/api fallback
-final productLookupProvider = FutureProvider.family<Product?, String>((ref, barcode) async {
+final productLookupProvider = FutureProvider.family<Product?, String>((
+  ref,
+  barcode,
+) async {
   final firestoreService = ref.watch(firestoreServiceProvider);
   final lookupService = ref.watch(productLookupServiceProvider);
 
@@ -26,12 +29,15 @@ final productLookupProvider = FutureProvider.family<Product?, String>((ref, barc
     await firestoreService.addProduct(apiProduct);
     return apiProduct;
   }
-  
+
   return null;
 });
 
 // Search Logic
-final productSearchProvider = FutureProvider.family<List<Product>, String>((ref, query) async {
+final productSearchProvider = FutureProvider.family<List<Product>, String>((
+  ref,
+  query,
+) async {
   if (query.isEmpty) return [];
   final firestoreService = ref.watch(firestoreServiceProvider);
   return firestoreService.searchProducts(query);

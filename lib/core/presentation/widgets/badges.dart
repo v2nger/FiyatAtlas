@@ -14,7 +14,7 @@ class TrustBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color borderColor;
-    
+
     // Determine color based on score (Using Tier Colors from AppColors)
     if (isShadowBanned) {
       borderColor = AppColors.shadow;
@@ -43,34 +43,34 @@ class TrustBadge extends StatelessWidget {
           ),
         ),
         child: Container(
-           // Inner container to create border effect if needed, 
-           // but design says "Background: Surface, Border: Tier Color".
-           // For Atlas it says "Animated gradient border". 
-           // Simplified: Gradient Border with Surface Inner
-           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-           decoration: BoxDecoration(
-             color: AppColors.surface,
-             borderRadius: BorderRadius.circular(10),
-           ),
-           child: Row(
-             mainAxisSize: MainAxisSize.min,
-             children: [
-               const Icon(Icons.verified, size: 14, color: AppColors.atlasStart),
-               const SizedBox(width: 6),
-               Text(
-                 '${score.toStringAsFixed(0)} Trust',
-                 style: const TextStyle(
-                   color: AppColors.textPrimary,
-                   fontSize: 12,
-                   fontWeight: FontWeight.w600,
-                 ),
-               ),
-             ],
-           ),
+          // Inner container to create border effect if needed,
+          // but design says "Background: Surface, Border: Tier Color".
+          // For Atlas it says "Animated gradient border".
+          // Simplified: Gradient Border with Surface Inner
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.verified, size: 14, color: AppColors.atlasStart),
+              const SizedBox(width: 6),
+              Text(
+                '${score.toStringAsFixed(0)} Trust',
+                style: const TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
-    
+
     // Standard Badge
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -83,9 +83,9 @@ class TrustBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            isShadowBanned ? Icons.visibility_off : Icons.verified_user, 
-            size: 14, 
-            color: borderColor
+            isShadowBanned ? Icons.visibility_off : Icons.verified_user,
+            size: 14,
+            color: borderColor,
           ),
           const SizedBox(width: 4),
           Text(
@@ -111,7 +111,7 @@ class TierBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color;
     List<Color> gradientColors;
-    
+
     switch (tier.toLowerCase()) {
       case 'atlas':
         color = AppColors.atlasStart;
@@ -119,7 +119,10 @@ class TierBadge extends StatelessWidget {
         break;
       case 'gold':
         color = AppColors.gold;
-        gradientColors = [AppColors.gold, AppColors.gold.withValues(alpha: 0.8)];
+        gradientColors = [
+          AppColors.gold,
+          AppColors.gold.withValues(alpha: 0.8),
+        ];
         break;
       case 'silver':
         color = AppColors.silver;
@@ -152,7 +155,8 @@ class TierBadge extends StatelessWidget {
       child: Text(
         tier.toUpperCase(),
         style: const TextStyle(
-          color: Colors.white, // Text inside Tier badge usually white for contrast
+          color:
+              Colors.white, // Text inside Tier badge usually white for contrast
           fontSize: 11,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.2,
